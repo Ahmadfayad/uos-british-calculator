@@ -1234,6 +1234,7 @@ function buildScenarioPresentation(scenarios) {
   const ordered = [];
   const labelMap = new Map();
   const toneMap = new Map();
+  const maxAlternatives = 2;
 
   const bestFinal = finalScenarios[0] || null;
   const bestExpected = expectedScenarios[0] || null;
@@ -1250,10 +1251,24 @@ function buildScenarioPresentation(scenarios) {
     toneMap.set(bestExpected, 'expected');
   }
 
-  const remaining = [...finalScenarios.slice(bestFinal ? 1 : 0), ...expectedScenarios.slice(bestExpected ? 1 : 0)]
-    .sort((a, b) => b.percentage - a.percentage);
+  const remainingFinal = finalScenarios.slice(bestFinal ? 1 : 0);
+  const remainingExpected = expectedScenarios.slice(bestExpected ? 1 : 0);
+  const selectedAlternatives = [];
 
-  remaining.forEach((scenario, idx) => {
+  // Always include one expected alternative first if available.
+  if(remainingExpected.length) selectedAlternatives.push(remainingExpected[0]);
+
+  const fallbackPool = [
+    ...remainingExpected.slice(selectedAlternatives.length ? 1 : 0),
+    ...remainingFinal
+  ].sort((a, b) => b.percentage - a.percentage);
+
+  for(const scenario of fallbackPool) {
+    if(selectedAlternatives.length >= maxAlternatives) break;
+    selectedAlternatives.push(scenario);
+  }
+
+  selectedAlternatives.forEach((scenario, idx) => {
     labelMap.set(scenario, `Alternative Scenario ${idx + 1} (${scenarioHasExpectedGrades(scenario) ? 'Expected Grades' : 'Final Grades'})`);
     toneMap.set(scenario, 'other');
     ordered.push(scenario);
@@ -1669,6 +1684,14 @@ function handleKey(e,card) {
   if(e.key==='Escape'){dropdown.classList.add('hidden');card.querySelector('.search-wrap').classList.remove('dropdown-open');card.classList.remove('dropdown-active');}
 }
 
+function setGradeOptionsForLevel(level, gradeSelect, selectedGrade='') {
+  const allowedGrades = Object.keys(gradingScheme[level] || {}).filter(grade => gradingScheme[level][grade] !== null);
+  gradeSelect.innerHTML = `<option value="">Select Grade</option>${allowedGrades.map(grade => `<option value="${grade}">${grade}</option>`).join('')}`;
+  if(selectedGrade && allowedGrades.includes(selectedGrade)) {
+    gradeSelect.value = selectedGrade;
+  }
+}
+
 function selectSubjectWithGrade(card,entry,grade) {
   const input=card.querySelector('.subject-search'), dropdown=card.querySelector('.search-dropdown'),
         levelVal=card.querySelector('.level-val'), catVal=card.querySelector('.category-val'), subVal=card.querySelector('.subject-val'),
@@ -1686,8 +1709,8 @@ function selectSubjectWithGrade(card,entry,grade) {
   if(entry.level==='moe'){
     card.querySelector('.percentile').value=''; pctGroup.classList.remove('hidden');
     setTimeout(()=>card.querySelector('.percentile').focus(),50);
-  }else if(grade){
-    gradeSelect.value=grade; gradeSelect.innerHTML=`<option value="${grade}">${grade}</option>`;
+  }else{
+    setGradeOptionsForLevel(entry.level, gradeSelect, grade || '');
     gradeGroup.classList.remove('hidden');
   }
   wrap.classList.add('selected'); updateLevelCounter(); autoAddNextRow(card);
@@ -1716,6 +1739,30 @@ function loadDemoData() {
   const allGrades = ['A*','A','A','B','B','C'];
   const asGrades  = ['A','A','B','B','C'];
   const aGrades   = ['A*','A','A','B'];
+
+  const smartDemoStatuses = (subjects) => {
+    const copy = subjects.map(s => ({ ...s, status: 'final' }));
+    const advanced = copy.filter(s => s.level === 'a-level');
+
+    // Keep expected grades realistic by limiting them to A-Level subjects only.
+    const expectedTargets = [];
+    if(advanced.length) {
+      expectedTargets.push(advanced[0]);
+      if(advanced.length > 1 && Math.random() > 0.45) expectedTargets.push(advanced[1]);
+    }
+
+    // Make sure the demo always shows at least one expected grade when possible.
+    if(!expectedTargets.length && copy.some(s => s.level === 'a-level')) {
+      expectedTargets.push(copy.find(s => s.level === 'a-level'));
+    }
+
+    expectedTargets.forEach(target => {
+      const match = copy.find(s => s.level === target.level && s.subject === target.subject);
+      if(match) match.status = 'expected';
+    });
+
+    return copy;
+  };
 
   const PROFILES = [
     {
@@ -1877,7 +1924,7 @@ function loadDemoData() {
 
   // Randomly target between 7 and 15 subjects
   const targetCount = 7 + Math.floor(Math.random() * 9);
-  const baseSubjects = [...profile.subjects];
+  const baseSubjects = smartDemoStatuses(profile.subjects);
   const baseKeys = new Set(baseSubjects.map(s => s.subject + '|' + s.level));
 
   // Shuffle extra pool and pick unique extras until we hit targetCount
@@ -1889,7 +1936,7 @@ function loadDemoData() {
       // Re-roll grade so each demo is fresh
       baseSubjects.push({...extra, grade: grades(
         extra.level === 'a-level' ? aGrades : extra.level === 'as-level' ? asGrades : allGrades
-      )});
+      ), status: (extra.level === 'a-level' || extra.level === 'as-level') && Math.random() > 0.3 ? 'expected' : 'final'});
       baseKeys.add(key);
     }
   }
@@ -1928,11 +1975,10 @@ function loadDemoData() {
     levelTag.classList.remove('hidden');
     wrap.classList.add('selected');
 
-    gradeSelect.innerHTML = `<option value="${subj.grade}">${subj.grade}</option>`;
-    gradeSelect.value = subj.grade;
+    setGradeOptionsForLevel(subj.level, gradeSelect, subj.grade);
     gradeGroup.classList.remove('hidden');
     if(statusGroup) statusGroup.classList.remove('hidden');
-    if(statusSelect) statusSelect.value = 'final';
+    if(statusSelect) statusSelect.value = subj.status || 'final';
   });
 
   updateLevelCounter();
