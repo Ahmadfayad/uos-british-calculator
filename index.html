@@ -619,12 +619,16 @@
       font-size: 0.72rem; font-weight: 600; padding: 3px 9px; border-radius: var(--r-pill);
       background: var(--surface); border: 1px solid var(--border); color: var(--text-2); white-space: nowrap;
     }
-    .scenario-meta-chip.sci  { background: rgba(16,185,129,0.08);  border-color: rgba(16,185,129,0.25);  color: #34d399; }
-    .scenario-meta-chip.com  { background: rgba(245,158,11,0.08);  border-color: rgba(245,158,11,0.25);  color: #fbbf24; }
-    .scenario-meta-chip.lit  { background: rgba(139,92,246,0.08);  border-color: rgba(139,92,246,0.25);  color: #c4b5fd; }
-    .scenario-meta-chip.med  { background: rgba(220,38,38,0.08);  border-color: rgba(220,38,38,0.3);   color: #f87171; }
-    .scenario-meta-chip.dent { background: rgba(124,58,237,0.1);  border-color: rgba(124,58,237,0.3);   color: #c4b5fd; }
-    .scenario-meta-chip.pharm{ background: rgba(2,132,199,0.1);   border-color: rgba(2,132,199,0.3);    color: #7dd3fc; }
+    .scenario-meta-chip.sci,
+    .scenario-meta-chip.com,
+    .scenario-meta-chip.lit,
+    .scenario-meta-chip.med,
+    .scenario-meta-chip.dent,
+    .scenario-meta-chip.pharm {
+      background: rgba(148,163,184,0.2);
+      border-color: rgba(148,163,184,0.35);
+      color: #111827;
+    }
     .scenario-meta-chip.expected-status { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3); color: #f59e0b; }
     .scenario-meta-chip.final-status { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3); color: #10b981; }
     .scenario-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -793,7 +797,16 @@
       cursor: pointer; transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
     }
     .scenario-pick-item:hover { border-color: var(--primary); background: rgba(99,102,241,0.05); }
-    .scenario-pick-item input[type=radio] { accent-color: var(--primary); width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; }
+    .scenario-pick-item input[type=radio],
+    .scenario-pick-item input[type=checkbox] {
+      accent-color: var(--primary);
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      min-height: 18px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
     .scenario-pick-item.selected { border-color: var(--primary); background: rgba(99,102,241,0.08); }
     .scenario-pick-label { flex: 1; }
     .scenario-pick-name { font-size: 0.88rem; font-weight: 700; color: var(--text); }
@@ -1267,14 +1280,34 @@ function promptStudentInfoThenPick(requireScenarios=false) {
   listEl.innerHTML = scenarios.map((s, idx) => {
     const name = labelMap.get(s) || 'Scenario';
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
-    return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
-      <input type="radio" name="pdf-scenario-inline" value="${idx}" ${idx===0?'checked':''}>
+    return `<label class="scenario-pick-item${idx<2?' selected':''}">
+      <input type="checkbox" name="pdf-scenario-inline" value="${idx}" ${idx<2?'checked':''}>
       <div class="scenario-pick-label">
         <div class="scenario-pick-name">${name} &mdash; ${s.percentage.toFixed(2)}%</div>
         <div class="scenario-pick-pct">${combo}</div>
       </div>
     </label>`;
   }).join('');
+
+  const inlinePicks = Array.from(listEl.querySelectorAll('input[name="pdf-scenario-inline"]'));
+  const refreshInlinePickStyles = () => {
+    listEl.querySelectorAll('.scenario-pick-item').forEach(item => {
+      const input = item.querySelector('input[name="pdf-scenario-inline"]');
+      item.classList.toggle('selected', !!input?.checked);
+    });
+  };
+  inlinePicks.forEach(input => {
+    input.addEventListener('change', () => {
+      const selected = inlinePicks.filter(i => i.checked);
+      if(selected.length > 2) {
+        input.checked = false;
+        return;
+      }
+      refreshInlinePickStyles();
+    });
+  });
+  refreshInlinePickStyles();
+
   document.getElementById('pdf-scenario-section').style.display = scenarios.length > 0 ? 'flex' : 'none';
   document.getElementById('student-info-modal').classList.add('open');
   document.getElementById('pdf-student-name').focus();
@@ -1282,8 +1315,8 @@ function promptStudentInfoThenPick(requireScenarios=false) {
     const name = document.getElementById('pdf-student-name').value.trim();
     const id   = document.getElementById('pdf-student-id').value.trim();
     const employee = document.getElementById('pdf-employee-name').value.trim();
-    const picked = listEl.querySelector('input[name="pdf-scenario-inline"]:checked');
-    const preferredIdx = picked ? parseInt(picked.value) : 0;
+    const picked = Array.from(listEl.querySelectorAll('input[name="pdf-scenario-inline"]:checked')).map(i => parseInt(i.value));
+    const preferredIdx = picked.length ? picked.slice(0, 2) : [0];
     document.getElementById('student-info-modal').classList.remove('open');
     downloadData(name, id, preferredIdx, employee);
   };
@@ -1454,7 +1487,50 @@ function initSearchCard(card) {
   document.addEventListener('click',e=>{if(!card.contains(e.target)){dropdown.classList.add('hidden');wrap.classList.remove('dropdown-open');card.classList.remove('dropdown-active');}},{capture:true});
 }
 
-function getMatches(query) { return allSubjects.filter(s=>s.subject.toLowerCase().includes(query.toLowerCase())).slice(0,30); }
+function normalizeSearch(text) {
+  return (text || '').toLowerCase().replace(/[^a-z0-9&]+/g, ' ').trim();
+}
+
+function getMatches(query) {
+  const qRaw = (query || '').trim().toLowerCase();
+  const q = normalizeSearch(query);
+  if(!q) return [];
+
+  const scienceAliasMap = [
+    { alias: 'phy', target: 'physics' },
+    { alias: 'chem', target: 'chemistry' },
+    { alias: 'bio', target: 'biology' },
+    { alias: 'sci', target: 'science' }
+  ];
+
+  const aliasTargets = scienceAliasMap
+    .filter(({ alias }) => qRaw.startsWith(alias) || alias.startsWith(qRaw))
+    .map(({ target }) => target);
+
+  const ranked = allSubjects
+    .map((s, idx) => {
+      const subjectNorm = normalizeSearch(s.subject);
+      const includes = subjectNorm.includes(q);
+      const aliasHit = aliasTargets.some(target => subjectNorm.includes(target));
+      if(!includes && !aliasHit) return null;
+
+      let score = 0;
+      if(subjectNorm === q) score += 500;
+      if(subjectNorm.startsWith(q)) score += 320;
+      if(subjectNorm.split(' ').some(part => part.startsWith(q))) score += 220;
+      if(includes) score += 130 - Math.min(subjectNorm.indexOf(q), 25);
+      if(aliasHit) score += 260;
+      if(s.category === 'Sciences') score += 55;
+      if(qRaw.length <= 4 && s.category === 'Sciences') score += 70;
+      score -= Math.min(idx, 40) * 0.02;
+
+      return { ...s, _score: score };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b._score - a._score || a.subject.localeCompare(b.subject));
+
+  return ranked.slice(0, 30).map(({ _score, ...rest }) => rest);
+}
 
 function subjectUsageKey(level, subject) {
   return `${level}||${subject}`;
@@ -1954,10 +2030,11 @@ function selectDisplayScenarios(scenarios, maxCount = 5) {
   const finalOnlyScenarios = scenarios.filter(s => !scenarioHasExpectedGrades(s));
   const picked = [];
 
-  if(expectedScenarios.length) picked.push(expectedScenarios[0]);
-  if(finalOnlyScenarios.length && picked.length < maxCount) picked.push(finalOnlyScenarios[0]);
+  if(finalOnlyScenarios.length) picked.push(finalOnlyScenarios[0]);
+  if(expectedScenarios.length && picked.length < maxCount) picked.push(expectedScenarios[0]);
 
-  scenarios.forEach(s => {
+  const orderedRemainder = [...finalOnlyScenarios, ...expectedScenarios];
+  orderedRemainder.forEach(s => {
     if(picked.length >= maxCount) return;
     if(!picked.includes(s)) picked.push(s);
   });
@@ -2439,8 +2516,8 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
   // Scenario title & percentage
-  const issBest = idx === 0;
-  const headerColor = issBest ? [5,150,105] : [79,70,229];
+  const hasExpected = scenarioHasExpectedGrades(scenario);
+  const headerColor = hasExpected ? [185, 28, 28] : [5, 150, 105];
   doc.setFillColor(...headerColor); doc.roundedRect(15, yPos, 180, 26, 3, 3, 'F');
   doc.setTextColor(255,255,255); doc.setFontSize(10); doc.setFont('helvetica','bold');
   doc.text(labelText.toUpperCase(), 105, yPos+9, {align:'center'});
@@ -2608,16 +2685,20 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
   const doc = new jsPDF();
   const levelColors = {'o-level':[8,145,178],'as-level':[217,119,6],'a-level':[5,150,105],'moe':[124,58,237]};
   const labelMap = buildScenarioLabelMap(scenarios);
+  const preferredIndices = Array.isArray(preferredIdx)
+    ? preferredIdx
+    : (preferredIdx === null || preferredIdx === undefined ? [] : [preferredIdx]);
+  const preferredSet = new Set(preferredIndices);
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
 
   scenarios.forEach((scenario, idx) => {
     if(idx > 0) { doc.addPage(); yPos = 20; }
-    const isPreferred = preferredIdx !== null && idx === preferredIdx;
-    const isBest = idx === 0;
+    const isPreferred = preferredSet.has(idx);
+    const hasExpected = scenarioHasExpectedGrades(scenario);
     let labelText = labelMap.get(scenario) || 'Scenario';
     if(isPreferred) labelText += '  [Preferred]';
-    const headerColor = isBest ? [5,150,105] : [79,70,229];
+    const headerColor = hasExpected ? [185, 28, 28] : [5, 150, 105];
 
     // Scenario header block
     doc.setFillColor(...headerColor); doc.roundedRect(15, yPos, 180, 26, 3, 3, 'F');
