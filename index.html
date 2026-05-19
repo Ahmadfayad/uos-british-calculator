@@ -1824,10 +1824,11 @@ function updateLevelCounter() {
   const mobileCount = document.getElementById('mobile-breakdown-count');
   if(mobileCount) mobileCount.textContent = String(total);
 
-  const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
-  if(isMobileViewport && total > previousTotal && !window._suppressBreakdownAutoOpen) {
-    openMobileBreakdown();
-  }
+  // Auto-open disabled - users must click the button to view breakdown
+  // const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
+  // if(isMobileViewport && total > previousTotal && !window._suppressBreakdownAutoOpen) {
+  //   openMobileBreakdown();
+  // }
   if(total === 0) {
     closeMobileBreakdown();
   }
