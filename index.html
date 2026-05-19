@@ -1501,6 +1501,8 @@ function autoAddNextRow(currentCard) {
 }
 
 function loadDemoData() {
+  const proceed = confirm('This action will fill the calculator with sample values for testing. Do you want to continue?');
+  if (!proceed) return;
   window._suppressBreakdownAutoOpen = true;
   closeMobileBreakdown();
   const grades = (arr) => arr[Math.floor(Math.random()*arr.length)];
