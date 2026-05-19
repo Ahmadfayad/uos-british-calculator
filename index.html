@@ -2200,23 +2200,83 @@ function appendExcludedSubjectsToPdf(doc, yPos, scenario) {
   const excluded = allEntries.filter(s => !included.has(scenarioSubjectKey(s)));
   if(!excluded.length) return yPos;
 
-  if(yPos > 264) { doc.addPage(); yPos = 20; }
-  doc.setFillColor(241, 245, 249); doc.rect(15, yPos, 180, 9, 'F');
-  doc.setDrawColor(203, 213, 225); doc.rect(15, yPos, 180, 9);
-  doc.setTextColor(15, 23, 42); doc.setFontSize(8); doc.setFont('helvetica','bold');
-  doc.text('Not Included Subjects', 17, yPos+6);
-  yPos += 10;
+  const panelX = 15;
+  const panelW = 180;
+  const rowX = panelX;
+  const rowW = 180;
+  const rowColors = [[255, 244, 244], [255, 238, 238]];
+  const borderColor = [248, 180, 180];
+  const headerFill = [255, 226, 226];
+  const headerText = [127, 29, 29];
+  const rowText = [69, 26, 26];
+  const subjectX = 28;
+  const levelX = 98;
+  const categoryX = 128;
+  const gradeX = 163;
+  const scoreX = 193;
+  const subjectW = 66;
+  const categoryW = 31;
+  const tableTopPadding = 10;
+  const tableBottomPadding = 6;
+  const minRowHeight = 10;
+  const lineHeight = 3.6;
 
-  doc.setFont('helvetica','normal'); doc.setFontSize(7.5);
-  excluded.forEach((s)=>{
-    if(yPos > 274) { doc.addPage(); yPos = 20; }
-    doc.setTextColor(71, 85, 105);
-    const line = `- ${s.subject} (${levelLabels[s.level]}, ${s.category}, ${s.grade}, ${s.percentage}%)`;
-    doc.text(line.substring(0, 95), 17, yPos);
-    yPos += 6.2;
+  const drawWrappedCell = (lines, x, y, height, color, align='left') => {
+    const blockHeight = Math.max(lineHeight, lines.length * lineHeight);
+    let textY = y + ((height - blockHeight) / 2) + 5.0;
+    doc.setTextColor(...color);
+    lines.forEach((line, idx) => {
+      doc.text(line, x, textY + (idx * lineHeight), align ? { align } : undefined);
+    });
+  };
+
+  if(yPos > 258) { doc.addPage(); yPos = 20; }
+  doc.setFillColor(...headerFill); doc.rect(panelX, yPos, panelW, 9, 'F');
+  doc.setDrawColor(...borderColor); doc.rect(panelX, yPos, panelW, 9);
+  doc.setTextColor(...headerText); doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('Not Included Subjects', panelX + 2, yPos+6);
+  yPos += tableTopPadding;
+
+  doc.setFillColor(...headerFill); doc.rect(rowX, yPos, rowW, 9, 'F');
+  doc.setDrawColor(...borderColor); doc.rect(rowX, yPos, rowW, 9);
+  doc.setTextColor(...headerText); doc.setFontSize(7.8); doc.setFont('helvetica','bold');
+  doc.text('#', 19, yPos+6);
+  doc.text('Subject', subjectX, yPos+6);
+  doc.text('Level', levelX, yPos+6);
+  doc.text('Category', categoryX, yPos+6);
+  doc.text('Grade', gradeX, yPos+6);
+  doc.text('Score', scoreX, yPos+6, {align:'right'});
+  yPos += 9;
+
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(7.2);
+  excluded.forEach((s, idx)=>{
+    const subjectLines = doc.splitTextToSize(s.subject, subjectW);
+    const categoryLines = doc.splitTextToSize(s.category, categoryW);
+    const rowHeight = Math.max(minRowHeight, (Math.max(subjectLines.length, categoryLines.length) * lineHeight) + 4.2);
+
+    if(yPos + rowHeight > 278) { doc.addPage(); yPos = 20; }
+
+    const rowBg = rowColors[idx % rowColors.length];
+    doc.setFillColor(...rowBg);
+    doc.setDrawColor(...borderColor);
+    doc.rect(rowX, yPos, rowW, rowHeight, 'FD');
+    doc.line(25, yPos, 25, yPos + rowHeight);
+    doc.line(95, yPos, 95, yPos + rowHeight);
+    doc.line(125, yPos, 125, yPos + rowHeight);
+    doc.line(160, yPos, 160, yPos + rowHeight);
+    doc.line(175, yPos, 175, yPos + rowHeight);
+
+    drawWrappedCell([String(idx + 1)], 19, yPos, rowHeight, rowText);
+    drawWrappedCell(subjectLines, subjectX, yPos, rowHeight, rowText);
+    drawWrappedCell([levelLabels[s.level]], levelX, yPos, rowHeight, [127, 29, 29]);
+    drawWrappedCell(categoryLines, categoryX, yPos, rowHeight, rowText);
+    drawWrappedCell([s.grade], gradeX, yPos, rowHeight, [127, 29, 29]);
+    drawWrappedCell([`${s.percentage}%`], scoreX, yPos, rowHeight, [127, 29, 29], 'right');
+    yPos += rowHeight;
   });
 
-  return yPos + 2;
+  return yPos + tableBottomPadding;
 }
 
 function downloadScenarioPDF(idx, studentName='', studentId='', employeeName='') {
