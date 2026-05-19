@@ -620,6 +620,27 @@
     .scenario-table .td-grade { font-weight: 700; text-align: center; }
     .scenario-table .td-score { font-weight: 700; text-align: right; color: var(--text); }
     .scenario-table .td-action { text-align: right; width: 1%; white-space: nowrap; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .status-badge.final {
+      color: #047857;
+      background: rgba(16,185,129,0.14);
+      border: 1px solid rgba(16,185,129,0.28);
+    }
+    .status-badge.expected {
+      color: #b45309;
+      background: rgba(245,158,11,0.14);
+      border: 1px solid rgba(245,158,11,0.28);
+    }
     .scenario-remove-btn {
       border: 1px solid rgba(239,68,68,0.35);
       background: rgba(239,68,68,0.12);
@@ -1330,6 +1351,7 @@ Object.entries(subjectLists).forEach(([level, cats]) => {
   });
 });
 const levelLabels = { 'o-level':'O Level (IGCSE)','as-level':'AS Level','a-level':'A Level','moe':'Grade 12 (High School)' };
+const gradeStatusLabels = { final: 'Final', expected: 'Expected' };
 
 function subjectCardHTML() {
   return `<div class="subject-card">
@@ -1345,6 +1367,13 @@ function subjectCardHTML() {
     <div class="field-group grade-group hidden">
       <span class="field-label">Grade</span>
       <select class="grade"><option value="">Select Grade</option></select>
+    </div>
+    <div class="field-group status-group hidden">
+      <span class="field-label">Result Type</span>
+      <select class="grade-status">
+        <option value="final">Final</option>
+        <option value="expected">Expected</option>
+      </select>
     </div>
     <div class="field-group pct-group hidden">
       <span class="field-label">Percentile</span>
@@ -1477,12 +1506,17 @@ function handleKey(e,card) {
 function selectSubjectWithGrade(card,entry,grade) {
   const input=card.querySelector('.subject-search'), dropdown=card.querySelector('.search-dropdown'),
         levelVal=card.querySelector('.level-val'), catVal=card.querySelector('.category-val'), subVal=card.querySelector('.subject-val'),
-        gradeGroup=card.querySelector('.grade-group'), pctGroup=card.querySelector('.pct-group'),
+  gradeGroup=card.querySelector('.grade-group'), pctGroup=card.querySelector('.pct-group'), statusGroup=card.querySelector('.status-group'),
         levelTag=card.querySelector('.level-tag'), gradeSelect=card.querySelector('.grade'), wrap=card.querySelector('.search-wrap');
   input.value=entry.subject; levelVal.value=entry.level; catVal.value=entry.category; subVal.value=entry.subject; dropdown.classList.add('hidden');
   wrap.classList.remove('dropdown-open'); card.classList.remove('dropdown-active');
   levelTag.textContent=levelLabels[entry.level]; levelTag.className=`level-tag ${entry.level}`; levelTag.classList.remove('hidden');
   gradeGroup.classList.add('hidden'); pctGroup.classList.add('hidden');
+  if(statusGroup) {
+    statusGroup.classList.remove('hidden');
+    const statusSelect = card.querySelector('.grade-status');
+    if(statusSelect) statusSelect.value = 'final';
+  }
   if(entry.level==='moe'){
     card.querySelector('.percentile').value=''; pctGroup.classList.remove('hidden');
     setTimeout(()=>card.querySelector('.percentile').focus(),50);
@@ -1718,6 +1752,8 @@ function loadDemoData() {
     const levelTag   = card.querySelector('.level-tag');
     const gradeGroup = card.querySelector('.grade-group');
     const gradeSelect= card.querySelector('.grade');
+    const statusGroup= card.querySelector('.status-group');
+    const statusSelect= card.querySelector('.grade-status');
     const wrap       = card.querySelector('.search-wrap');
 
     input.value = subj.subject;
@@ -1729,6 +1765,8 @@ function loadDemoData() {
     gradeSelect.innerHTML = `<option value="${subj.grade}">${subj.grade}</option>`;
     gradeSelect.value = subj.grade;
     gradeGroup.classList.remove('hidden');
+    if(statusGroup) statusGroup.classList.remove('hidden');
+    if(statusSelect) statusSelect.value = 'final';
   });
 
   updateLevelCounter();
@@ -1843,7 +1881,7 @@ function updateLevelCounter() {
 }
 
 function scenarioSubjectKey(subject) {
-  return `${subject.level}|${subject.subject}|${subject.category}|${subject.grade}|${subject.percentage}`;
+  return `${subject.level}|${subject.subject}|${subject.category}|${subject.grade}|${subject.percentage}|${subject.status || 'final'}`;
 }
 
 function recalculateScenario(scenario) {
@@ -1912,12 +1950,14 @@ function renderScenarioCards() {
 
     const rows = scenario.subjects.map(s=>{
       const removeKey = encodeURIComponent(scenarioSubjectKey(s));
+      const status = s.status || 'final';
       return `
       <tr>
         <td class="td-subject">${s.subject}</td>
         <td><span class="level-pill ${s.level}">${levelLabels[s.level]}</span></td>
         <td>${s.category}</td>
         <td class="td-grade">${s.grade}</td>
+        <td><span class="status-badge ${status}">${gradeStatusLabels[status] || 'Final'}</span></td>
         <td class="td-score">${s.percentage}%</td>
         <td class="td-action"><button class="scenario-remove-btn" onclick="removeSubjectFromScenario(${idx}, '${removeKey}')">Remove</button></td>
       </tr>`;
@@ -1932,7 +1972,7 @@ function renderScenarioCards() {
           return `<div class="excluded-item">
             <div class="excluded-meta">
               <span class="excluded-name">${s.subject}</span>
-              <span class="excluded-sub">${levelLabels[s.level]} | ${s.category} | ${s.grade} | ${s.percentage}%</span>
+              <span class="excluded-sub">${levelLabels[s.level]} | ${s.category} | ${s.grade} | ${gradeStatusLabels[s.status || 'final']} | ${s.percentage}%</span>
             </div>
             <button class="excluded-add-btn" onclick="addSubjectToScenario(${idx}, '${addKey}')">Add</button>
           </div>`;
@@ -1955,7 +1995,7 @@ function renderScenarioCards() {
       </div>
       <div class="scenario-table-wrap">
         <table class="scenario-table">
-          <thead><tr><th>Subject</th><th>Level</th><th>Category</th><th>Grade</th><th style="text-align:right">Score</th><th style="text-align:right">Action</th></tr></thead>
+          <thead><tr><th>Subject</th><th>Level</th><th>Category</th><th>Grade</th><th>Status</th><th style="text-align:right">Score</th><th style="text-align:right">Action</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>
@@ -2003,7 +2043,8 @@ function calculateOverallPercentage() {
           subject=card.querySelector('.subject-val').value,
           category=card.querySelector('.category-val').value,
           gradeVal=card.querySelector('.grade').value, 
-          pctVal=card.querySelector('.percentile').value;
+          pctVal=card.querySelector('.percentile').value,
+          statusVal=card.querySelector('.grade-status')?.value || 'final';
     
     if(!level||!subject) return;
     
@@ -2015,7 +2056,7 @@ function calculateOverallPercentage() {
     }
     
     if(percentage!==null) {
-      allEntries.push({level, subject, category, grade: gradeVal||'N/A', percentage});
+      allEntries.push({level, subject, category, grade: gradeVal||'N/A', percentage, status: statusVal});
     }
   });
   
@@ -2212,7 +2253,8 @@ function appendExcludedSubjectsToPdf(doc, yPos, scenario) {
   const subjectX = 28;
   const levelX = 98;
   const categoryX = 128;
-  const gradeX = 163;
+  const gradeX = 159;
+  const statusX = 176;
   const scoreX = 193;
   const subjectW = 66;
   const categoryW = 31;
@@ -2245,6 +2287,7 @@ function appendExcludedSubjectsToPdf(doc, yPos, scenario) {
   doc.text('Level', levelX, yPos+6);
   doc.text('Category', categoryX, yPos+6);
   doc.text('Grade', gradeX, yPos+6);
+  doc.text('Status', statusX, yPos+6, {align:'center'});
   doc.text('Score', scoreX, yPos+6, {align:'right'});
   yPos += 9;
 
@@ -2264,14 +2307,16 @@ function appendExcludedSubjectsToPdf(doc, yPos, scenario) {
     doc.line(25, yPos, 25, yPos + rowHeight);
     doc.line(95, yPos, 95, yPos + rowHeight);
     doc.line(125, yPos, 125, yPos + rowHeight);
-    doc.line(160, yPos, 160, yPos + rowHeight);
-    doc.line(175, yPos, 175, yPos + rowHeight);
+    doc.line(155, yPos, 155, yPos + rowHeight);
+    doc.line(168, yPos, 168, yPos + rowHeight);
+    doc.line(185, yPos, 185, yPos + rowHeight);
 
     drawWrappedCell([String(idx + 1)], 19, yPos, rowHeight, rowText);
     drawWrappedCell(subjectLines, subjectX, yPos, rowHeight, rowText);
     drawWrappedCell([levelLabels[s.level]], levelX, yPos, rowHeight, [127, 29, 29]);
     drawWrappedCell(categoryLines, categoryX, yPos, rowHeight, rowText);
     drawWrappedCell([s.grade], gradeX, yPos, rowHeight, [127, 29, 29]);
+    drawWrappedCell([s.status === 'expected' ? 'Expected' : 'Final'], statusX, yPos, rowHeight, s.status === 'expected' ? [217, 119, 6] : [22, 101, 52], 'center');
     drawWrappedCell([`${s.percentage}%`], scoreX, yPos, rowHeight, [127, 29, 29], 'right');
     yPos += rowHeight;
   });
@@ -2330,7 +2375,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   doc.setDrawColor(203, 213, 225); doc.rect(15, yPos, 180, 9);
   doc.setTextColor(15, 23, 42); doc.setFontSize(8); doc.setFont('helvetica','bold');
   doc.text('#', 19, yPos+6); doc.text('Subject', 27, yPos+6); doc.text('Level', 105, yPos+6);
-  doc.text('Grade', 138, yPos+6); doc.text('Score', 170, yPos+6);
+  doc.text('Grade', 136, yPos+6); doc.text('Status', 159, yPos+6); doc.text('Score', 177, yPos+6);
   yPos += 9;
 
   doc.setFont('helvetica','normal');
@@ -2346,8 +2391,11 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
     doc.setTextColor(...(levelColors[s.level]||[51,65,85])); doc.setFont('helvetica','bold');
     doc.text(levelLabels[s.level], 105, yPos+5.5);
     doc.setFont('helvetica','normal'); doc.setTextColor(51,65,85);
-    doc.text(s.grade, 138, yPos+5.5); doc.setFont('helvetica','bold');
-    doc.text(`${s.percentage}%`, 170, yPos+5.5);
+    doc.text(s.grade, 136, yPos+5.5);
+    doc.setTextColor(s.status === 'expected' ? 217 : 22, s.status === 'expected' ? 119 : 101, s.status === 'expected' ? 6 : 52);
+    doc.text(s.status === 'expected' ? 'Expected' : 'Final', 159, yPos+5.5);
+    doc.setFont('helvetica','bold'); doc.setTextColor(51,65,85);
+    doc.text(`${s.percentage}%`, 177, yPos+5.5);
     yPos += 8;
   });
 
@@ -2508,7 +2556,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     doc.setDrawColor(203, 213, 225); doc.rect(15, yPos, 180, 9);
     doc.setTextColor(15, 23, 42); doc.setFontSize(8); doc.setFont('helvetica','bold');
     doc.text('#', 19, yPos+6); doc.text('Subject', 27, yPos+6); doc.text('Level', 105, yPos+6);
-    doc.text('Grade', 138, yPos+6); doc.text('Score', 170, yPos+6);
+    doc.text('Grade', 136, yPos+6); doc.text('Status', 159, yPos+6); doc.text('Score', 177, yPos+6);
     yPos += 9;
 
     doc.setFont('helvetica','normal');
@@ -2523,8 +2571,11 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
       doc.setTextColor(...(levelColors[s.level]||[51,65,85])); doc.setFont('helvetica','bold');
       doc.text(levelLabels[s.level], 105, yPos+5.5);
       doc.setFont('helvetica','normal'); doc.setTextColor(51,65,85);
-      doc.text(s.grade, 138, yPos+5.5); doc.setFont('helvetica','bold');
-      doc.text(`${s.percentage}%`, 170, yPos+5.5);
+      doc.text(s.grade, 136, yPos+5.5);
+      doc.setTextColor(s.status === 'expected' ? 217 : 22, s.status === 'expected' ? 119 : 101, s.status === 'expected' ? 6 : 52);
+      doc.text(s.status === 'expected' ? 'Expected' : 'Final', 159, yPos+5.5);
+      doc.setFont('helvetica','bold'); doc.setTextColor(51,65,85);
+      doc.text(`${s.percentage}%`, 177, yPos+5.5);
       yPos += 8;
     });
 
@@ -2575,7 +2626,7 @@ function exportScenarioToExcel(idx, studentName='', studentId='', employeeName='
       ['Eligible Majors', scenario.majorTypes.map(m => m.label).join(', ') || 'None'],
       [],
       ['Subject Details'],
-      ['Subject', 'Level', 'Category', 'Grade', 'Score (%)']
+      ['Subject', 'Level', 'Category', 'Grade', 'Result Type', 'Score (%)']
     );
     
     // Add subjects
@@ -2585,6 +2636,7 @@ function exportScenarioToExcel(idx, studentName='', studentId='', employeeName='
         subj.level.toUpperCase().replace('-', '-'),
         subj.category,
         subj.grade,
+        gradeStatusLabels[subj.status || 'final'] || 'Final',
         subj.percentage
       ]);
     });
@@ -2598,6 +2650,7 @@ function exportScenarioToExcel(idx, studentName='', studentId='', employeeName='
       { wch: 15 }, // Level
       { wch: 20 }, // Category
       { wch: 10 }, // Grade
+      { wch: 14 }, // Result Type
       { wch: 12 }  // Score
     ];
     
@@ -2673,7 +2726,7 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
         ['Categories', scenario.categories.join(', ')],
         ['Eligible Majors', scenario.majorTypes.map(m => m.label).join(', ') || 'None'],
         [],
-        ['Subject', 'Level', 'Category', 'Grade', 'Score (%)']
+        ['Subject', 'Level', 'Category', 'Grade', 'Result Type', 'Score (%)']
       );
       
       scenario.subjects.forEach(subj => {
@@ -2682,6 +2735,7 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
           subj.level.toUpperCase().replace('-', '-'),
           subj.category,
           subj.grade,
+          gradeStatusLabels[subj.status || 'final'] || 'Final',
           subj.percentage
         ]);
       });
@@ -2692,6 +2746,7 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
         { wch: 15 },
         { wch: 20 },
         { wch: 10 },
+        { wch: 14 },
         { wch: 12 }
       ];
       
