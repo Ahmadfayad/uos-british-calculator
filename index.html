@@ -602,6 +602,8 @@
     .scenario-meta-chip.med  { background: rgba(220,38,38,0.08);  border-color: rgba(220,38,38,0.3);   color: #f87171; }
     .scenario-meta-chip.dent { background: rgba(124,58,237,0.1);  border-color: rgba(124,58,237,0.3);   color: #c4b5fd; }
     .scenario-meta-chip.pharm{ background: rgba(2,132,199,0.1);   border-color: rgba(2,132,199,0.3);    color: #7dd3fc; }
+    .scenario-meta-chip.expected-status { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3); color: #f59e0b; }
+    .scenario-meta-chip.final-status { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3); color: #10b981; }
     .scenario-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .scenario-table {
       width: 100%; border-collapse: collapse; font-size: 0.82rem;
@@ -1901,6 +1903,26 @@ function recalculateScenario(scenario) {
   scenario.majorTypes = detectMajorTypes(scenario.subjects.filter(s => s.level !== 'moe'), scenario.percentage);
 }
 
+function scenarioHasExpectedGrades(scenario) {
+  return !!scenario?.subjects?.some(s => s.status === 'expected');
+}
+
+function selectDisplayScenarios(scenarios, maxCount = 5) {
+  const expectedScenarios = scenarios.filter(scenarioHasExpectedGrades);
+  const finalOnlyScenarios = scenarios.filter(s => !scenarioHasExpectedGrades(s));
+  const picked = [];
+
+  if(expectedScenarios.length) picked.push(expectedScenarios[0]);
+  if(finalOnlyScenarios.length && picked.length < maxCount) picked.push(finalOnlyScenarios[0]);
+
+  scenarios.forEach(s => {
+    if(picked.length >= maxCount) return;
+    if(!picked.includes(s)) picked.push(s);
+  });
+
+  return picked.slice(0, maxCount);
+}
+
 function addSubjectToScenario(idx, encodedKey) {
   const scenarios = window._lastScenarios || [];
   const allEntries = window._allScenarioEntries || [];
@@ -1951,6 +1973,10 @@ function renderScenarioCards() {
     recalculateScenario(scenario);
     const cardClass = idx===0 ? 'best' : 'alt';
     const labelText = idx===0 ? getBestScenarioLabel(scenario) : `Alternative ${idx+1}`;
+    const hasExpected = scenarioHasExpectedGrades(scenario);
+    const scenarioTypeChip = hasExpected
+      ? '<span class="scenario-meta-chip expected-status">Contains Expected Grades</span>'
+      : '<span class="scenario-meta-chip final-status">Final Grades Only</span>';
     const subjectCount = scenario.subjects.length;
     const comboText = `${scenario.oCount} O-Level${scenario.asCount>0?` + ${scenario.asCount} AS-Level`:''}${scenario.aCount>0?` + ${scenario.aCount} A-Level`:''}${scenario.moeCount>0?` + ${scenario.moeCount} MOE`:''}`.trim();
 
@@ -1997,6 +2023,7 @@ function renderScenarioCards() {
       <div class="scenario-meta">
         <span class="scenario-meta-chip">${comboText}</span>
         <span class="scenario-meta-chip">${subjectCount} Subjects (average divisor)</span>
+        ${scenarioTypeChip}
         ${scenario.categories.map(c=>`<span class="scenario-meta-chip">${c}</span>`).join('')}
         ${scenario.majorTypes.map(m=>`<span class="scenario-meta-chip ${m.key}">✓ ${m.label}</span>`).join('')}
       </div>
@@ -2108,7 +2135,7 @@ function calculateOverallPercentage() {
   
   // Store scenarios and all entered subjects globally for scenario editing and PDF export
   window._allScenarioEntries = allEntries.map(s=>({...s}));
-  window._lastScenarios = scenarios.slice(0, 3).map(s=>(
+  window._lastScenarios = selectDisplayScenarios(scenarios, 5).map(s=>(
     {
       ...s,
       subjects: s.subjects.map(sub=>({...sub})),
@@ -2182,16 +2209,15 @@ function generateScenarios(mainSubjects, moeSubjects) {
     });
   });
   
-  // Deduplicate: keep only the best scenario per combination structure (o+as+a type)
-  // This ensures each shown scenario is structurally distinct, not just a minor O-Level swap
-  const bestPerType = new Map();
+  // Deduplicate by exact subject set (including expected/final status), then rank by percentage.
+  const bestPerSet = new Map();
   for (const s of scenarios) {
-    const key = `${s.oCount}-${s.asCount}-${s.aCount}`;
-    if (!bestPerType.has(key) || s.percentage > bestPerType.get(key).percentage) {
-      bestPerType.set(key, s);
+    const key = s.subjects.map(scenarioSubjectKey).sort().join('||');
+    if (!bestPerSet.has(key) || s.percentage > bestPerSet.get(key).percentage) {
+      bestPerSet.set(key, s);
     }
   }
-  return Array.from(bestPerType.values()).sort((a,b)=>b.percentage - a.percentage);
+  return Array.from(bestPerSet.values()).sort((a,b)=>b.percentage - a.percentage);
 }
 
 function getCombinations(arr, size) {
