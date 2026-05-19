@@ -1139,7 +1139,7 @@
         <input type="text" id="pdf-student-id" placeholder="Required" autocomplete="off" required>
       </div>
       <div class="student-field">
-        <label>Employee Name *</label>
+        <label>Employee Name/ID *</label>
         <input type="text" id="pdf-employee-name" placeholder="Required" autocomplete="off" required>
       </div>
       <div id="pdf-scenario-section" class="student-field" style="display:none; margin-bottom:4px;">
@@ -1214,7 +1214,7 @@ function _preloadLogo(cb) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
     try {
-      _uosLogoDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+      _uosLogoDataUrl = canvas.toDataURL('image/png');
       window._uosLogoAspect = (img.naturalWidth || 400) / (img.naturalHeight || 160);
     } catch(e){}
     cb();
@@ -1453,6 +1453,10 @@ function buildPdfHeader(doc, studentName, studentId, employeeName='') {
     yAfterHeader = 68;
   }
   return yAfterHeader;
+}
+
+function getPdfMajorPriority(key) {
+  return ({ med: 1, dent: 2, pharm: 3, sci: 4, lit: 5 }[key] || 99);
 }
 const gradingScheme = {
   'o-level':  { 'A*': 100, 'A': 95, 'B': 85, 'C': 75, 'D': null, '9': 100, '8': 95, '7': 90, '6': 85, '5': 80, '4': 75 },
@@ -2633,7 +2637,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
     const majorBg  = {sci:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
     const pillH = 6, pillPad = 4, gap = 3;
     let pillX = 15;
-    scenario.majorTypes.forEach((m)=>{
+    [...scenario.majorTypes].sort((a, b) => getPdfMajorPriority(a.key) - getPdfMajorPriority(b.key)).forEach((m)=>{
       const bg = majorBg[m.key] || [71,85,105];
       const label = `${m.label} Major`;
       doc.setFontSize(7); doc.setFont('helvetica','bold');
@@ -2820,7 +2824,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
       const majorBg  = {sci:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
       const pillH = 6, pillPad = 4, gap = 3;
       let pillX = 15;
-      scenario.majorTypes.forEach((m)=>{
+      [...scenario.majorTypes].sort((a, b) => getPdfMajorPriority(a.key) - getPdfMajorPriority(b.key)).forEach((m)=>{
         const bg = majorBg[m.key] || [71,85,105];
         const label = `${m.label} Major`;
         doc.setFontSize(7); doc.setFont('helvetica','bold');
