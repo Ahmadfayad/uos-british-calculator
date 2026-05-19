@@ -2693,7 +2693,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
     doc.text('University of Sharjah \u00b7 Office of the Registrar', 15, 291);
     doc.text(`Page ${i} of ${pageCount}`, 195, 291, {align:'right'});
   }
-  doc.save('44.pdf');
+  doc.save('35.pdf');
 }
 
 function resetForm() {
@@ -2880,7 +2880,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     doc.text('University of Sharjah \u00b7 Office of the Registrar', 15, 291);
     doc.text(`Page ${i} of ${pageCount}`, 195, 291, {align:'right'});
   }
-  doc.save('44.pdf');
+  doc.save('35.pdf');
 }
 
 // Excel Export Functions
@@ -2941,7 +2941,7 @@ function exportScenarioToExcel(idx, studentName='', studentId='', employeeName='
     XLSX.utils.book_append_sheet(wb, ws, 'Results');
     
     // Build filename with student info
-    XLSX.writeFile(wb, '44.xlsx');
+    XLSX.writeFile(wb, '35.xlsx');
   });
 }
 
@@ -3033,7 +3033,7 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
     });
     
     // Build filename with student info
-    XLSX.writeFile(wb, '44.xlsx');
+    XLSX.writeFile(wb, '35.xlsx');
   });
 }
 
