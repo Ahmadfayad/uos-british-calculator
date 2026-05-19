@@ -1214,7 +1214,7 @@ function _preloadLogo(cb) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
     try {
-      _uosLogoDataUrl = canvas.toDataURL('image/png');
+      _uosLogoDataUrl = canvas.toDataURL('image/jpeg', 0.72);
       window._uosLogoAspect = (img.naturalWidth || 400) / (img.naturalHeight || 160);
     } catch(e){}
     cb();
@@ -1443,14 +1443,14 @@ function buildPdfHeader(doc, studentName, studentId, employeeName='') {
   // Student info band (if provided)
   let yAfterHeader = 50;
   if(studentId || employeeName) {
-    doc.setFillColor(245, 247, 250); doc.rect(0, 42, 210, 11, 'F');
-    doc.setDrawColor(226, 232, 240); doc.line(0, 53, 210, 53);
-    doc.setTextColor(51, 65, 85); doc.setFontSize(8); doc.setFont('helvetica','normal');
-    const parts = [];
-    if(studentId)   parts.push(`ID: ${studentId}`);
-    if(employeeName) parts.push(`Employee: ${employeeName}`);
-    doc.text(parts.join('   \u2022   '), 15, 49);
-    yAfterHeader = 60;
+    doc.setFillColor(245, 247, 250); doc.rect(0, 42, 210, 18, 'F');
+    doc.setDrawColor(226, 232, 240); doc.line(0, 60, 210, 60);
+    doc.setTextColor(51, 65, 85);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(9.5);
+    doc.text(`Student ID: ${studentId || '-'}`, 15, 49);
+    doc.text(`Employee Name/ID: ${employeeName || '-'}`, 15, 56);
+    yAfterHeader = 68;
   }
   return yAfterHeader;
 }
@@ -2608,7 +2608,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   const scenarios = window._lastScenarios;
   const scenario = scenarios[idx];
   const {jsPDF} = window.jspdf;
-  const doc = new jsPDF();
+  const doc = new jsPDF({ compress: true, putOnlyUsedFonts: true, orientation: 'p', unit: 'mm', format: 'a4' });
   const presentation = buildScenarioPresentation(scenarios);
   const labelMap = presentation.labelMap;
   const toneMap = presentation.toneMap;
@@ -2779,7 +2779,7 @@ function downloadData(studentName='', studentId='', preferredIdx=null, employeeN
 function _doDownloadData(studentName='', studentId='', preferredIdx=null, employeeName='') {
   const scenarios = window._lastScenarios;
   const {jsPDF} = window.jspdf;
-  const doc = new jsPDF();
+  const doc = new jsPDF({ compress: true, putOnlyUsedFonts: true, orientation: 'p', unit: 'mm', format: 'a4' });
   const levelColors = {'o-level':[8,145,178],'as-level':[217,119,6],'a-level':[5,150,105],'moe':[124,58,237]};
   const presentation = buildScenarioPresentation(scenarios);
   const orderedScenarios = presentation.ordered;
