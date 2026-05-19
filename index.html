@@ -1135,12 +1135,8 @@
     <div class="modal-header"><h2 class="modal-title">Generate PDF Report</h2><button class="modal-close" onclick="cancelStudentModal()">×</button></div>
     <div class="modal-body" style="padding:0 0 4px;">
       <div class="student-field">
-        <label>Student Name</label>
-        <input type="text" id="pdf-student-name" placeholder="" autocomplete="off">
-      </div>
-      <div class="student-field">
-        <label>Student ID</label>
-        <input type="text" id="pdf-student-id" placeholder="" autocomplete="off">
+        <label>Student ID *</label>
+        <input type="text" id="pdf-student-id" placeholder="Required" autocomplete="off" required>
       </div>
       <div class="student-field">
         <label>Employee Name *</label>
@@ -1276,16 +1272,25 @@ function promptStudentInfo(action, requireScenarios=false) {
   _pdfPendingAction = action;
   document.getElementById('pdf-scenario-section').style.display = 'none';
   document.getElementById('student-info-modal').classList.add('open');
-  document.getElementById('pdf-student-name').focus();
+  document.getElementById('pdf-student-id').focus();
   document.getElementById('pdf-confirm-btn').onclick = function(){
-    const name = document.getElementById('pdf-student-name').value.trim();
-    const id   = document.getElementById('pdf-student-id').value.trim();
+    const id = getRequiredStudentId();
+    if(!id) return;
     const employee = getRequiredEmployeeName();
     if(!employee) return;
     document.getElementById('student-info-modal').classList.remove('open');
-    if(_pdfPendingAction) _pdfPendingAction(name, id, employee);
+    if(_pdfPendingAction) _pdfPendingAction('', id, employee);
     _pdfPendingAction = null;
   };
+}
+
+function getRequiredStudentId() {
+  const idInput = document.getElementById('pdf-student-id');
+  const studentId = idInput.value.trim();
+  if(studentId) return studentId;
+  alert('Student ID is required.');
+  idInput.focus();
+  return '';
 }
 
 function getRequiredEmployeeName() {
@@ -1343,16 +1348,16 @@ function promptStudentInfoThenPick(requireScenarios=false) {
 
   document.getElementById('pdf-scenario-section').style.display = orderedScenarios.length > 0 ? 'flex' : 'none';
   document.getElementById('student-info-modal').classList.add('open');
-  document.getElementById('pdf-student-name').focus();
+  document.getElementById('pdf-student-id').focus();
   document.getElementById('pdf-confirm-btn').onclick = function(){
-    const name = document.getElementById('pdf-student-name').value.trim();
-    const id   = document.getElementById('pdf-student-id').value.trim();
+    const id = getRequiredStudentId();
+    if(!id) return;
     const employee = getRequiredEmployeeName();
     if(!employee) return;
     const picked = Array.from(listEl.querySelectorAll('input[name="pdf-scenario-inline"]:checked')).map(i => parseInt(i.value));
     const preferredIdx = picked.length ? picked.slice(0, 2) : [0];
     document.getElementById('student-info-modal').classList.remove('open');
-    downloadData(name, id, preferredIdx, employee);
+    downloadData('', id, preferredIdx, employee);
   };
 }
 
@@ -1422,12 +1427,11 @@ function buildPdfHeader(doc, studentName, studentId, employeeName='') {
   doc.text(`Generated: ${new Date().toLocaleDateString('en-GB')} at ${new Date().toLocaleTimeString('en-GB')}`, 105, 38.5, {align:'center'});
   // Student info band (if provided)
   let yAfterHeader = 50;
-  if(studentName || studentId || employeeName) {
+  if(studentId || employeeName) {
     doc.setFillColor(245, 247, 250); doc.rect(0, 42, 210, 11, 'F');
     doc.setDrawColor(226, 232, 240); doc.line(0, 53, 210, 53);
     doc.setTextColor(51, 65, 85); doc.setFontSize(8); doc.setFont('helvetica','normal');
     const parts = [];
-    if(studentName) parts.push(`Student: ${studentName}`);
     if(studentId)   parts.push(`ID: ${studentId}`);
     if(employeeName) parts.push(`Employee: ${employeeName}`);
     doc.text(parts.join('   \u2022   '), 15, 49);
@@ -2639,10 +2643,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
     doc.text('University of Sharjah \u00b7 Office of the Registrar', 15, 291);
     doc.text(`Page ${i} of ${pageCount}`, 195, 291, {align:'right'});
   }
-  const _idPart = studentId ? `${studentId}_` : '';
-  const _namePart = studentName ? `${studentName.replace(/\s+/g,'_')}_` : '';
-  const _employeePart = employeeName ? `${employeeName.replace(/\s+/g,'_')}_` : '';
-  doc.save(`${_idPart}${_namePart}${_employeePart}Percentage Report.pdf`);
+  doc.save('44.pdf');
 }
 
 function resetForm() {
@@ -2829,10 +2830,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     doc.text('University of Sharjah \u00b7 Office of the Registrar', 15, 291);
     doc.text(`Page ${i} of ${pageCount}`, 195, 291, {align:'right'});
   }
-  const _idPart = studentId ? `${studentId}_` : '';
-  const _namePart = studentName ? `${studentName.replace(/\s+/g,'_')}_` : '';
-  const _employeePart = employeeName ? `${employeeName.replace(/\s+/g,'_')}_` : '';
-  doc.save(`${_idPart}${_namePart}${_employeePart}Percentage Report.pdf`);
+  doc.save('44.pdf');
 }
 
 // Excel Export Functions
@@ -2850,10 +2848,9 @@ function exportScenarioToExcel(idx, studentName='', studentId='', employeeName='
     ];
     
     // Add student information if provided
-    if (studentName) summaryData.push(['Student Name', studentName]);
     if (studentId) summaryData.push(['Student ID', studentId]);
     if (employeeName) summaryData.push(['Employee Name', employeeName]);
-    if (studentName || studentId || employeeName) summaryData.push([]);
+    if (studentId || employeeName) summaryData.push([]);
     
     summaryData.push(
       ['Scenario', `Scenario ${idx + 1}`],
@@ -2894,10 +2891,7 @@ function exportScenarioToExcel(idx, studentName='', studentId='', employeeName='
     XLSX.utils.book_append_sheet(wb, ws, 'Results');
     
     // Build filename with student info
-    const _idPart = studentId ? `${studentId}_` : '';
-    const _namePart = studentName ? `${studentName.replace(/\s+/g,'_')}_` : '';
-    const _employeePart = employeeName ? `${employeeName.replace(/\s+/g,'_')}_` : '';
-    XLSX.writeFile(wb, `${_idPart}${_namePart}${_employeePart}Scenario_${idx + 1}.xlsx`);
+    XLSX.writeFile(wb, '44.xlsx');
   });
 }
 
@@ -2915,10 +2909,9 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
     ];
     
     // Add student information if provided
-    if (studentName) summaryData.push(['Student Name', studentName]);
     if (studentId) summaryData.push(['Student ID', studentId]);
     if (employeeName) summaryData.push(['Employee Name', employeeName]);
-    if (studentName || studentId || employeeName) summaryData.push([]);
+    if (studentId || employeeName) summaryData.push([]);
     
     summaryData.push(
       ['Scenario', 'Overall %', 'Combination', 'Categories', 'Eligible Majors']
@@ -2952,10 +2945,9 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
       ];
       
       // Add student info to each scenario sheet
-      if (studentName) detailData.push(['Student Name', studentName]);
       if (studentId) detailData.push(['Student ID', studentId]);
       if (employeeName) detailData.push(['Employee Name', employeeName]);
-      if (studentName || studentId || employeeName) detailData.push([]);
+      if (studentId || employeeName) detailData.push([]);
       
       detailData.push(
         ['Overall Percentage', `${scenario.percentage.toFixed(2)}%`],
@@ -2991,10 +2983,7 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
     });
     
     // Build filename with student info
-    const _idPart = studentId ? `${studentId}_` : '';
-    const _namePart = studentName ? `${studentName.replace(/\s+/g,'_')}_` : '';
-    const _employeePart = employeeName ? `${employeeName.replace(/\s+/g,'_')}_` : '';
-    XLSX.writeFile(wb, `${_idPart}${_namePart}${_employeePart}All_Scenarios.xlsx`);
+    XLSX.writeFile(wb, '44.xlsx');
   });
 }
 
