@@ -1143,8 +1143,8 @@
         <input type="text" id="pdf-student-id" placeholder="" autocomplete="off">
       </div>
       <div class="student-field">
-        <label>Employee Name</label>
-        <input type="text" id="pdf-employee-name" placeholder="" autocomplete="off">
+        <label>Employee Name *</label>
+        <input type="text" id="pdf-employee-name" placeholder="Required" autocomplete="off" required>
       </div>
       <div id="pdf-scenario-section" class="student-field" style="display:none; margin-bottom:4px;">
         <label>Preferred Scenario</label>
@@ -1280,11 +1280,21 @@ function promptStudentInfo(action, requireScenarios=false) {
   document.getElementById('pdf-confirm-btn').onclick = function(){
     const name = document.getElementById('pdf-student-name').value.trim();
     const id   = document.getElementById('pdf-student-id').value.trim();
-    const employee = document.getElementById('pdf-employee-name').value.trim();
+    const employee = getRequiredEmployeeName();
+    if(!employee) return;
     document.getElementById('student-info-modal').classList.remove('open');
     if(_pdfPendingAction) _pdfPendingAction(name, id, employee);
     _pdfPendingAction = null;
   };
+}
+
+function getRequiredEmployeeName() {
+  const employeeInput = document.getElementById('pdf-employee-name');
+  const employeeName = employeeInput.value.trim();
+  if(employeeName) return employeeName;
+  alert('Employee name is required.');
+  employeeInput.focus();
+  return '';
 }
 
 function promptStudentInfoThenPick(requireScenarios=false) {
@@ -1337,7 +1347,8 @@ function promptStudentInfoThenPick(requireScenarios=false) {
   document.getElementById('pdf-confirm-btn').onclick = function(){
     const name = document.getElementById('pdf-student-name').value.trim();
     const id   = document.getElementById('pdf-student-id').value.trim();
-    const employee = document.getElementById('pdf-employee-name').value.trim();
+    const employee = getRequiredEmployeeName();
+    if(!employee) return;
     const picked = Array.from(listEl.querySelectorAll('input[name="pdf-scenario-inline"]:checked')).map(i => parseInt(i.value));
     const preferredIdx = picked.length ? picked.slice(0, 2) : [0];
     document.getElementById('student-info-modal').classList.remove('open');
