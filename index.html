@@ -618,6 +618,7 @@
     .scenario-table tbody tr:hover td { background: rgba(255,255,255,0.02); color: var(--text); }
     .scenario-table .td-subject { color: var(--text); font-weight: 500; min-width: 160px; }
     .scenario-table .td-grade { font-weight: 700; text-align: center; }
+    .scenario-table .td-grade .expected-inline { color: #f59e0b; font-weight: 800; }
     .scenario-table .td-score { font-weight: 700; text-align: right; color: var(--text); }
     .scenario-table .td-action { text-align: right; width: 1%; white-space: nowrap; }
     .status-badge {
@@ -1184,6 +1185,11 @@ let _pdfPendingName = '';
 let _pdfPendingId = '';
 let _pdfPendingEmployee = '';
 
+function getBestScenarioLabel(scenario) {
+  const hasExpected = !!scenario?.subjects?.some(s => s.status === 'expected');
+  return hasExpected ? 'Best Scenario (Expected Grades)' : 'Best Scenario (Final Grades)';
+}
+
 function promptStudentInfo(action, requireScenarios=false) {
   if(requireScenarios && (!window._lastScenarios || window._lastScenarios.length === 0)) {
     alert('Please calculate your percentage first before downloading.');
@@ -1216,7 +1222,7 @@ function promptStudentInfoThenPick(requireScenarios=false) {
   const scenarios = window._lastScenarios || [];
   const listEl = document.getElementById('pdf-scenario-list');
   listEl.innerHTML = scenarios.map((s, idx) => {
-    const name = idx === 0 ? 'Best Scenario' : `Alternative Scenario ${idx + 1}`;
+    const name = idx === 0 ? getBestScenarioLabel(s) : `Alternative Scenario ${idx + 1}`;
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
       <input type="radio" name="pdf-scenario-inline" value="${idx}" ${idx===0?'checked':''}>
@@ -1245,7 +1251,7 @@ function openScenarioPickModal() {
   if(!scenarios || !scenarios.length) return;
   const list = document.getElementById('scenario-pick-list');
   list.innerHTML = scenarios.map((s, idx) => {
-    const name = idx === 0 ? 'Best Scenario' : `Alternative Scenario ${idx + 1}`;
+    const name = idx === 0 ? getBestScenarioLabel(s) : `Alternative Scenario ${idx + 1}`;
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
       <input type="radio" name="scenario-pick" value="${idx}" ${idx===0?'checked':''}>
@@ -1324,7 +1330,7 @@ const gradingScheme = {
 const subjectLists = {
   'o-level': {
     'Languages': ['Afrikaans - Second Language','Arabic - First Language','Arabic - Foreign Language','Bahasa Indonesia','Bengali','Chinese - First Language','Chinese - Second Language','Chinese (Mandarin) - Foreign Language','Dutch - Foreign Language','English - First Language','English - Second Language','English - Literature','French - First Language','French - Foreign Language','German - First Language','German - Foreign Language','Hindi as a Second Language','IsiZulu as a Second Language','Italian - Foreign Language','Japanese - First Language','Japanese - Foreign Language','Kazakh as a Second Language','Korean as a Second Language','Malay - Foreign Language','Marathi','Nepali','Portuguese - First Language','Portuguese - Foreign Language','Punjabi','Russian - First Language','Sinhala','Spanish - First Language','Spanish - Foreign Language','Tamil','Thai - First Language','Turkish - First Language','Urdu as a Second Language','Vietnamese as a Second Language','Bangladesh Studies'],
-    'Social Studies': ['Business Studies','Development Studies','Economics','Enterprise','Environmental Management','Geography','Global Perspectives','History','Islamic Studies','Pakistan Studies','Religious Studies','Sociology','Travel & Tourism'],
+    'Social Studies': ['Business Studies','Business','Development Studies','Economics','Enterprise','Environmental Management','Geography','Global Perspectives','History','Islamic Studies','Pakistan Studies','Religious Studies','Sociology','Travel & Tourism'],
     'Sciences': ['Agriculture','Biology','Chemistry','Combined Science','Computer Science','Co-ordinated Sciences (Double Award)','Environmental Management','Information & Communication Technology','Marine Science','Physical Education','Physical Science','Physics','Psychology'],
     'Math': ['Mathematics','Additional Mathematics','International Mathematics'],
     'Arts and Design': ['Accounting','Art & Design','Business Studies','Design & Technology','Drama','Enterprise','Food & Nutrition','Music','Physical Education','Travel & Tourism']
@@ -1944,19 +1950,20 @@ function renderScenarioCards() {
   scenarios.forEach((scenario, idx)=>{
     recalculateScenario(scenario);
     const cardClass = idx===0 ? 'best' : 'alt';
-    const labelText = idx===0 ? 'Best Scenario' : `Alternative ${idx+1}`;
+    const labelText = idx===0 ? getBestScenarioLabel(scenario) : `Alternative ${idx+1}`;
     const subjectCount = scenario.subjects.length;
     const comboText = `${scenario.oCount} O-Level${scenario.asCount>0?` + ${scenario.asCount} AS-Level`:''}${scenario.aCount>0?` + ${scenario.aCount} A-Level`:''}${scenario.moeCount>0?` + ${scenario.moeCount} MOE`:''}`.trim();
 
     const rows = scenario.subjects.map(s=>{
       const removeKey = encodeURIComponent(scenarioSubjectKey(s));
       const status = s.status || 'final';
+      const expectedSuffix = status === 'expected' ? ' <span class="expected-inline">(Expected)</span>' : '';
       return `
       <tr>
         <td class="td-subject">${s.subject}</td>
         <td><span class="level-pill ${s.level}">${levelLabels[s.level]}</span></td>
         <td>${s.category}</td>
-        <td class="td-grade">${s.grade}</td>
+        <td class="td-grade">${s.grade}${expectedSuffix}</td>
         <td><span class="status-badge ${status}">${gradeStatusLabels[status] || 'Final'}</span></td>
         <td class="td-score">${s.percentage}%</td>
         <td class="td-action"><button class="scenario-remove-btn" onclick="removeSubjectFromScenario(${idx}, '${removeKey}')">Remove</button></td>
@@ -1972,7 +1979,7 @@ function renderScenarioCards() {
           return `<div class="excluded-item">
             <div class="excluded-meta">
               <span class="excluded-name">${s.subject}</span>
-              <span class="excluded-sub">${levelLabels[s.level]} | ${s.category} | ${s.grade} | ${gradeStatusLabels[s.status || 'final']} | ${s.percentage}%</span>
+              <span class="excluded-sub">${levelLabels[s.level]} | ${s.category} | ${s.grade}${(s.status || 'final') === 'expected' ? ' (Expected)' : ''} | ${s.percentage}%</span>
             </div>
             <button class="excluded-add-btn" onclick="addSubjectToScenario(${idx}, '${addKey}')">Add</button>
           </div>`;
@@ -2118,9 +2125,13 @@ function calculateOverallPercentage() {
   
   // Show success modal with best scenario
   const best = window._lastScenarios[0];
+  const bestTypeMsg = best.subjects.some(s => s.status === 'expected')
+    ? 'Best scenario with expected grades of selected levels.'
+    : 'Best scenario with final grades.';
   const majorColor = (key)=>({sci:'#34d399', com:'#fbbf24', lit:'#c4b5fd', med:'#f87171', dent:'#c4b5fd', pharm:'#7dd3fc'})[key] || '#cbd5e1';
   document.getElementById('success-message').innerHTML=`
     <p>Congratulations! You have achieved a valid combination.</p>
+    <p class="success-note">${bestTypeMsg}</p>
     <span class="big-pct">${best.percentage.toFixed(2)}%</span>
     <p class="success-note">Overall Admission Percentage</p>
     ${best.majorTypes.map(m=>`<p class="success-major" style="color:${majorColor(m.key)}">✅ Eligible: ${m.label} Majors</p>`).join('')}
@@ -2334,7 +2345,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   const scenario = scenarios[idx];
   const {jsPDF} = window.jspdf;
   const doc = new jsPDF();
-  const labelText = idx===0 ? 'Best Scenario' : `Alternative Scenario ${idx+1}`;
+  const labelText = idx===0 ? getBestScenarioLabel(scenario) : `Alternative Scenario ${idx+1}`;
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
   // Scenario title & percentage
@@ -2513,7 +2524,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     if(idx > 0) { doc.addPage(); yPos = 20; }
     const isPreferred = preferredIdx !== null && idx === preferredIdx;
     const isBest = idx === 0;
-    let labelText = isBest ? 'Best Scenario' : `Alternative Scenario ${idx + 1}`;
+    let labelText = isBest ? getBestScenarioLabel(scenario) : `Alternative Scenario ${idx + 1}`;
     if(isPreferred) labelText += '  [Preferred]';
     const headerColor = isBest ? [5,150,105] : [79,70,229];
 
