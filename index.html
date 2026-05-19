@@ -568,26 +568,49 @@
       animation: fadeSlideUp 0.35s var(--ease) both; margin-bottom: 16px;
       background: var(--surface);
     }
-    .scenario-card.best { border-color: rgba(16,185,129,0.3); }
-    .scenario-card.alt  { border-color: rgba(99,102,241,0.2); }
+    .scenario-card.final { border-color: rgba(16,185,129,0.35); }
+    .scenario-card.expected { border-color: rgba(248,180,180,0.72); }
     .scenario-header {
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
       padding: 14px 18px; border-bottom: 1px solid var(--border);
     }
-    .scenario-card.best .scenario-header { background: rgba(16,185,129,0.05); }
-    .scenario-card.alt  .scenario-header { background: rgba(99,102,241,0.04); }
+    .scenario-card.final .scenario-header { background: rgba(16,185,129,0.08); }
+    .scenario-card.expected .scenario-header { background: rgba(255,226,226,0.62); }
     .scenario-title-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .scenario-label {
       font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 3px 10px;
       border-radius: var(--r-pill);
     }
-    .scenario-card.best .scenario-label { background: rgba(16,185,129,0.15); color: #34d399; }
-    .scenario-card.alt  .scenario-label { background: rgba(99,102,241,0.15); color: #a5b4fc; }
+    .scenario-card.final .scenario-label { background: rgba(16,185,129,0.18); color: #10b981; }
+    .scenario-card.expected .scenario-label { background: rgba(248,180,180,0.35); color: #b91c1c; }
     .scenario-pct {
       font-size: 1.6rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
     }
-    .scenario-card.best .scenario-pct { color: #34d399; }
-    .scenario-card.alt  .scenario-pct { color: #a5b4fc; }
+    .scenario-card.final .scenario-pct { color: #10b981; }
+    .scenario-card.expected .scenario-pct { color: #b91c1c; }
+    .scenario-group {
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    .scenario-group.final-group {
+      border-color: rgba(16,185,129,0.3);
+      background: rgba(16,185,129,0.045);
+    }
+    .scenario-group.expected-group {
+      border-color: rgba(248,180,180,0.75);
+      background: rgba(255,241,241,0.5);
+    }
+    .scenario-group-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 2px 4px 10px;
+    }
+    .scenario-group.final-group .scenario-group-title { color: #059669; }
+    .scenario-group.expected-group .scenario-group-title { color: #b91c1c; }
     .scenario-meta {
       display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 18px;
       border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.015);
@@ -1187,9 +1210,9 @@ let _pdfPendingName = '';
 let _pdfPendingId = '';
 let _pdfPendingEmployee = '';
 
-function getBestScenarioLabel(scenario) {
+function getScenarioDisplayLabel(scenario, number) {
   const hasExpected = !!scenario?.subjects?.some(s => s.status === 'expected');
-  return hasExpected ? 'Best Scenario (Expected Grades)' : 'Best Scenario (Final Grades)';
+  return `Scenario ${number} (${hasExpected ? 'Expected Grades' : 'Final Grades'})`;
 }
 
 function promptStudentInfo(action, requireScenarios=false) {
@@ -1224,7 +1247,7 @@ function promptStudentInfoThenPick(requireScenarios=false) {
   const scenarios = window._lastScenarios || [];
   const listEl = document.getElementById('pdf-scenario-list');
   listEl.innerHTML = scenarios.map((s, idx) => {
-    const name = idx === 0 ? getBestScenarioLabel(s) : `Alternative Scenario ${idx + 1}`;
+    const name = getScenarioDisplayLabel(s, idx + 1);
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
       <input type="radio" name="pdf-scenario-inline" value="${idx}" ${idx===0?'checked':''}>
@@ -1253,7 +1276,7 @@ function openScenarioPickModal() {
   if(!scenarios || !scenarios.length) return;
   const list = document.getElementById('scenario-pick-list');
   list.innerHTML = scenarios.map((s, idx) => {
-    const name = idx === 0 ? getBestScenarioLabel(s) : `Alternative Scenario ${idx + 1}`;
+    const name = getScenarioDisplayLabel(s, idx + 1);
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
       <input type="radio" name="scenario-pick" value="${idx}" ${idx===0?'checked':''}>
@@ -1967,13 +1990,14 @@ function renderScenarioCards() {
     return;
   }
 
-  let resultHTML = '<div id="scenarios-list">';
+  const finalCards = [];
+  const expectedCards = [];
 
   scenarios.forEach((scenario, idx)=>{
     recalculateScenario(scenario);
-    const cardClass = idx===0 ? 'best' : 'alt';
-    const labelText = idx===0 ? getBestScenarioLabel(scenario) : `Alternative ${idx+1}`;
     const hasExpected = scenarioHasExpectedGrades(scenario);
+    const cardClass = hasExpected ? 'expected' : 'final';
+    const labelText = getScenarioDisplayLabel(scenario, idx + 1);
     const scenarioTypeChip = hasExpected
       ? '<span class="scenario-meta-chip expected-status">Contains Expected Grades</span>'
       : '<span class="scenario-meta-chip final-status">Final Grades Only</span>';
@@ -2012,7 +2036,7 @@ function renderScenarioCards() {
         }).join('')
       : '<div class="excluded-empty">All entered subjects are included in this scenario.</div>';
 
-    resultHTML += `
+    const cardHtml = `
     <div class="scenario-card ${cardClass}">
       <div class="scenario-header">
         <div class="scenario-title-group">
@@ -2048,7 +2072,24 @@ function renderScenarioCards() {
         </button>
       </div>
     </div>`;
+
+    if(hasExpected) expectedCards.push(cardHtml);
+    else finalCards.push(cardHtml);
   });
+
+  let resultHTML = '<div id="scenarios-list">';
+  if(finalCards.length) {
+    resultHTML += `<div class="scenario-group final-group">
+      <div class="scenario-group-title">Final Grade Scenarios</div>
+      ${finalCards.join('')}
+    </div>`;
+  }
+  if(expectedCards.length) {
+    resultHTML += `<div class="scenario-group expected-group">
+      <div class="scenario-group-title">Expected Grade Scenarios</div>
+      ${expectedCards.join('')}
+    </div>`;
+  }
 
   if(scenarios.length > 1) {
     resultHTML += `<div class="scenarios-actions">
@@ -2371,7 +2412,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   const scenario = scenarios[idx];
   const {jsPDF} = window.jspdf;
   const doc = new jsPDF();
-  const labelText = idx===0 ? getBestScenarioLabel(scenario) : `Alternative Scenario ${idx+1}`;
+  const labelText = getScenarioDisplayLabel(scenario, idx + 1);
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
   // Scenario title & percentage
@@ -2550,7 +2591,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     if(idx > 0) { doc.addPage(); yPos = 20; }
     const isPreferred = preferredIdx !== null && idx === preferredIdx;
     const isBest = idx === 0;
-    let labelText = isBest ? getBestScenarioLabel(scenario) : `Alternative Scenario ${idx + 1}`;
+    let labelText = getScenarioDisplayLabel(scenario, idx + 1);
     if(isPreferred) labelText += '  [Preferred]';
     const headerColor = isBest ? [5,150,105] : [79,70,229];
 
