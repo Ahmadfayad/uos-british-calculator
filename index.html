@@ -570,12 +570,14 @@
     }
     .scenario-card.final { border-color: rgba(16,185,129,0.35); }
     .scenario-card.expected { border-color: rgba(248,180,180,0.72); }
+    .scenario-card.other { border-color: rgba(96,165,250,0.45); }
     .scenario-header {
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
       padding: 14px 18px; border-bottom: 1px solid var(--border);
     }
     .scenario-card.final .scenario-header { background: rgba(16,185,129,0.08); }
     .scenario-card.expected .scenario-header { background: rgba(255,226,226,0.62); }
+    .scenario-card.other .scenario-header { background: rgba(191,219,254,0.35); }
     .scenario-title-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .scenario-label {
       font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 3px 10px;
@@ -583,11 +585,13 @@
     }
     .scenario-card.final .scenario-label { background: rgba(16,185,129,0.18); color: #10b981; }
     .scenario-card.expected .scenario-label { background: rgba(248,180,180,0.35); color: #b91c1c; }
+    .scenario-card.other .scenario-label { background: rgba(147,197,253,0.35); color: #1d4ed8; }
     .scenario-pct {
       font-size: 1.6rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
     }
     .scenario-card.final .scenario-pct { color: #10b981; }
     .scenario-card.expected .scenario-pct { color: #b91c1c; }
+    .scenario-card.other .scenario-pct { color: #2563eb; }
     .scenario-group {
       border: 1px solid var(--border);
       border-radius: var(--r-xl);
@@ -602,6 +606,10 @@
       border-color: rgba(248,180,180,0.75);
       background: rgba(255,241,241,0.5);
     }
+    .scenario-group.other-group {
+      border-color: rgba(96,165,250,0.45);
+      background: rgba(219,234,254,0.35);
+    }
     .scenario-group-title {
       font-size: 0.74rem;
       font-weight: 800;
@@ -611,6 +619,7 @@
     }
     .scenario-group.final-group .scenario-group-title { color: #059669; }
     .scenario-group.expected-group .scenario-group-title { color: #b91c1c; }
+    .scenario-group.other-group .scenario-group-title { color: #1d4ed8; }
     .scenario-meta {
       display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 18px;
       border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.015);
@@ -1223,26 +1232,38 @@ let _pdfPendingName = '';
 let _pdfPendingId = '';
 let _pdfPendingEmployee = '';
 
-function buildScenarioLabelMap(scenarios) {
-  const labelMap = new Map();
-  const expectedScenarios = scenarios.filter(scenarioHasExpectedGrades).sort((a, b) => b.percentage - a.percentage);
+function buildScenarioPresentation(scenarios) {
   const finalScenarios = scenarios.filter(s => !scenarioHasExpectedGrades(s)).sort((a, b) => b.percentage - a.percentage);
+  const expectedScenarios = scenarios.filter(scenarioHasExpectedGrades).sort((a, b) => b.percentage - a.percentage);
+  const ordered = [];
+  const labelMap = new Map();
+  const toneMap = new Map();
 
-  expectedScenarios.forEach((scenario, idx) => {
-    const label = idx === 0
-      ? 'Best Scenario (Expected Grades)'
-      : `Alternative Scenario ${idx} (Expected Grades)`;
-    labelMap.set(scenario, label);
+  const bestFinal = finalScenarios[0] || null;
+  const bestExpected = expectedScenarios[0] || null;
+
+  if(bestFinal) {
+    ordered.push(bestFinal);
+    labelMap.set(bestFinal, 'Best Scenario (Final Grades)');
+    toneMap.set(bestFinal, 'final');
+  }
+
+  if(bestExpected) {
+    ordered.push(bestExpected);
+    labelMap.set(bestExpected, 'Best Scenario (Expected Grades)');
+    toneMap.set(bestExpected, 'expected');
+  }
+
+  const remaining = [...finalScenarios.slice(bestFinal ? 1 : 0), ...expectedScenarios.slice(bestExpected ? 1 : 0)]
+    .sort((a, b) => b.percentage - a.percentage);
+
+  remaining.forEach((scenario, idx) => {
+    labelMap.set(scenario, `Alternative Scenario ${idx + 1} (${scenarioHasExpectedGrades(scenario) ? 'Expected Grades' : 'Final Grades'})`);
+    toneMap.set(scenario, 'other');
+    ordered.push(scenario);
   });
 
-  finalScenarios.forEach((scenario, idx) => {
-    const label = idx === 0
-      ? 'Best Scenario (Final Grades)'
-      : `Alternative Scenario ${idx} (Final Grades)`;
-    labelMap.set(scenario, label);
-  });
-
-  return labelMap;
+  return { ordered, labelMap, toneMap, bestFinal, bestExpected };
 }
 
 function promptStudentInfo(action, requireScenarios=false) {
@@ -1275,13 +1296,15 @@ function promptStudentInfoThenPick(requireScenarios=false) {
   _pdfPendingAction = null;
   // Populate inline scenario list
   const scenarios = window._lastScenarios || [];
-  const labelMap = buildScenarioLabelMap(scenarios);
+  const presentation = buildScenarioPresentation(scenarios);
+  const orderedScenarios = presentation.ordered;
+  const labelMap = presentation.labelMap;
   const listEl = document.getElementById('pdf-scenario-list');
-  listEl.innerHTML = scenarios.map((s, idx) => {
+  listEl.innerHTML = orderedScenarios.map((s, idx) => {
     const name = labelMap.get(s) || 'Scenario';
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx<2?' selected':''}">
-      <input type="checkbox" name="pdf-scenario-inline" value="${idx}" ${idx<2?'checked':''}>
+      <input type="checkbox" name="pdf-scenario-inline" value="${scenarios.indexOf(s)}" ${idx<2?'checked':''}>
       <div class="scenario-pick-label">
         <div class="scenario-pick-name">${name} &mdash; ${s.percentage.toFixed(2)}%</div>
         <div class="scenario-pick-pct">${combo}</div>
@@ -1308,7 +1331,7 @@ function promptStudentInfoThenPick(requireScenarios=false) {
   });
   refreshInlinePickStyles();
 
-  document.getElementById('pdf-scenario-section').style.display = scenarios.length > 0 ? 'flex' : 'none';
+  document.getElementById('pdf-scenario-section').style.display = orderedScenarios.length > 0 ? 'flex' : 'none';
   document.getElementById('student-info-modal').classList.add('open');
   document.getElementById('pdf-student-name').focus();
   document.getElementById('pdf-confirm-btn').onclick = function(){
@@ -1325,13 +1348,15 @@ function promptStudentInfoThenPick(requireScenarios=false) {
 function openScenarioPickModal() {
   const scenarios = window._lastScenarios;
   if(!scenarios || !scenarios.length) return;
-  const labelMap = buildScenarioLabelMap(scenarios);
+  const presentation = buildScenarioPresentation(scenarios);
+  const orderedScenarios = presentation.ordered;
+  const labelMap = presentation.labelMap;
   const list = document.getElementById('scenario-pick-list');
-  list.innerHTML = scenarios.map((s, idx) => {
+  list.innerHTML = orderedScenarios.map((s, idx) => {
     const name = labelMap.get(s) || 'Scenario';
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
-      <input type="radio" name="scenario-pick" value="${idx}" ${idx===0?'checked':''}>
+      <input type="radio" name="scenario-pick" value="${scenarios.indexOf(s)}" ${idx===0?'checked':''}>
       <div class="scenario-pick-label">
         <div class="scenario-pick-name">${name} &mdash; ${s.percentage.toFixed(2)}%</div>
         <div class="scenario-pick-pct">${combo}</div>
@@ -2088,12 +2113,17 @@ function renderScenarioCards() {
 
   const finalCards = [];
   const expectedCards = [];
-  const labelMap = buildScenarioLabelMap(scenarios);
+  const otherCards = [];
+  const presentation = buildScenarioPresentation(scenarios);
+  const orderedScenarios = presentation.ordered;
+  const labelMap = presentation.labelMap;
+  const toneMap = presentation.toneMap;
 
-  scenarios.forEach((scenario, idx)=>{
+  orderedScenarios.forEach((scenario)=>{
     recalculateScenario(scenario);
+    const tone = toneMap.get(scenario) || 'other';
     const hasExpected = scenarioHasExpectedGrades(scenario);
-    const cardClass = hasExpected ? 'expected' : 'final';
+    const cardClass = tone === 'other' ? 'other' : tone;
     const labelText = labelMap.get(scenario) || (hasExpected ? 'Expected Grades Scenario' : 'Final Grades Scenario');
     const scenarioTypeChip = hasExpected
       ? '<span class="scenario-meta-chip expected-status">Contains Expected Grades</span>'
@@ -2101,6 +2131,7 @@ function renderScenarioCards() {
     const subjectCount = scenario.subjects.length;
     const comboText = `${scenario.oCount} O-Level${scenario.asCount>0?` + ${scenario.asCount} AS-Level`:''}${scenario.aCount>0?` + ${scenario.aCount} A-Level`:''}${scenario.moeCount>0?` + ${scenario.moeCount} MOE`:''}`.trim();
 
+    const scenarioIndex = scenarios.indexOf(scenario);
     const rows = scenario.subjects.map(s=>{
       const removeKey = encodeURIComponent(scenarioSubjectKey(s));
       const status = s.status || 'final';
@@ -2113,7 +2144,7 @@ function renderScenarioCards() {
         <td class="td-grade">${s.grade}${expectedSuffix}</td>
         <td><span class="status-badge ${status}">${gradeStatusLabels[status] || 'Final'}</span></td>
         <td class="td-score">${s.percentage}%</td>
-        <td class="td-action"><button class="scenario-remove-btn" onclick="removeSubjectFromScenario(${idx}, '${removeKey}')">Remove</button></td>
+        <td class="td-action"><button class="scenario-remove-btn" onclick="removeSubjectFromScenario(${scenarioIndex}, '${removeKey}')">Remove</button></td>
       </tr>`;
     }).join('');
 
@@ -2123,12 +2154,13 @@ function renderScenarioCards() {
     const excludedRows = excludedSubjects.length
       ? excludedSubjects.map(s=>{
           const addKey = encodeURIComponent(scenarioSubjectKey(s));
+        const scenarioIndex = scenarios.indexOf(scenario);
           return `<div class="excluded-item">
             <div class="excluded-meta">
               <span class="excluded-name">${s.subject}</span>
               <span class="excluded-sub">${levelLabels[s.level]} | ${s.category} | ${s.grade}${(s.status || 'final') === 'expected' ? ' (Expected)' : ''} | ${s.percentage}%</span>
             </div>
-            <button class="excluded-add-btn" onclick="addSubjectToScenario(${idx}, '${addKey}')">Add</button>
+            <button class="excluded-add-btn" onclick="addSubjectToScenario(${scenarioIndex}, '${addKey}')">Add</button>
           </div>`;
         }).join('')
       : '<div class="excluded-empty">All entered subjects are included in this scenario.</div>';
@@ -2159,34 +2191,39 @@ function renderScenarioCards() {
         <div class="excluded-list">${excludedRows}</div>
       </div>
       <div class="scenario-footer">
-        <button class="btn btn-ghost" style="font-size:0.8rem;padding:7px 14px;" onclick="promptStudentInfo((n,i,e)=>downloadScenarioPDF(${idx},n,i,e))">
+        <button class="btn btn-ghost" style="font-size:0.8rem;padding:7px 14px;" onclick="promptStudentInfo((n,i,e)=>downloadScenarioPDF(${scenarioIndex},n,i,e))">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download PDF
         </button>
-        <button class="btn btn-ghost" style="font-size:0.8rem;padding:7px 14px;" onclick="promptStudentInfo((n,i,e)=>exportScenarioToExcel(${idx},n,i,e))">
+        <button class="btn btn-ghost" style="font-size:0.8rem;padding:7px 14px;" onclick="promptStudentInfo((n,i,e)=>exportScenarioToExcel(${scenarioIndex},n,i,e))">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
           Export to Excel
         </button>
       </div>
     </div>`;
 
-    if(hasExpected) expectedCards.push({ html: cardHtml, percentage: scenario.percentage });
-    else finalCards.push({ html: cardHtml, percentage: scenario.percentage });
+    if(tone === 'final') finalCards.push(cardHtml);
+    else if(tone === 'expected') expectedCards.push(cardHtml);
+    else otherCards.push(cardHtml);
   });
 
   let resultHTML = '<div id="scenarios-list">';
   if(finalCards.length) {
-    finalCards.sort((a, b) => b.percentage - a.percentage);
     resultHTML += `<div class="scenario-group final-group">
-      <div class="scenario-group-title">Final Grade Scenarios</div>
-      ${finalCards.map(c => c.html).join('')}
+      <div class="scenario-group-title">Best Final Grade Scenario</div>
+      ${finalCards.join('')}
     </div>`;
   }
   if(expectedCards.length) {
-    expectedCards.sort((a, b) => b.percentage - a.percentage);
     resultHTML += `<div class="scenario-group expected-group">
-      <div class="scenario-group-title">Expected Grade Scenarios</div>
-      ${expectedCards.map(c => c.html).join('')}
+      <div class="scenario-group-title">Best Expected Grade Scenario</div>
+      ${expectedCards.join('')}
+    </div>`;
+  }
+  if(otherCards.length) {
+    resultHTML += `<div class="scenario-group other-group">
+      <div class="scenario-group-title">Other Alternative Scenarios</div>
+      ${otherCards.join('')}
     </div>`;
   }
 
@@ -2511,13 +2548,15 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   const scenario = scenarios[idx];
   const {jsPDF} = window.jspdf;
   const doc = new jsPDF();
-  const labelMap = buildScenarioLabelMap(scenarios);
+  const presentation = buildScenarioPresentation(scenarios);
+  const labelMap = presentation.labelMap;
+  const toneMap = presentation.toneMap;
   const labelText = labelMap.get(scenario) || 'Scenario';
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
   // Scenario title & percentage
-  const hasExpected = scenarioHasExpectedGrades(scenario);
-  const headerColor = hasExpected ? [185, 28, 28] : [5, 150, 105];
+  const tone = toneMap.get(scenario) || 'other';
+  const headerColor = tone === 'final' ? [5, 150, 105] : tone === 'expected' ? [185, 28, 28] : [37, 99, 235];
   doc.setFillColor(...headerColor); doc.roundedRect(15, yPos, 180, 26, 3, 3, 'F');
   doc.setTextColor(255,255,255); doc.setFontSize(10); doc.setFont('helvetica','bold');
   doc.text(labelText.toUpperCase(), 105, yPos+9, {align:'center'});
@@ -2530,7 +2569,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   doc.text(`Combination: ${comboText}`, 15, yPos);
   doc.text(`Categories: ${scenario.categories.join(', ')}`, 15, yPos+6);
   if(scenario.majorTypes && scenario.majorTypes.length) {
-    const majorBg  = {sci:[5,150,105], com:[217,119,6], lit:[139,92,246], med:[220,38,38], dent:[124,58,237], pharm:[2,132,199]};
+    const majorBg  = {sci:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
     const pillH = 6, pillPad = 4, gap = 3;
     let pillX = 15;
     scenario.majorTypes.forEach((m)=>{
@@ -2540,7 +2579,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
       const textW = doc.getTextWidth(label);
       const pillW = textW + pillPad * 2;
       doc.setFillColor(...bg); doc.roundedRect(pillX, yPos+11, pillW, pillH, 1.5, 1.5, 'F');
-      doc.setTextColor(255,255,255);
+      doc.setTextColor(17,24,39);
       doc.text(label, pillX + pillPad, yPos + 11 + 4.2);
       pillX += pillW + gap;
     });
@@ -2684,7 +2723,10 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
   const {jsPDF} = window.jspdf;
   const doc = new jsPDF();
   const levelColors = {'o-level':[8,145,178],'as-level':[217,119,6],'a-level':[5,150,105],'moe':[124,58,237]};
-  const labelMap = buildScenarioLabelMap(scenarios);
+  const presentation = buildScenarioPresentation(scenarios);
+  const orderedScenarios = presentation.ordered;
+  const labelMap = presentation.labelMap;
+  const toneMap = presentation.toneMap;
   const preferredIndices = Array.isArray(preferredIdx)
     ? preferredIdx
     : (preferredIdx === null || preferredIdx === undefined ? [] : [preferredIdx]);
@@ -2692,13 +2734,14 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
 
-  scenarios.forEach((scenario, idx) => {
+  orderedScenarios.forEach((scenario, idx) => {
     if(idx > 0) { doc.addPage(); yPos = 20; }
-    const isPreferred = preferredSet.has(idx);
-    const hasExpected = scenarioHasExpectedGrades(scenario);
+    const sourceIdx = scenarios.indexOf(scenario);
+    const isPreferred = preferredSet.has(sourceIdx);
     let labelText = labelMap.get(scenario) || 'Scenario';
     if(isPreferred) labelText += '  [Preferred]';
-    const headerColor = hasExpected ? [185, 28, 28] : [5, 150, 105];
+    const tone = toneMap.get(scenario) || 'other';
+    const headerColor = tone === 'final' ? [5, 150, 105] : tone === 'expected' ? [185, 28, 28] : [37, 99, 235];
 
     // Scenario header block
     doc.setFillColor(...headerColor); doc.roundedRect(15, yPos, 180, 26, 3, 3, 'F');
@@ -2716,7 +2759,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     doc.text(`Combination: ${comboText}`, 15, yPos);
     doc.text(`Categories: ${scenario.categories.join(', ')}`, 15, yPos+6);
     if(scenario.majorTypes && scenario.majorTypes.length) {
-      const majorBg  = {sci:[5,150,105], com:[217,119,6], lit:[139,92,246], med:[220,38,38], dent:[124,58,237], pharm:[2,132,199]};
+      const majorBg  = {sci:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
       const pillH = 6, pillPad = 4, gap = 3;
       let pillX = 15;
       scenario.majorTypes.forEach((m)=>{
@@ -2726,7 +2769,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
         const textW = doc.getTextWidth(label);
         const pillW = textW + pillPad * 2;
         doc.setFillColor(...bg); doc.roundedRect(pillX, yPos+11, pillW, pillH, 1.5, 1.5, 'F');
-        doc.setTextColor(255,255,255);
+        doc.setTextColor(17,24,39);
         doc.text(label, pillX + pillPad, yPos + 11 + 4.2);
         pillX += pillW + gap;
       });
