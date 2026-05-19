@@ -1210,9 +1210,26 @@ let _pdfPendingName = '';
 let _pdfPendingId = '';
 let _pdfPendingEmployee = '';
 
-function getScenarioDisplayLabel(scenario, number) {
-  const hasExpected = !!scenario?.subjects?.some(s => s.status === 'expected');
-  return `Scenario ${number} (${hasExpected ? 'Expected Grades' : 'Final Grades'})`;
+function buildScenarioLabelMap(scenarios) {
+  const labelMap = new Map();
+  const expectedScenarios = scenarios.filter(scenarioHasExpectedGrades).sort((a, b) => b.percentage - a.percentage);
+  const finalScenarios = scenarios.filter(s => !scenarioHasExpectedGrades(s)).sort((a, b) => b.percentage - a.percentage);
+
+  expectedScenarios.forEach((scenario, idx) => {
+    const label = idx === 0
+      ? 'Best Scenario (Expected Grades)'
+      : `Alternative Scenario ${idx} (Expected Grades)`;
+    labelMap.set(scenario, label);
+  });
+
+  finalScenarios.forEach((scenario, idx) => {
+    const label = idx === 0
+      ? 'Best Scenario (Final Grades)'
+      : `Alternative Scenario ${idx} (Final Grades)`;
+    labelMap.set(scenario, label);
+  });
+
+  return labelMap;
 }
 
 function promptStudentInfo(action, requireScenarios=false) {
@@ -1245,9 +1262,10 @@ function promptStudentInfoThenPick(requireScenarios=false) {
   _pdfPendingAction = null;
   // Populate inline scenario list
   const scenarios = window._lastScenarios || [];
+  const labelMap = buildScenarioLabelMap(scenarios);
   const listEl = document.getElementById('pdf-scenario-list');
   listEl.innerHTML = scenarios.map((s, idx) => {
-    const name = getScenarioDisplayLabel(s, idx + 1);
+    const name = labelMap.get(s) || 'Scenario';
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
       <input type="radio" name="pdf-scenario-inline" value="${idx}" ${idx===0?'checked':''}>
@@ -1274,9 +1292,10 @@ function promptStudentInfoThenPick(requireScenarios=false) {
 function openScenarioPickModal() {
   const scenarios = window._lastScenarios;
   if(!scenarios || !scenarios.length) return;
+  const labelMap = buildScenarioLabelMap(scenarios);
   const list = document.getElementById('scenario-pick-list');
   list.innerHTML = scenarios.map((s, idx) => {
-    const name = getScenarioDisplayLabel(s, idx + 1);
+    const name = labelMap.get(s) || 'Scenario';
     const combo = `${s.oCount} O-Level${s.asCount>0?` + ${s.asCount} AS-Level`:''}${s.aCount>0?` + ${s.aCount} A-Level`:''}`;
     return `<label class="scenario-pick-item${idx===0?' selected':''}" onclick="pickScenario(this)">
       <input type="radio" name="scenario-pick" value="${idx}" ${idx===0?'checked':''}>
@@ -1992,12 +2011,13 @@ function renderScenarioCards() {
 
   const finalCards = [];
   const expectedCards = [];
+  const labelMap = buildScenarioLabelMap(scenarios);
 
   scenarios.forEach((scenario, idx)=>{
     recalculateScenario(scenario);
     const hasExpected = scenarioHasExpectedGrades(scenario);
     const cardClass = hasExpected ? 'expected' : 'final';
-    const labelText = getScenarioDisplayLabel(scenario, idx + 1);
+    const labelText = labelMap.get(scenario) || (hasExpected ? 'Expected Grades Scenario' : 'Final Grades Scenario');
     const scenarioTypeChip = hasExpected
       ? '<span class="scenario-meta-chip expected-status">Contains Expected Grades</span>'
       : '<span class="scenario-meta-chip final-status">Final Grades Only</span>';
@@ -2073,21 +2093,23 @@ function renderScenarioCards() {
       </div>
     </div>`;
 
-    if(hasExpected) expectedCards.push(cardHtml);
-    else finalCards.push(cardHtml);
+    if(hasExpected) expectedCards.push({ html: cardHtml, percentage: scenario.percentage });
+    else finalCards.push({ html: cardHtml, percentage: scenario.percentage });
   });
 
   let resultHTML = '<div id="scenarios-list">';
   if(finalCards.length) {
+    finalCards.sort((a, b) => b.percentage - a.percentage);
     resultHTML += `<div class="scenario-group final-group">
       <div class="scenario-group-title">Final Grade Scenarios</div>
-      ${finalCards.join('')}
+      ${finalCards.map(c => c.html).join('')}
     </div>`;
   }
   if(expectedCards.length) {
+    expectedCards.sort((a, b) => b.percentage - a.percentage);
     resultHTML += `<div class="scenario-group expected-group">
       <div class="scenario-group-title">Expected Grade Scenarios</div>
-      ${expectedCards.join('')}
+      ${expectedCards.map(c => c.html).join('')}
     </div>`;
   }
 
@@ -2412,7 +2434,8 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   const scenario = scenarios[idx];
   const {jsPDF} = window.jspdf;
   const doc = new jsPDF();
-  const labelText = getScenarioDisplayLabel(scenario, idx + 1);
+  const labelMap = buildScenarioLabelMap(scenarios);
+  const labelText = labelMap.get(scenario) || 'Scenario';
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
   // Scenario title & percentage
@@ -2584,6 +2607,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
   const {jsPDF} = window.jspdf;
   const doc = new jsPDF();
   const levelColors = {'o-level':[8,145,178],'as-level':[217,119,6],'a-level':[5,150,105],'moe':[124,58,237]};
+  const labelMap = buildScenarioLabelMap(scenarios);
 
   let yPos = buildPdfHeader(doc, studentName, studentId, employeeName);
 
@@ -2591,7 +2615,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     if(idx > 0) { doc.addPage(); yPos = 20; }
     const isPreferred = preferredIdx !== null && idx === preferredIdx;
     const isBest = idx === 0;
-    let labelText = getScenarioDisplayLabel(scenario, idx + 1);
+    let labelText = labelMap.get(scenario) || 'Scenario';
     if(isPreferred) labelText += '  [Preferred]';
     const headerColor = isBest ? [5,150,105] : [79,70,229];
 
