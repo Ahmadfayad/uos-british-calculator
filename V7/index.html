@@ -629,6 +629,7 @@
       background: var(--surface); border: 1px solid var(--border); color: var(--text-2); white-space: nowrap;
     }
     .scenario-meta-chip.sci,
+    .scenario-meta-chip.gen,
     .scenario-meta-chip.com,
     .scenario-meta-chip.lit,
     .scenario-meta-chip.med,
@@ -1456,7 +1457,7 @@ function buildPdfHeader(doc, studentName, studentId, employeeName='') {
 }
 
 function getPdfMajorPriority(key) {
-  return ({ med: 1, dent: 2, pharm: 3, sci: 4, lit: 5 }[key] || 99);
+  return ({ med: 1, dent: 2, pharm: 3, sci: 4, gen: 5, com: 6, lit: 7 }[key] || 99);
 }
 const PERCENTAGE_DECIMALS = 4;
 function formatPercentage(value) {
@@ -2402,7 +2403,7 @@ function calculateOverallPercentage() {
   const bestTypeMsg = best.subjects.some(s => s.status === 'expected')
     ? 'Best scenario with expected grades of selected levels.'
     : 'Best scenario with final grades.';
-  const majorColor = (key)=>({sci:'#34d399', com:'#fbbf24', lit:'#c4b5fd', med:'#f87171', dent:'#c4b5fd', pharm:'#7dd3fc'})[key] || '#cbd5e1';
+  const majorColor = (key)=>({sci:'#34d399', gen:'#86efac', com:'#fbbf24', lit:'#c4b5fd', med:'#f87171', dent:'#c4b5fd', pharm:'#7dd3fc'})[key] || '#cbd5e1';
   document.getElementById('success-message').innerHTML=`
     <p>Congratulations! You have achieved a valid combination.</p>
     <p class="success-note">${bestTypeMsg}</p>
@@ -2546,16 +2547,11 @@ function detectMajorTypes(subjects, overallPercentage = null) {
   const hasMedicalAcademicProfile = hasMathAtLeastA && hasTwoCoreSciencesAtLeastA && hasAdvancedChemOrBio;
   const hasPharmacyAcademicProfile = hasMathAtLeastB && hasTwoCoreSciencesAtLeastB && hasAdvancedChemOrBioForPharmacy;
 
-  if(hasMedicalAcademicProfile && Number.isFinite(overall) && overall >= 85) {
-    addMajor('dent', 'Dental');
-  }
   if(hasMedicalAcademicProfile && Number.isFinite(overall) && overall >= 95) addMajor('med', 'Medicine');
-
-  if(hasPharmacyAcademicProfile && Number.isFinite(overall) && overall >= 85) {
-    addMajor('pharm', 'Pharmacy');
-  }
-
+  if(hasMedicalAcademicProfile && Number.isFinite(overall) && overall >= 85) addMajor('dent', 'Dental');
+  if(hasPharmacyAcademicProfile && Number.isFinite(overall) && overall >= 85) addMajor('pharm', 'Pharmacy');
   if(hasMath && sciCount >= 2) addMajor('sci', 'Scientific');
+  if(hasMath && sciCount >= 1) addMajor('gen', 'General');
   if(hasCommercial) addMajor('com', 'Commercial');
   addMajor('lit', 'Literary');
   return majors;
@@ -2683,7 +2679,7 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   doc.text(`Combination: ${comboText}`, 15, yPos);
   doc.text(`Categories: ${scenario.categories.join(', ')}`, 15, yPos+6);
   if(scenario.majorTypes && scenario.majorTypes.length) {
-    const majorBg  = {sci:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
+    const majorBg  = {sci:[226,232,240], gen:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
     const pillH = 6, pillPad = 4, gap = 3;
     let pillX = 15;
     [...scenario.majorTypes].sort((a, b) => getPdfMajorPriority(a.key) - getPdfMajorPriority(b.key)).forEach((m)=>{
@@ -2870,7 +2866,7 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     doc.text(`Combination: ${comboText}`, 15, yPos);
     doc.text(`Categories: ${scenario.categories.join(', ')}`, 15, yPos+6);
     if(scenario.majorTypes && scenario.majorTypes.length) {
-      const majorBg  = {sci:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
+      const majorBg  = {sci:[226,232,240], gen:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
       const pillH = 6, pillPad = 4, gap = 3;
       let pillX = 15;
       [...scenario.majorTypes].sort((a, b) => getPdfMajorPriority(a.key) - getPdfMajorPriority(b.key)).forEach((m)=>{
