@@ -1563,7 +1563,7 @@ const gradeNotes = {
 };
 const subjectLists = {
   'o-level': {
-    'Languages': ['Afrikaans - Second Language','Arabic - First Language','Arabic - Foreign Language','Bahasa Indonesia','Bengali','Chinese - First Language','Chinese - Second Language','Chinese (Mandarin) - Foreign Language','Dutch - Foreign Language','English - First Language','English - Second Language','English - Literature','French - First Language','French - Foreign Language','German - First Language','German - Foreign Language','Hindi as a Second Language','IsiZulu as a Second Language','Italian - Foreign Language','Japanese - First Language','Japanese - Foreign Language','Kazakh as a Second Language','Korean as a Second Language','Malay - Foreign Language','Marathi','Nepali','Portuguese - First Language','Portuguese - Foreign Language','Punjabi','Russian - First Language','Sinhala','Spanish - First Language','Spanish - Foreign Language','Tamil','Thai - First Language','Turkish - First Language','Urdu','Vietnamese as a Second Language'],
+    'Languages': ['Afrikaans - Second Language','Arabic - First Language','Arabic - Foreign Language','Bahasa Indonesia','Bengali','Chinese - First Language','Chinese - Second Language','Chinese (Mandarin) - Foreign Language','Dutch - Foreign Language','English - First Language','English - Second Language','English Language','English - Literature','French - First Language','French - Foreign Language','German - First Language','German - Foreign Language','Hindi as a Second Language','IsiZulu as a Second Language','Italian - Foreign Language','Japanese - First Language','Japanese - Foreign Language','Kazakh as a Second Language','Korean as a Second Language','Malay - Foreign Language','Marathi','Nepali','Portuguese - First Language','Portuguese - Foreign Language','Punjabi','Russian - First Language','Sinhala','Spanish - First Language','Spanish - Foreign Language','Tamil','Thai - First Language','Turkish - First Language','Urdu','Vietnamese as a Second Language'],
     'Social Studies': ['Accounting','Bangladesh Studies','Business Studies','Business','Development Studies','Economics','Enterprise','Geography','Global Perspectives','History','Islamic Studies','Pakistan Studies','Physical Education','Psychology','Religious Studies','Sociology','Travel & Tourism'],
     'Sciences': ['Agriculture','Biology','Human Biology','Chemistry','Combined Science','Computer Science','Co-ordinated Sciences (Double Award)','Design & Technology','Environmental Management','Food & Nutrition','Information & Communication Technology','Marine Science','Physical Science','Physics'],
     'Math': ['Mathematics','Additional Mathematics','International Mathematics','Further Pure Mathematics'],
@@ -2335,7 +2335,18 @@ function scenarioHasExpectedGrades(scenario) {
   return !!scenario?.subjects?.some(s => s.status === 'expected');
 }
 
-function selectDisplayScenarios(scenarios, maxCount = 5) {
+function selectDisplayScenarios(allScenarios, maxCount = 5) {
+  // Collapse ties: scenarios with the same level mix, the same average and the
+  // same grade status are equivalent (e.g. swapping two O-Levels that are both
+  // 85%). Keep the first and remember how many equivalent choices exist.
+  const tieKey = s => { const c = countLevels(s.subjects); return `${c.o}|${c.as}|${c.a}|${c.moe}|${s.percentage.toFixed(6)}|${scenarioHasExpectedGrades(s)}`; };
+  const byTie = new Map();
+  allScenarios.forEach(s => {
+    const kept = byTie.get(tieKey(s));
+    if(kept) kept.equivalentCount = (kept.equivalentCount || 0) + 1;
+    else byTie.set(tieKey(s), s);
+  });
+  const scenarios = [...byTie.values()];
   const expectedScenarios = scenarios.filter(scenarioHasExpectedGrades);
   const finalOnlyScenarios = scenarios.filter(s => !scenarioHasExpectedGrades(s));
   const picked = [];
@@ -2425,6 +2436,9 @@ function scenarioReasoningHTML(scenario, sum, n, excludedSubjects) {
     : li('info', '=', 'No other subject was above the average, so only the required subjects are counted.'));
 
   items.push(li('info', 'Σ', `Average = ${Number(sum.toFixed(4))} ÷ ${n} subjects = <strong>${formatPercentage(sum / n)}</strong>.`));
+  if(scenario.equivalentCount) {
+    items.push(li('info', '≡', `${scenario.equivalentCount} other subject choice${scenario.equivalentCount > 1 ? 's give' : ' gives'} exactly the same average with the same level mix (for example, swapping two subjects with equal marks), so ${scenario.equivalentCount > 1 ? 'they are' : 'it is'} not listed separately.`));
+  }
 
   if((window._allScenarioEntries || []).some(s => s.category === 'Math' && s.level !== 'moe')) {
     items.push(scenario.subjects.some(s => s.category === 'Math')
