@@ -796,8 +796,8 @@
     }
     .scenario-meta-chip.invalid { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); color: #ef4444; }
     .scenario-reasoning { border-top: 1px solid var(--border); padding: 10px 14px; font-size: 0.8rem; color: var(--text-2); }
-    .scenario-reasoning summary {
-      cursor: pointer; font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-2);
+    .scenario-reasoning .reasoning-title {
+      font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-2);
     }
     .reason-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; line-height: 1.5; }
     .reason-list li { display: flex; gap: 8px; align-items: flex-start; }
@@ -809,6 +809,10 @@
     .major-check-title { font-weight: 700; color: var(--text); font-size: 0.8rem; }
     .major-check-title .verdict { font-weight: 600; font-size: 0.72rem; margin-left: 6px; }
     #result.stale { opacity: 0.45; transition: opacity 0.2s ease; }
+    .site-footer {
+      text-align: center; font-size: 0.75rem; letter-spacing: 0.02em; color: var(--text-2);
+      opacity: 0.55; padding: 28px 16px 36px;
+    }
     .ocr-section .bulk-add-icon { background: rgba(16,185,129,0.16); }
     .ocr-section .bulk-add-icon svg { color: var(--success); }
     .ocr-drop {
@@ -1142,6 +1146,7 @@
       <div class="sidebar-title">Subjects Breakdown</div>
     </div>
   </div>
+  <footer class="site-footer">Powered by Ahmad Albalbissi</footer>
 </div>
 <button id="mobile-breakdown-fab" class="mobile-breakdown-fab" type="button" aria-label="Open subjects breakdown" onclick="openMobileBreakdown()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1321,7 +1326,7 @@ function loadJsPDF(cb) {
   const s = document.createElement('script');
   s.src = JSPDF_CDN;
   s.onload = () => { _jspdfLoaded = true; _jspdfLoading = false; _jspdfQueue.forEach(fn => fn()); _jspdfQueue = []; };
-  s.onerror = () => { _jspdfLoading = false; _jspdfQueue = []; alert('Could not load PDF library. Please check your internet connection and try again.'); };
+  s.onerror = () => { _jspdfLoading = false; _jspdfQueue = []; appAlert('Could not load PDF library. Please check your internet connection and try again.'); };
   document.head.appendChild(s);
 }
 
@@ -1336,7 +1341,7 @@ function loadXLSX(cb) {
   const s = document.createElement('script');
   s.src = XLSX_CDN;
   s.onload = () => { _xlsxLoaded = true; _xlsxLoading = false; _xlsxQueue.forEach(fn => fn()); _xlsxQueue = []; };
-  s.onerror = () => { _xlsxLoading = false; _xlsxQueue = []; alert('Could not load Excel library. Please check your internet connection and try again.'); };
+  s.onerror = () => { _xlsxLoading = false; _xlsxQueue = []; appAlert('Could not load Excel library. Please check your internet connection and try again.'); };
   document.head.appendChild(s);
 }
 </script>
@@ -1451,13 +1456,13 @@ function buildStablePresentation(scenarios) {
   return { ordered: [...scenarios], labelMap, toneMap, bestFinal, bestExpected };
 }
 
-function promptStudentInfo(action, requireScenarios=false) {
+function promptStudentInfo(action, requireScenarios=false, staleConfirmed=false) {
   if(requireScenarios && (!window._lastScenarios || window._lastScenarios.length === 0)) {
-    alert('Please calculate your percentage first before downloading.');
+    appAlert('Please calculate your percentage first before downloading.');
     return;
   }
   // Pre-fetch jsPDF in the background as soon as user opens the modal
-  if(!confirmFreshResults()) return;
+  if(window._resultsStale && !staleConfirmed) { withFreshResults(() => promptStudentInfo(action, requireScenarios, true)); return; }
   loadJsPDF(()=>{});
   _pdfPendingAction = action;
   document.getElementById('pdf-scenario-section').style.display = 'none';
@@ -1478,7 +1483,7 @@ function getRequiredStudentId() {
   const idInput = document.getElementById('pdf-student-id');
   const studentId = idInput.value.trim();
   if(studentId) return studentId;
-  alert('Student ID is required.');
+  appAlert('Student ID is required.');
   idInput.focus();
   return '';
 }
@@ -1487,17 +1492,17 @@ function getRequiredEmployeeName() {
   const employeeInput = document.getElementById('pdf-employee-name');
   const employeeName = employeeInput.value.trim();
   if(employeeName) return employeeName;
-  alert('Employee name is required.');
+  appAlert('Employee name is required.');
   employeeInput.focus();
   return '';
 }
 
-function promptStudentInfoThenPick(requireScenarios=false) {
+function promptStudentInfoThenPick(requireScenarios=false, staleConfirmed=false) {
   if(requireScenarios && (!window._lastScenarios || window._lastScenarios.length === 0)) {
-    alert('Please calculate your percentage first before downloading.');
+    appAlert('Please calculate your percentage first before downloading.');
     return;
   }
-  if(!confirmFreshResults()) return;
+  if(window._resultsStale && !staleConfirmed) { withFreshResults(() => promptStudentInfoThenPick(requireScenarios, true)); return; }
   loadJsPDF(()=>{});
   _pdfPendingAction = null;
   // Populate inline scenario list
@@ -2003,9 +2008,15 @@ function clearStaleState() {
   document.getElementById('result').classList.remove('stale');
 }
 
-function confirmFreshResults() {
-  if(!window._resultsStale) return true;
-  return confirm('The scenarios are out of date: subjects or grades were changed after the last calculation.\n\nDownload the old results anyway?');
+// Runs `proceed` straight away when results are current; otherwise asks first.
+function withFreshResults(proceed) {
+  if(!window._resultsStale) { proceed(); return; }
+  appConfirm({
+    title: 'Results are out of date',
+    message: 'Subjects or grades were changed after the last calculation. Download the old results anyway, or cancel and click "Calculate Percentage" first.',
+    okText: 'Download anyway',
+    onConfirm: proceed
+  });
 }
 
 function autoAddNextRow(currentCard) {
@@ -2021,8 +2032,17 @@ function autoAddNextRow(currentCard) {
 }
 
 function loadDemoData() {
-  const proceed = confirm('This action will fill the calculator with sample values for testing. Do you want to continue?');
-  if (!proceed) return;
+  const hasEntries = [...document.querySelectorAll('.subject-card .subject-val')].some(i => i.value);
+  appConfirm({
+    icon: '⚡',
+    title: 'Load demo data',
+    message: 'This fills the calculator with a random sample student for testing.' + (hasEntries ? ' The subjects currently entered will be replaced.' : ''),
+    okText: 'Load demo',
+    onConfirm: fillDemoData
+  });
+}
+
+function fillDemoData() {
   window._suppressBreakdownAutoOpen = true;
   closeMobileBreakdown();
   const grades = (arr) => arr[Math.floor(Math.random()*arr.length)];
@@ -2566,8 +2586,8 @@ function scenarioReasoningHTML(scenario, sum, n, excludedSubjects) {
     ? 'Major requirements are checked against all entered board subjects, including expected grades.'
     : 'Major requirements are checked against all entered board subjects with final grades.';
 
-  return `<details class="scenario-reasoning">
-    <summary>How this result was calculated</summary>
+  return `<div class="scenario-reasoning">
+    <div class="reasoning-title">How this result was calculated</div>
     <ul class="reason-list">${items.join('')}</ul>
     <div class="major-check">
       <div class="major-check-title">Track &amp; health-major requirements</div>
@@ -2575,7 +2595,7 @@ function scenarioReasoningHTML(scenario, sum, n, excludedSubjects) {
       <ul class="reason-list">${trackLine}</ul>
     </div>
     ${majors}
-  </details>`;
+  </div>`;
 }
 
 function renderScenarioCards() {
@@ -3347,7 +3367,7 @@ function bulkAddRows() {
   const count = parseInt(document.getElementById('bulk-count').value);
   if(!count || count<1 || count>20) {
     toggleQuickEntry(true);
-    alert('Please enter a valid number between 1 and 20');
+    appAlert('Please enter a valid number between 1 and 20');
     return;
   }
   // Add rows with delay to ensure smooth auto-scroll for each
@@ -3360,7 +3380,7 @@ function bulkAddRows() {
 function downloadData(studentName='', studentId='', preferredIdx=null, employeeName='') {
   const scenarios = window._lastScenarios;
   if(!scenarios || scenarios.length === 0) {
-    alert('Please calculate your percentage first before downloading.');
+    appAlert('Please calculate your percentage first before downloading.');
     return;
   }
   loadJsPDF(()=>_preloadLogo(()=>_doDownloadData(studentName, studentId, preferredIdx, employeeName)));
@@ -3689,11 +3709,33 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
   }
 });
 
+// In-page dialogs. The browser's own confirm()/alert() can be silently
+// blocked ("prevent this page from creating additional dialogs", embedded
+// viewers), which made buttons appear to do nothing.
 let _condConfirmCallback = null;
-function showCondConfirm(cb) {
-  _condConfirmCallback = cb;
-  document.getElementById('cond-confirm-msg').textContent = 'Considered only provided that the overall average aligns with the admission requirements of the desired major';
+function appConfirm({ icon = '⚠️', title = 'Please confirm', message = '', okText = 'OK', cancelText = 'Cancel', onConfirm = null }) {
+  _condConfirmCallback = onConfirm;
+  document.getElementById('cond-confirm-icon').textContent = icon;
+  document.getElementById('cond-confirm-title').textContent = title;
+  document.getElementById('cond-confirm-msg').textContent = message;
+  const ok = document.getElementById('cond-confirm-ok');
+  const cancel = document.getElementById('cond-confirm-cancel');
+  ok.textContent = okText;
+  cancel.textContent = cancelText;
+  cancel.style.display = cancelText ? '' : 'none';
   document.getElementById('cond-confirm-modal').classList.add('open');
+  setTimeout(() => ok.focus(), 50);
+}
+function appAlert(message, title = 'Notice') {
+  appConfirm({ icon: 'ℹ️', title, message, okText: 'OK', cancelText: '' });
+}
+function showCondConfirm(cb) {
+  appConfirm({
+    title: 'Conditional Grade',
+    message: 'Considered only provided that the overall average aligns with the admission requirements of the desired major',
+    okText: 'OK – Add Subject',
+    onConfirm: cb
+  });
 }
 function confirmCondConfirm() {
   document.getElementById('cond-confirm-modal').classList.remove('open');
@@ -4398,11 +4440,13 @@ function showOcrWarnings(warnings) {
     `<div class="msg-box warning"><span class="msg-icon">⚠️</span><div>${w}</div></div>`).join('');
 }
 
-let _ocrBusy = false;
+let _ocrBusy = false, _ocrCancelled = false;
 async function handleCertificateFiles(fileList) {
   const files = Array.from(fileList || []).filter(f => /pdf$|^image\//i.test(f.type) || /\.(pdf|png|jpe?g|webp|bmp|tiff?)$/i.test(f.name));
-  if(!files.length || _ocrBusy) return;
+  if(!files.length) return;
+  if(_ocrBusy) { appAlert('The previous certificates are still being read. Please try again in a moment.'); return; }
   _ocrBusy = true;
+  _ocrCancelled = false;
   const mode = getOcrEngine();
   const modal = document.getElementById('ocr-modal');
   const addBtn = document.getElementById('ocr-add-btn');
@@ -4438,6 +4482,7 @@ async function handleCertificateFiles(fileList) {
   const seen = new Map();
   const rows = [];
   for(let i = 0; i < files.length; i++) {
+    if(_ocrCancelled) break;
     const file = files[i];
     const p = progress[i];
     try {
@@ -4462,6 +4507,7 @@ async function handleCertificateFiles(fileList) {
     setOcrProgress(progress);
   }
 
+  if(_ocrCancelled) { _ocrBusy = false; return; }
   window._ocrRows = resolveRepeatedSubjects(rows);
   const secs = Math.round((performance.now() - started) / 1000);
   setOcrProgress(progress, `Finished in ${secs} s · ${OCR_ENGINES[mode]}`);
@@ -4584,8 +4630,16 @@ function addOcrRowsToCalculator() {
   document.getElementById('feedback').innerHTML = `<div class="msg-box success"><span class="msg-icon">✓</span><div><strong>${added} subject${added === 1 ? '' : 's'} added from certificates.</strong> Check them against the documents, then click <em>Calculate Percentage</em>.${skipped.length ? `<br>Already entered, so skipped: ${skipped.map(escHtml).join(', ')}.` : ''}</div></div>`;
 }
 
-function closeOcrModal() {
-  if(_ocrBusy && !confirm('Reading is still in progress. Close anyway? The results so far will be lost.')) return;
+function closeOcrModal(force = false) {
+  if(_ocrBusy && !force) {
+    appConfirm({
+      title: 'Reading in progress',
+      message: 'The certificates are still being read. Close anyway? The results so far will be lost.',
+      okText: 'Close',
+      onConfirm: () => { _ocrCancelled = true; closeOcrModal(true); }
+    });
+    return;
+  }
   document.getElementById('ocr-modal').classList.remove('open');
 }
 
@@ -4605,13 +4659,13 @@ function closeOcrModal() {
 </script>
 
 <div id="cond-confirm-modal" onclick="if(event.target===this)cancelCondConfirm()">
-  <div id="cond-confirm-box">
-    <div class="cond-icon">⚠️</div>
-    <h3>Conditional Grade</h3>
+  <div id="cond-confirm-box" role="dialog" aria-modal="true" aria-labelledby="cond-confirm-title">
+    <div class="cond-icon" id="cond-confirm-icon">⚠️</div>
+    <h3 id="cond-confirm-title">Conditional Grade</h3>
     <p id="cond-confirm-msg"></p>
     <div class="cond-btn-row">
-      <button class="btn-cond-cancel" onclick="cancelCondConfirm()">Cancel</button>
-      <button class="btn-cond-ok" onclick="confirmCondConfirm()">OK – Add Subject</button>
+      <button class="btn-cond-cancel" id="cond-confirm-cancel" onclick="cancelCondConfirm()">Cancel</button>
+      <button class="btn-cond-ok" id="cond-confirm-ok" onclick="confirmCondConfirm()">OK – Add Subject</button>
     </div>
   </div>
 </div>
