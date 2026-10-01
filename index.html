@@ -809,6 +809,47 @@
     .major-check-title { font-weight: 700; color: var(--text); font-size: 0.8rem; }
     .major-check-title .verdict { font-weight: 600; font-size: 0.72rem; margin-left: 6px; }
     #result.stale { opacity: 0.45; transition: opacity 0.2s ease; }
+    .ocr-section .bulk-add-icon { background: rgba(16,185,129,0.16); }
+    .ocr-section .bulk-add-icon svg { color: var(--success); }
+    .ocr-drop {
+      display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+      border: 2px dashed rgba(129,140,248,0.55); border-radius: var(--r); padding: 12px; text-align: center;
+      font-size: 0.8rem; color: var(--text-2); cursor: pointer; transition: background var(--dur) var(--ease);
+    }
+    .ocr-drop.drag, .ocr-drop:hover { background: rgba(99,102,241,0.12); }
+    .ocr-privacy { font-size: 0.7rem; color: var(--text-3); }
+    .ocr-modal-box { max-width: 1040px; }
+    .ocr-progress { display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem; color: var(--text-2); margin-bottom: 12px; }
+    .ocr-progress-item { display: flex; justify-content: space-between; gap: 10px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); }
+    .ocr-progress-item .state { color: var(--text-3); white-space: nowrap; }
+    .ocr-progress-item .state.done { color: #10b981; }
+    .ocr-progress-item .state.error { color: #ef4444; }
+    .ocr-warnings { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .ocr-table-wrap { overflow: auto; max-height: 56vh; border: 1px solid var(--border); border-radius: var(--r); }
+    .ocr-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .ocr-table th {
+      position: sticky; top: 0; background: #131c2e; z-index: 1; text-align: left; padding: 8px; font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    body.light-theme .ocr-table th { background: #fff; }
+    .ocr-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text-2); }
+    .ocr-table tr.excluded td { opacity: 0.5; }
+    .ocr-table select, .ocr-table input[type="number"] {
+      background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px;
+      padding: 4px 6px; font: inherit; font-size: 0.78rem; max-width: 220px;
+    }
+    .ocr-table input[type="number"] { width: 70px; }
+    .ocr-table select[data-field="level"] { min-width: 92px; }
+    .ocr-table select[data-field="status"] { min-width: 92px; }
+    .ocr-table select option { background: #131c2e; color: #f1f5f9; }
+    body.light-theme .ocr-table select option { background: #fff; color: #0f172a; }
+    .ocr-raw { font-family: ui-monospace, Consolas, monospace; font-size: 0.68rem; color: var(--text-3); max-width: 260px; overflow-wrap: anywhere; }
+    .ocr-source { font-size: 0.7rem; color: var(--text-3); white-space: nowrap; }
+    .ocr-flag { font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: var(--r-pill); white-space: nowrap; display: inline-block; }
+    .ocr-flag.ok { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+    .ocr-flag.check { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+    .ocr-notes { font-size: 0.68rem; color: var(--text-3); margin-top: 3px; line-height: 1.35; }
+    .ocr-actions { display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end; flex-wrap: wrap; }
     .scenarios-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
     .success-modal-box {
       width: min(100%, 420px);
@@ -992,6 +1033,23 @@
     <div class="main-content">
       <div class="main-card">
         <div class="section-label">Subject entries</div>
+    <div class="bulk-add-section ocr-section" id="ocr-section">
+      <div class="bulk-add-header">
+        <span class="bulk-add-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+        </span>
+        <div class="bulk-add-text">
+          <div class="bulk-add-title">Read subjects from certificates <span class="extra-pill">Beta</span></div>
+          <div class="bulk-add-desc">Add PDF or image scans of O-Level, AS / A-Level and Grade 12 documents. Subjects, levels and grades are detected for you to review.</div>
+        </div>
+      </div>
+      <label class="ocr-drop" id="ocr-drop" for="ocr-file-input">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span><strong>Choose files</strong> or drop them here (PDF, JPG, PNG)</span>
+      </label>
+      <input type="file" id="ocr-file-input" accept=".pdf,application/pdf,image/*" multiple hidden>
+      <div class="ocr-privacy">🔒 Files are read on this computer only. Nothing is uploaded.</div>
+    </div>
     <div class="bulk-add-section" id="bulk-add-section">
       <button class="bulk-toggle" type="button" onclick="toggleQuickEntry()" aria-expanded="false" aria-controls="bulk-add-content" id="bulk-toggle-btn">
         <span class="bulk-toggle-left">
@@ -1183,6 +1241,18 @@
       <button class="btn btn-ghost" onclick="closeSuccessModal()" style="margin-top:8px;">Done</button>
     </div>
     <p style="font-size:0.72rem;color:var(--text-3);margin-top:10px;text-align:center;">This message will close automatically in a few seconds.</p>
+  </div>
+</div>
+<div id="ocr-modal" class="modal-overlay" data-static="true">
+  <div class="modal-box ocr-modal-box">
+    <div class="modal-header"><h2 class="modal-title">Review detected subjects</h2><button class="modal-close" onclick="closeOcrModal()">×</button></div>
+    <div id="ocr-progress" class="ocr-progress"></div>
+    <div id="ocr-warnings" class="ocr-warnings"></div>
+    <div id="ocr-review"></div>
+    <div class="ocr-actions">
+      <button class="btn btn-ghost" onclick="closeOcrModal()">Cancel</button>
+      <button class="btn btn-primary" id="ocr-add-btn" onclick="addOcrRowsToCalculator()" disabled>Add selected subjects</button>
+    </div>
   </div>
 </div>
 <div id="student-info-modal" class="modal-overlay">
@@ -2158,40 +2228,7 @@ function loadDemoData() {
   const container = document.getElementById('subject-inputs');
   container.innerHTML = '';
 
-  baseSubjects.forEach((subj, i) => {
-    // Create row
-    const div = document.createElement('div');
-    div.innerHTML = subjectCardHTML().trim();
-    const card = div.firstElementChild;
-    container.appendChild(card);
-    initSearchCard(card);
-
-    // Populate hidden values (category always comes from the official subject list)
-    subj.category = categoryOf(subj.level, subj.subject) || subj.category;
-    card.querySelector('.subject-val').value  = subj.subject;
-    card.querySelector('.level-val').value    = subj.level;
-    card.querySelector('.category-val').value = subj.category;
-
-    // Populate visible UI
-    const input      = card.querySelector('.subject-search');
-    const levelTag   = card.querySelector('.level-tag');
-    const gradeGroup = card.querySelector('.grade-group');
-    const gradeSelect= card.querySelector('.grade');
-    const statusGroup= card.querySelector('.status-group');
-    const statusSelect= card.querySelector('.grade-status');
-    const wrap       = card.querySelector('.search-wrap');
-
-    input.value = subj.subject;
-    levelTag.textContent = levelLabels[subj.level];
-    levelTag.className = `level-tag ${subj.level}`;
-    levelTag.classList.remove('hidden');
-    wrap.classList.add('selected');
-
-    setGradeOptionsForLevel(subj.level, gradeSelect, subj.grade);
-    gradeGroup.classList.remove('hidden');
-    if(statusGroup) statusGroup.classList.remove('hidden');
-    if(statusSelect) statusSelect.value = subj.status || 'final';
-  });
+  baseSubjects.forEach(subj => addFilledSubjectCard(subj));
 
   updateLevelCounter();
   window._suppressBreakdownAutoOpen = false;
@@ -2201,6 +2238,43 @@ function loadDemoData() {
     <span class="msg-icon">⚡</span>
     <div><strong>${profile.label}</strong> — ${baseSubjects.length} subjects loaded. Click <em>Calculate Percentage</em> to see the result.</div>
   </div>`;
+}
+
+// Appends a subject card that is already filled in (used by demo data and the
+// certificate reader). subj: { level, subject, grade, status, mark }.
+function addFilledSubjectCard(subj) {
+  const container = document.getElementById('subject-inputs');
+  container.querySelector('.empty-state')?.remove();
+  const div = document.createElement('div');
+  div.innerHTML = subjectCardHTML().trim();
+  const card = div.firstElementChild;
+  container.appendChild(card);
+  initSearchCard(card);
+
+  // Category always comes from the official subject list
+  const category = categoryOf(subj.level, subj.subject) || subj.category || '';
+  card.querySelector('.subject-val').value  = subj.subject;
+  card.querySelector('.level-val').value    = subj.level;
+  card.querySelector('.category-val').value = category;
+
+  const levelTag = card.querySelector('.level-tag');
+  card.querySelector('.subject-search').value = subj.subject;
+  levelTag.textContent = levelLabels[subj.level];
+  levelTag.className = `level-tag ${subj.level}`;
+  levelTag.classList.remove('hidden');
+  card.querySelector('.search-wrap').classList.add('selected');
+
+  if(subj.level === 'moe') {
+    card.querySelector('.percentile').value = subj.mark ?? '';
+    card.querySelector('.pct-group').classList.remove('hidden');
+  } else {
+    setGradeOptionsForLevel(subj.level, card.querySelector('.grade'), subj.grade);
+    card.querySelector('.grade-group').classList.remove('hidden');
+  }
+  card.querySelector('.status-group')?.classList.remove('hidden');
+  const statusSelect = card.querySelector('.grade-status');
+  if(statusSelect) statusSelect.value = subj.status || 'final';
+  return card;
 }
 
 function addSubjectRow() {
@@ -3569,14 +3643,14 @@ function closeSuccessModalAndScrollToScenarios(){
     if(list){list.scrollIntoView({behavior:'smooth',block:'start'});}
   }catch(e){}
 }
-document.querySelectorAll('.modal-overlay').forEach(overlay=>{overlay.addEventListener('click',e=>{if(e.target===overlay){overlay.classList.remove('open'); if(overlay.id==='student-info-modal')_pdfPendingAction=null;}});});
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{overlay.addEventListener('click',e=>{if(e.target===overlay && !overlay.dataset.static){overlay.classList.remove('open'); if(overlay.id==='student-info-modal')_pdfPendingAction=null;}});});
 // Grade, result-type and mark changes after a calculation make the results stale.
 document.getElementById('subject-inputs').addEventListener('change', e => {
   if(e.target.matches('.grade, .grade-status, .percentile')) markResultsStale();
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape' && document.getElementById('cond-confirm-modal').classList.contains('open')) cancelCondConfirm();
-  if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>{m.classList.remove('open'); if(m.id==='student-info-modal')_pdfPendingAction=null;});
+  if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open:not([data-static])').forEach(m=>{m.classList.remove('open'); if(m.id==='student-info-modal')_pdfPendingAction=null;});
   if(e.key==='Enter' && document.getElementById('student-info-modal').classList.contains('open')) document.getElementById('pdf-confirm-btn').click();
 });
 
@@ -3614,6 +3688,514 @@ function cancelCondConfirm() {
   document.getElementById('cond-confirm-modal').classList.remove('open');
   _condConfirmCallback = null;
 }
+</script>
+<script>
+// ── Certificate reader (OCR) ───────────────────────────────────────────
+// Runs entirely in the browser: PDF.js renders each page and Tesseract.js
+// reads it. No file leaves this computer. Staff always review the detected
+// rows before anything is added to the calculator.
+const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+const PDFJS_WORKER_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const TESSERACT_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+
+const _scriptPromises = {};
+function loadScriptOnce(src) {
+  if(!_scriptPromises[src]) {
+    _scriptPromises[src] = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = () => { delete _scriptPromises[src]; reject(new Error('Could not load ' + src)); };
+      document.head.appendChild(s);
+    });
+  }
+  return _scriptPromises[src];
+}
+
+async function loadOcrLibraries() {
+  await Promise.all([loadScriptOnce(PDFJS_CDN), loadScriptOnce(TESSERACT_CDN)]);
+  pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_CDN;
+}
+
+const _ocrWorkers = {};
+function getOcrWorker(langs) {
+  if(!_ocrWorkers[langs]) _ocrWorkers[langs] = Tesseract.createWorker(langs.split('+'));
+  return _ocrWorkers[langs];
+}
+async function resetOcrWorker(langs) {
+  const pending = _ocrWorkers[langs];
+  delete _ocrWorkers[langs];
+  try { (await pending)?.terminate(); } catch(e) {}
+}
+
+// Tesseract's WebAssembly engine occasionally crashes between jobs
+// ("null function"); retry once on a fresh worker.
+async function ocrCanvas(canvas, langs = 'eng') {
+  for(let attempt = 1; ; attempt++) {
+    try {
+      const { data } = await (await getOcrWorker(langs)).recognize(canvas);
+      return { text: data.text, confidence: Math.round(data.confidence) };
+    } catch(e) {
+      await resetOcrWorker(langs);
+      if(attempt >= 2) throw e;
+    }
+  }
+}
+
+function toGrayscale(canvas) {
+  const ctx = canvas.getContext('2d');
+  const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d = img.data;
+  for(let i = 0; i < d.length; i += 4) {
+    const g = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+    d[i] = d[i+1] = d[i+2] = g;
+  }
+  ctx.putImageData(img, 0, 0);
+  return canvas;
+}
+
+// Renders a PDF page at ~300 dpi, the resolution Tesseract reads best.
+async function renderPdfPage(page) {
+  const viewport = page.getViewport({ scale: 300 / 72 });
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(viewport.width);
+  canvas.height = Math.round(viewport.height);
+  await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+  return toGrayscale(canvas);
+}
+
+async function imageFileToCanvas(file) {
+  const bitmap = await createImageBitmap(file);
+  // Upscale small photos so text is large enough to read.
+  const scale = Math.max(1, 2000 / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return toGrayscale(canvas);
+}
+
+// Rebuilds text lines from a PDF's own text layer, so digital PDFs need no OCR.
+function textLayerToLines(items) {
+  const rows = [];
+  items.filter(i => i.str.trim()).forEach(i => {
+    const x = i.transform[4], y = i.transform[5];
+    let row = rows.find(r => Math.abs(r.y - y) < 3);
+    if(!row) { row = { y, parts: [] }; rows.push(row); }
+    row.parts.push({ x, s: i.str });
+  });
+  return rows
+    .sort((a, b) => b.y - a.y)
+    .map(r => r.parts.sort((a, b) => a.x - b.x).map(p => p.s).join(' '))
+    .join('\n');
+}
+
+// Grade 12 MOE documents are mostly Arabic: those pages are read again with
+// the Arabic model so the subject names can be recognised.
+function looksLikeMoeDocument(text) {
+  if(/Education Zone|\bGR\.?\s*12\b|\bGrade\s*12\b|الصف الثاني عشر|وزارة التربية/i.test(text)) return true;
+  return /Ministry of Education/i.test(text) && !/\bGRADE\s+[1-9A-G]\b|\bAWARD\b/.test(text);
+}
+
+async function ocrPage(canvas) {
+  const eng = await ocrCanvas(canvas, 'eng');
+  if(!looksLikeMoeDocument(eng.text)) return eng;
+  try {
+    const ara = await ocrCanvas(canvas, 'ara+eng');
+    return { text: ara.text + '\n' + eng.text, confidence: ara.confidence };
+  } catch(e) {
+    return eng;
+  }
+}
+
+async function readDocumentPages(file, onStatus) {
+  const pages = [];
+  if(file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    for(let p = 1; p <= pdf.numPages; p++) {
+      onStatus(`Reading page ${p} of ${pdf.numPages}…`);
+      const page = await pdf.getPage(p);
+      const layerText = textLayerToLines((await page.getTextContent()).items);
+      // Scanner apps often add a text layer holding only QR digits; use the
+      // layer only when it contains real words.
+      if((layerText.match(/[A-Za-z؀-ۿ]/g) || []).length >= 40) {
+        pages.push({ page: p, text: layerText, confidence: 100, source: 'text' });
+        continue;
+      }
+      pages.push({ page: p, ...(await ocrPage(await renderPdfPage(page))), source: 'ocr' });
+    }
+  } else {
+    onStatus('Reading image…');
+    pages.push({ page: 1, ...(await ocrPage(await imageFileToCanvas(file))), source: 'ocr' });
+  }
+  return pages;
+}
+
+async function fileFingerprint(file) {
+  const hash = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ── Parsing ──
+const GRADE_WORDS = { nine:'9', eight:'8', seven:'7', six:'6', five:'5', four:'4', three:'3', two:'2', one:'1' };
+
+function cleanOcrLine(line) {
+  return line.replace(/[|=_~—–“”"`;!]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function pageLevel(text) {
+  if(/ADVANCED SUBSIDIARY|\bAS LEVEL\b/i.test(text)) return 'as-level';
+  if(/ADVANCED LEVEL|\bA LEVEL\b|GCE A/i.test(text)) return 'a-level';
+  return 'o-level';
+}
+
+function normalizeGrade(token, word, level) {
+  let grade = (token || '').toUpperCase().replace(/\s+/g, '');
+  const fromWord = word ? (GRADE_WORDS[word.toLowerCase().trim()] || (/^a\s*star$/i.test(word.trim()) ? 'A*' : word.trim().toUpperCase())) : '';
+  // The grade written in words, e.g. "(eight)", is harder for OCR to misread than a single digit.
+  if(fromWord && gradingScheme[level]?.[fromWord] !== undefined) grade = fromWord;
+  return gradingScheme[level]?.[grade] !== undefined ? grade : '';
+}
+
+// Pearson International A Level statements:
+//   "AWARD YCH11 CHEMISTRY 0403/0600 C (c)"  → out of 600 = A-Level, out of 300 = AS-Level.
+function parseAwardLine(line) {
+  const m = line.match(/\bAWARD\b\s*-?\s*([A-Z0-9]{4,6})\s+(.+?)\s+0?(\d{2,3})\s*[\/A7]?\s*0?(600|300)\b\s*(.*)$/i);
+  if(!m) return null;
+  const level = m[4] === '600' ? 'a-level' : 'as-level';
+  const rest = m[5];
+  const g = rest.match(/^\W*([A-E]\*?|U)\b/i);
+  const w = rest.match(/\(\s*([a-e]\*?|u)\s*\)/i);
+  const grade = normalizeGrade(g ? g[1] : '', w ? w[1] : '', level);
+  return { rawSubject: m[2].replace(/^[^A-Za-z]+|[^A-Za-z)]+$/g, ''), level, grade, mark: `${m[3]}/${m[4]}` };
+}
+
+// Certificates that print "SUBJECT  GRADE 8 (eight)" (Pearson GCSE / International GCSE, Cambridge style).
+function parseGradeLine(line, level) {
+  const idx = line.search(/\sGRADE\s/);
+  if(idx < 0) return null;
+  // OCR often reads a capital I as a lowercase l inside capitals ("PHYSlCS").
+  const subject = line.slice(0, idx).replace(/^[^A-Za-z]+/, '').replace(/(?<=[A-Z])l(?=[A-Z]|\b)/g, 'I').trim();
+  // The capitalised keyword " GRADE " already skips the lowercase explanatory text on the back of certificates.
+  if(!/^[A-Za-z][A-Za-z0-9 &(),.'\/-]{2,60}$/.test(subject)) return null;
+  const after = line.slice(idx).replace(/^\sGRADE\s+/, '');
+  const g = after.match(/^(A\s?\*|[A-GU]|[1-9])\b/);
+  const w = after.match(/\(\s*([a-z* ]+?)\s*\)/i);
+  if(!g && !w) return null;
+  const lineLevel = /\bAS LEVEL\b|ADVANCED SUBSIDIARY/i.test(line) ? 'as-level' : /\bA LEVEL\b|ADVANCED LEVEL/i.test(line) ? 'a-level' : level;
+  return { rawSubject: subject, level: lineLevel, grade: normalizeGrade(g ? g[1] : '', w ? w[1] : '', lineLevel) };
+}
+
+// Cambridge-style result lines: "0580 MATHEMATICS ... A* (a*)" or "9709 MATHEMATICS AS LEVEL B (b)".
+function parseSyllabusLine(line, level) {
+  const m = line.match(/^(\d{4})\s+([A-Z][A-Z0-9 &(),.'\/-]+?)\s+(A\*|[A-GU]|[1-9])\s*\(\s*([a-z* ]+?)\s*\)/);
+  if(!m) return null;
+  let lineLevel = level;
+  if(/\bAS LEVEL\b/.test(m[2])) lineLevel = 'as-level';
+  else if(/\bA LEVEL\b/.test(m[2])) lineLevel = 'a-level';
+  else if(m[1].startsWith('0')) lineLevel = 'o-level';
+  const subject = m[2].replace(/\b(AS|A) LEVEL\b/g, '').trim();
+  return { rawSubject: subject, level: lineLevel, grade: normalizeGrade(m[3], m[4], lineLevel), uncertain: 'Cambridge-style line, please check' };
+}
+
+function parseMoeRows(text) {
+  const rows = [];
+  if(/التربية\s*ال[إا]سلامية|Islamic Education/i.test(text)) rows.push({ rawSubject: 'Islamic Education (Grade 12)', level: 'moe', subject: 'Grade 12 Islamic' });
+  if(/اللغة\s*العربية|Arabic Language/i.test(text)) rows.push({ rawSubject: 'Arabic Language (Grade 12)', level: 'moe', subject: 'Grade 12 Arabic' });
+  return rows;
+}
+
+// ── Subject matching ──
+const OCR_SUBJECT_ALIASES = {
+  'o-level': {
+    'mathematics a': 'Mathematics', 'mathematics b': 'Mathematics', 'maths': 'Mathematics',
+    'mathematics without coursework': 'Mathematics', 'international mathematics': 'International Mathematics',
+    'first language english': 'English - First Language', 'english as a second language': 'English - Second Language',
+    'english as a second language speaking endorsement': 'English - Second Language',
+    'first language arabic': 'Arabic - First Language', 'arabic as a foreign language': 'Arabic - Foreign Language',
+    'information & communication technology': 'Information & Communication Technology', 'ict': 'Information & Communication Technology',
+    'islamiyat': 'Islamic Studies', 'religious education': 'Religious Studies', 'business': 'Business Studies',
+    'science double award': 'Co-ordinated Sciences (Double Award)', 'combined science': 'Combined Science',
+    'english literature': 'English - Literature', 'literature in english': 'English - Literature'
+  },
+  'as-level': { 'maths': 'Mathematics', 'english language & literature': 'English - Language and Literature' },
+  'a-level': { 'maths': 'Mathematics', 'english language & literature': 'English Language' }
+};
+
+function bigramSimilarity(a, b) {
+  const grams = s => { const g = []; for(let i = 0; i < s.length - 1; i++) g.push(s.slice(i, i + 2)); return g; };
+  const ga = grams(a.replace(/\s/g, '')), gb = grams(b.replace(/\s/g, ''));
+  if(!ga.length || !gb.length) return 0;
+  const pool = [...gb];
+  let hits = 0;
+  ga.forEach(g => { const i = pool.indexOf(g); if(i >= 0) { hits++; pool.splice(i, 1); } });
+  return (2 * hits) / (ga.length + gb.length);
+}
+
+function matchOcrSubject(rawSubject, level) {
+  const norm = normalizeSearch(rawSubject.replace(/\(.*?\)/g, ' ').replace(/\band\b/gi, '&').replace(/\b9\s*1\b/g, ' '));
+  const candidates = allSubjects.filter(s => s.level === level);
+  const exact = candidates.find(s => normalizeSearch(s.subject) === norm);
+  if(exact) return { subject: exact.subject, how: 'exact' };
+  const alias = OCR_SUBJECT_ALIASES[level]?.[norm];
+  if(alias && candidates.some(s => s.subject === alias)) return { subject: alias, how: 'alias' };
+  let best = null, bestScore = 0;
+  candidates.forEach(s => {
+    const score = bigramSimilarity(normalizeSearch(s.subject), norm);
+    if(score > bestScore) { best = s; bestScore = score; }
+  });
+  if(best && bestScore >= 0.72) return { subject: best.subject, how: 'fuzzy' };
+  return { subject: '', how: 'none' };
+}
+
+function parseDocument(pages, fileName) {
+  const rows = [];
+  const allText = pages.map(p => p.text).join('\n');
+  const provisional = /PROVISIONAL/i.test(allText);
+  pages.forEach(pg => {
+    const level = pageLevel(pg.text);
+    pg.text.split('\n').forEach(raw => {
+      const line = cleanOcrLine(raw);
+      if(!line || /^UNIT\b/i.test(line) || /contributing/i.test(line)) return;
+      const row = parseAwardLine(line) || parseGradeLine(line, level) || parseSyllabusLine(line, level);
+      if(row) rows.push({ ...row, raw: raw.trim(), file: fileName, page: pg.page, pageConfidence: pg.confidence, source: pg.source });
+    });
+  });
+  if(!rows.length && looksLikeMoeDocument(allText)) {
+    parseMoeRows(allText).forEach(r => rows.push({ ...r, raw: r.rawSubject, file: fileName, page: 1, pageConfidence: pages[0]?.confidence ?? 0, source: pages[0]?.source }));
+  }
+  return rows.map(r => {
+    const match = r.subject ? { subject: r.subject, how: 'exact' } : matchOcrSubject(r.rawSubject, r.level);
+    const notes = [];
+    if(r.uncertain) notes.push(r.uncertain);
+    if(match.how === 'fuzzy') notes.push(`Subject guessed from "${r.rawSubject}"`);
+    if(match.how === 'none') notes.push(`No matching subject for "${r.rawSubject}", please choose one`);
+    if(r.level !== 'moe' && !r.grade) notes.push('Grade could not be read');
+    if(r.level === 'moe') notes.push('Enter the mark from the document (marks in tables are not read reliably)');
+    if(r.source === 'ocr' && r.pageConfidence < 70) notes.push(`Low scan quality (${r.pageConfidence}%)`);
+    if(provisional && r.level !== 'moe') notes.push('Provisional result, set to Expected');
+    if((gradeNotes[r.level] || {})[r.grade]) notes.push('Conditional grade (*)');
+    const needsCheck = match.how === 'fuzzy' || match.how === 'none' || (r.level !== 'moe' && !r.grade) || r.level === 'moe' || r.uncertain || (r.source === 'ocr' && r.pageConfidence < 70);
+    return {
+      include: true,
+      level: r.level,
+      subject: match.subject,
+      grade: r.grade || '',
+      mark: '',
+      status: provisional && r.level !== 'moe' ? 'expected' : 'final',
+      raw: r.raw, file: r.file, page: r.page,
+      notes, needsCheck
+    };
+  });
+}
+
+// Booklet: "If a subject has been taken more than once … the highest grade
+// achieved will be considered." Keep the best copy of a repeated subject.
+function resolveRepeatedSubjects(rows) {
+  const groups = new Map();
+  rows.forEach(r => {
+    if(!r.subject) return;
+    const key = `${r.level}||${r.subject}`;
+    if(!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  });
+  groups.forEach(list => {
+    const allowed = maxAllowedUses(list[0].level, list[0].subject);
+    if(list.length <= allowed) return;
+    const score = r => gradingScheme[r.level]?.[r.grade] ?? -1;
+    list.sort((a, b) => score(b) - score(a)).slice(allowed).forEach(r => {
+      r.include = false;
+      r.notes.push(r.grade === list[0].grade ? 'Same subject found twice, kept once' : 'Subject taken more than once, highest grade kept');
+    });
+  });
+  return rows;
+}
+
+// ── Review dialog ──
+window._ocrRows = [];
+
+function setOcrProgress(items) {
+  document.getElementById('ocr-progress').innerHTML = items.map(it =>
+    `<div class="ocr-progress-item"><span>${escHtml(it.name)}</span><span class="state ${it.cls || ''}">${escHtml(it.state)}</span></div>`).join('');
+}
+
+function showOcrWarnings(warnings) {
+  document.getElementById('ocr-warnings').innerHTML = warnings.map(w =>
+    `<div class="msg-box warning"><span class="msg-icon">⚠️</span><div>${w}</div></div>`).join('');
+}
+
+async function handleCertificateFiles(fileList) {
+  const files = Array.from(fileList || []).filter(f => /pdf$|^image\//i.test(f.type) || /\.(pdf|png|jpe?g|webp|bmp|tiff?)$/i.test(f.name));
+  if(!files.length) return;
+  const modal = document.getElementById('ocr-modal');
+  const addBtn = document.getElementById('ocr-add-btn');
+  window._ocrRows = [];
+  document.getElementById('ocr-review').innerHTML = '';
+  showOcrWarnings([]);
+  addBtn.disabled = true;
+  modal.classList.add('open');
+
+  const progress = files.map(f => ({ name: f.name, state: 'Waiting…' }));
+  setOcrProgress(progress);
+  const warnings = [];
+
+  try {
+    progress.forEach(p => p.state = 'Loading the reading engine (first use downloads it once)…');
+    setOcrProgress(progress);
+    await loadOcrLibraries();
+  } catch(e) {
+    progress.forEach(p => { p.state = 'Failed'; p.cls = 'error'; });
+    setOcrProgress(progress);
+    showOcrWarnings(['Could not load the reading engine. Please check the internet connection and try again.']);
+    return;
+  }
+
+  const seen = new Map();
+  const rows = [];
+  for(let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const p = progress[i];
+    try {
+      const fp = await fileFingerprint(file);
+      if(seen.has(fp)) {
+        p.state = 'Skipped (identical file)'; p.cls = 'done';
+        warnings.push(`<strong>${escHtml(file.name)}</strong> is identical to <strong>${escHtml(seen.get(fp))}</strong>, so it was read only once. Check that the right document was scanned.`);
+        setOcrProgress(progress);
+        continue;
+      }
+      seen.set(fp, file.name);
+      const pages = await readDocumentPages(file, msg => { p.state = msg; setOcrProgress(progress); });
+      const found = parseDocument(pages, file.name);
+      rows.push(...found);
+      p.state = found.length ? `${found.length} subject${found.length > 1 ? 's' : ''} found` : 'No subjects found';
+      p.cls = found.length ? 'done' : 'error';
+      if(!found.length) warnings.push(`No subjects were recognised in <strong>${escHtml(file.name)}</strong>. Add them manually, or try a clearer scan.`);
+    } catch(e) {
+      p.state = 'Could not read this file'; p.cls = 'error';
+      warnings.push(`<strong>${escHtml(file.name)}</strong> could not be read (${escHtml(String(e.message || e))}).`);
+    }
+    setOcrProgress(progress);
+  }
+
+  window._ocrRows = resolveRepeatedSubjects(rows);
+  showOcrWarnings(warnings);
+  renderOcrReview();
+}
+
+function ocrSubjectOptions(level, selected) {
+  const subjects = allSubjects.filter(s => s.level === level).map(s => s.subject);
+  return `<option value="">Choose subject…</option>` + [...new Set(subjects)].sort((a, b) => a.localeCompare(b))
+    .map(s => `<option value="${escHtml(s)}"${s === selected ? ' selected' : ''}>${escHtml(s)}</option>`).join('');
+}
+
+function ocrGradeCell(row, idx) {
+  if(row.level === 'moe') {
+    return `<input type="number" min="0" max="100" step="any" placeholder="Mark" value="${escHtml(String(row.mark))}" data-idx="${idx}" data-field="mark">`;
+  }
+  const grades = Object.keys(gradingScheme[row.level] || {});
+  return `<select data-idx="${idx}" data-field="grade"><option value="">—</option>${grades.map(g =>
+    `<option value="${g}"${g === row.grade ? ' selected' : ''}>${g}${(gradeNotes[row.level] || {})[g] ? ' *' : ''}</option>`).join('')}</select>`;
+}
+
+function renderOcrReview() {
+  const rows = window._ocrRows;
+  const container = document.getElementById('ocr-review');
+  if(!rows.length) {
+    container.innerHTML = '';
+    document.getElementById('ocr-add-btn').disabled = true;
+    return;
+  }
+  const levelOptions = sel => Object.entries(shortLevelLabels).map(([k, v]) => `<option value="${k}"${k === sel ? ' selected' : ''}>${v}</option>`).join('');
+  container.innerHTML = `
+    <div class="ocr-table-wrap"><table class="ocr-table">
+      <thead><tr><th>Add</th><th>Read from document</th><th>Subject</th><th>Level</th><th>Grade / Mark</th><th>Result</th><th>Check</th></tr></thead>
+      <tbody>${rows.map((r, i) => `
+        <tr class="${r.include ? '' : 'excluded'}">
+          <td><input type="checkbox" data-idx="${i}" data-field="include" ${r.include ? 'checked' : ''}></td>
+          <td><div class="ocr-raw">${escHtml(r.raw)}</div><div class="ocr-source">${escHtml(r.file)} · p.${r.page}</div></td>
+          <td><select data-idx="${i}" data-field="subject">${ocrSubjectOptions(r.level, r.subject)}</select></td>
+          <td><select data-idx="${i}" data-field="level">${levelOptions(r.level)}</select></td>
+          <td>${ocrGradeCell(r, i)}</td>
+          <td><select data-idx="${i}" data-field="status"><option value="final"${r.status === 'final' ? ' selected' : ''}>Final</option><option value="expected"${r.status === 'expected' ? ' selected' : ''}>Expected</option></select></td>
+          <td><span class="ocr-flag ${r.needsCheck ? 'check' : 'ok'}">${r.needsCheck ? 'Check' : 'OK'}</span>${r.notes.length ? `<div class="ocr-notes">${r.notes.map(escHtml).join('<br>')}</div>` : ''}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+  updateOcrAddButton();
+}
+
+function updateOcrAddButton() {
+  const count = window._ocrRows.filter(r => r.include).length;
+  const btn = document.getElementById('ocr-add-btn');
+  btn.disabled = count === 0;
+  btn.textContent = count ? `Add ${count} subject${count > 1 ? 's' : ''}` : 'Add selected subjects';
+}
+
+document.getElementById('ocr-review').addEventListener('change', e => {
+  const el = e.target;
+  const row = window._ocrRows[Number(el.dataset.idx)];
+  if(!row) return;
+  const field = el.dataset.field;
+  if(field === 'include') row.include = el.checked;
+  else if(field === 'level') {
+    row.level = el.value;
+    // Keep the subject if it exists at the new level, otherwise ask again.
+    if(!allSubjects.some(s => s.level === row.level && s.subject === row.subject)) row.subject = matchOcrSubject(row.subject || row.raw, row.level).subject;
+    if(gradingScheme[row.level]?.[row.grade] === undefined) row.grade = '';
+    renderOcrReview();
+    return;
+  }
+  else row[field] = el.value;
+  el.closest('tr')?.classList.toggle('excluded', !row.include);
+  updateOcrAddButton();
+});
+
+function addOcrRowsToCalculator() {
+  const chosen = window._ocrRows.filter(r => r.include);
+  const problems = [];
+  chosen.forEach(r => {
+    if(!r.subject) problems.push(`"${r.raw}": choose a subject`);
+    else if(r.level === 'moe') {
+      const mark = parseFloat(r.mark);
+      if(!(mark >= 0 && mark <= 100)) problems.push(`${r.subject}: enter a mark between 0 and 100`);
+    } else if(!r.grade) problems.push(`${r.subject}: choose a grade`);
+  });
+  if(problems.length) {
+    showOcrWarnings(['Please fix these rows first:<br>' + problems.map(escHtml).join('<br>')]);
+    return;
+  }
+
+  // Replace blank rows, and skip subjects that are already entered.
+  document.querySelectorAll('.subject-card').forEach(card => { if(!card.querySelector('.subject-val').value) card.remove(); });
+  const used = getUsedSubjectCounts();
+  const skipped = [];
+  let added = 0;
+  chosen.forEach(r => {
+    const key = subjectUsageKey(r.level, r.subject);
+    if((used.get(key) || 0) >= maxAllowedUses(r.level, r.subject)) { skipped.push(`${r.subject} (${levelLabels[r.level]})`); return; }
+    used.set(key, (used.get(key) || 0) + 1);
+    addFilledSubjectCard({ level: r.level, subject: r.subject, grade: r.grade, status: r.status, mark: r.mark });
+    added++;
+  });
+
+  updateLevelCounter();
+  markResultsStale();
+  closeOcrModal();
+  document.getElementById('feedback').innerHTML = `<div class="msg-box success"><span class="msg-icon">✓</span><div><strong>${added} subject${added === 1 ? '' : 's'} added from certificates.</strong> Check them against the documents, then click <em>Calculate Percentage</em>.${skipped.length ? `<br>Already entered, so skipped: ${skipped.map(escHtml).join(', ')}.` : ''}</div></div>`;
+}
+
+function closeOcrModal() {
+  document.getElementById('ocr-modal').classList.remove('open');
+}
+
+(function initCertificateUpload() {
+  const input = document.getElementById('ocr-file-input');
+  const drop = document.getElementById('ocr-drop');
+  input.addEventListener('change', () => { handleCertificateFiles(input.files); input.value = ''; });
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+  drop.addEventListener('drop', e => handleCertificateFiles(e.dataTransfer.files));
+})();
 </script>
 
 <div id="cond-confirm-modal" onclick="if(event.target===this)cancelCondConfirm()">
