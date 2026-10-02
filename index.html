@@ -4142,8 +4142,9 @@ async function fileFingerprint(file) {
 const GRADE_WORDS = { nine:'9', eight:'8', seven:'7', six:'6', five:'5', four:'4', three:'3', two:'2', one:'1' };
 
 function cleanOcrLine(line) {
-  // Text layers and OCR sometimes split A* into "A *".
-  return line.replace(/\bA\s+\*/g, 'A*').replace(/[|=_~—–“”"`;!]+/g, ' ').replace(/\s+/g, ' ').trim();
+  // Text layers and OCR sometimes split A* into "A *"; annotated samples carry
+  // markers such as "2>" that are not part of the result.
+  return line.replace(/(^|\s)\d>\s*/g, '$1').replace(/\bA\s+\*/g, 'A*').replace(/[|=_~—–“”"`;!]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function pageLevel(text) {
