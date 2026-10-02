@@ -3823,13 +3823,15 @@ async function tessRecognize(canvas, langs) {
   }
 }
 
-async function tesseractReadPage(canvas) {
+async function tesseractReadPage(canvas, opts = {}) {
   const eng = await tessRecognize(canvas, 'eng');
-  if(!looksLikeMoeDocument(eng.text)) return eng;
-  // Grade 12 MOE documents are mostly Arabic: read them again with the Arabic model.
+  // Mostly-Arabic pages (Grade 12 letters) read poorly in English: read them
+  // again with the Arabic model. The Arabic text is kept separate and only
+  // used to find Grade 12 subjects and marks, never British grades.
+  if(!opts.forceArabic && !looksLikeMoeDocument(eng.text) && eng.confidence >= 55) return eng;
   try {
     const ara = await tessRecognize(canvas, 'ara+eng');
-    return { text: ara.text + '\n' + eng.text, confidence: ara.confidence };
+    return { ...eng, arabicText: ara.text };
   } catch(e) {
     return eng;
   }
@@ -3878,7 +3880,8 @@ async function ensurePaddleReady() {
 
 // Text detection (DBNet): returns boxes in the canvas's coordinates.
 async function paddleDetect(canvas) {
-  const limit = 1920;
+  // Wide (landscape) pages, e.g. two statements scanned side by side, need more detail.
+  const limit = canvas.width > canvas.height * 1.2 ? 2560 : 1920;
   const W0 = canvas.width, H0 = canvas.height;
   const scale = Math.min(1, limit / Math.max(W0, H0));
   const w = Math.max(32, Math.round(W0 * scale / 32) * 32);
@@ -3971,25 +3974,31 @@ async function paddleReadWith(canvas, boxes, lang) {
   const model = PADDLE_MODELS[lang];
   const classes = await paddleDict(model.dict);
   const items = [];
-  let confSum = 0;
+  let confSum = 0, weak = 0;
   for(const box of boxes) {
     const r = await paddleRecognize(canvas, box, model.rec, classes, lang === 'ar');
-    if(r.text.trim()) { items.push({ ...box, text: r.text }); confSum += r.conf; }
+    if(r.text.trim()) { items.push({ ...box, text: r.text }); confSum += r.conf; if(r.conf < 0.6) weak++; }
   }
-  return { text: groupPaddleLines(items, lang === 'ar'), confidence: Math.round((items.length ? confSum / items.length : 0) * 100) };
+  return {
+    text: groupPaddleLines(items, lang === 'ar'),
+    confidence: Math.round((items.length ? confSum / items.length : 0) * 100),
+    weakShare: items.length ? weak / items.length : 0
+  };
 }
 
-async function paddleReadPage(canvas) {
+async function paddleReadPage(canvas, opts = {}) {
   // Detect text once and reuse the boxes for the English and (if needed) Arabic readers.
   const boxes = await paddleDetect(canvas);
   const en = await paddleReadWith(canvas, boxes, 'en');
-  if(!looksLikeMoeDocument(en.text)) return en;
+  const result = { text: en.text, confidence: en.confidence };
+  // A page where many lines read poorly in English is likely Arabic (e.g. a
+  // Grade 12 letter). The Arabic text is kept separate and only used to find
+  // Grade 12 subjects and marks, never British grades.
+  if(!opts.forceArabic && !looksLikeMoeDocument(en.text) && en.weakShare <= 0.3) return result;
   try {
-    const ar = await paddleReadWith(canvas, boxes, 'ar');
-    return { text: ar.text + '\n' + en.text, confidence: Math.min(ar.confidence, en.confidence) };
-  } catch(e) {
-    return en;
-  }
+    result.arabicText = (await paddleReadWith(canvas, boxes, 'ar')).text;
+  } catch(e) { /* keep the English reading */ }
+  return result;
 }
 
 // ── Page extraction ──
@@ -4045,7 +4054,8 @@ function textLayerToLines(items) {
 }
 
 function looksLikeMoeDocument(text) {
-  if(/Education Zone|\bGR\.?\s*12\b|\bGrade\s*12\b|الصف الثاني عشر|وزارة التربية/i.test(text)) return true;
+  if(/Education Zone|\bGR\.?\s*12\b|\bGrade\s*12\b|\bYear\s*12\b|الصف الثاني عشر|وزارة التربية/i.test(text)) return true;
+  if(/اللغه\s*العربيه|التربيه\s*الاسلاميه/.test(normalizeArabic(text))) return true;
   return /Ministry of Education/i.test(text) && !/\bGRADE\s+[1-9A-G]\b|\bAWARD\b/.test(text);
 }
 
@@ -4056,9 +4066,14 @@ const PAGE_READERS = { paddle: paddleReadPage, tesseract: tesseractReadPage };
 // run at the same time (Tesseract works in its own background worker).
 async function extractPages(file, engines, onStatus) {
   const result = Object.fromEntries(engines.map(e => [e, []]));
-  const readCanvas = async (canvas, pageNo) => {
-    const reads = await Promise.all(engines.map(e => PAGE_READERS[e](canvas)));
-    engines.forEach((e, i) => result[e].push({ page: pageNo, ...reads[i], source: 'ocr' }));
+  const readCanvas = async (canvas, pageNo, layerArabic = '') => {
+    const reads = await Promise.all(engines.map(e => PAGE_READERS[e](canvas, { forceArabic: !!layerArabic })));
+    engines.forEach((e, i) => {
+      const read = reads[i];
+      // A scrambled Arabic text layer still holds exact digits, so keep it too.
+      if(layerArabic) read.layerArabic = layerArabic;
+      result[e].push({ page: pageNo, ...read, source: 'ocr' });
+    });
     canvas.width = canvas.height = 0;
   };
   if(file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
@@ -4067,12 +4082,15 @@ async function extractPages(file, engines, onStatus) {
       onStatus(`Reading page ${p} of ${pdf.numPages}…`);
       const page = await pdf.getPage(p);
       const layerText = textLayerToLines((await page.getTextContent()).items);
-      // Scanner apps often add a text layer holding only QR digits; use the
-      // layer only when it contains real words.
-      if((layerText.match(/[A-Za-z؀-ۿ]/g) || []).length >= 40) {
+      // Use a PDF's own text only when it contains recognisable result lines
+      // and no Arabic. Scanner apps and verification stamps often add a hidden
+      // layer holding just a QR number or a web address, and Arabic text layers
+      // are frequently scrambled, so those pages are always read with OCR.
+      const layerHasArabic = /[؀-ۿ]{3,}/.test(layerText);
+      if(!layerHasArabic && hasResultLines(layerText)) {
         engines.forEach(e => result[e].push({ page: p, text: layerText, confidence: 100, source: 'text' }));
       } else {
-        await readCanvas(await renderPdfPage(page), p);
+        await readCanvas(await renderPdfPage(page), p, layerHasArabic ? layerText : '');
       }
       page.cleanup();
     }
@@ -4093,7 +4111,8 @@ async function fileFingerprint(file) {
 const GRADE_WORDS = { nine:'9', eight:'8', seven:'7', six:'6', five:'5', four:'4', three:'3', two:'2', one:'1' };
 
 function cleanOcrLine(line) {
-  return line.replace(/[|=_~—–“”"`;!]+/g, ' ').replace(/\s+/g, ' ').trim();
+  // Text layers and OCR sometimes split A* into "A *".
+  return line.replace(/\bA\s+\*/g, 'A*').replace(/[|=_~—–“”"`;!]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function pageLevel(text) {
@@ -4113,7 +4132,8 @@ function normalizeGrade(token, word, level) {
 // Pearson International A Level statements:
 //   "AWARD YCH11 CHEMISTRY 0403/0600 C (c)"  → out of 600 = A-Level, out of 300 = AS-Level.
 function parseAwardLine(line) {
-  const m = line.match(/\bAWARD\b\s*-?\s*([A-Z0-9]{4,6})\s+(.+?)\s+0?(\d{2,3})\s*[\/A7]?\s*0?(600|300)\b\s*(.*)$/i);
+  // The maximum is always printed as 0300 or 0600; OCR sometimes reads the leading 0 as 6.
+  const m = line.match(/\bAWARD\b\s*-?\s*([A-Z0-9]{4,6})\s+(.+?)\s+[06]?(\d{2,3})\s*[\/A7]?\s*[06]?(600|300)\b\s*(.*)$/i);
   if(!m) return null;
   const level = m[4] === '600' ? 'a-level' : 'as-level';
   const rest = m[5];
@@ -4151,10 +4171,99 @@ function parseSyllabusLine(line, level) {
   return { rawSubject: subject, level: lineLevel, grade: normalizeGrade(m[3], m[4], lineLevel), uncertain: 'Cambridge-style line, please check' };
 }
 
+// Cambridge certificates: "Chemistry A(a)", "English as a Second Language B(b)".
+function parseCambridgeCertLine(line, level) {
+  // The opening bracket is sometimes lost in OCR ("Chemistry Aa)").
+  const m = line.match(/^([A-Za-z][A-Za-z .,&'()\/-]{2,70}?)\s+(A\*|[A-GU]|[1-9])\s*\(?\s*([a-z]\*?|a\s*star|[a-z]+)\s*\)\s*$/);
+  if(!m) return null;
+  let subject = m[1].replace(/[.,]/g, ' ').replace(/\s+/g, ' ').trim();
+  let lineLevel = level;
+  if(/\bAS LEVEL\b|ADVANCED SUBSIDIARY/i.test(subject)) lineLevel = 'as-level';
+  else if(/\bA LEVEL\b|ADVANCED LEVEL/i.test(subject)) lineLevel = 'a-level';
+  subject = subject.replace(/\b(AS|A) LEVEL\b|ADVANCED SUBSIDIARY|ADVANCED LEVEL/gi, '').trim();
+  if((subject.match(/[A-Za-z]/g) || []).length < 3) return null;
+  return { rawSubject: subject, level: lineLevel, grade: normalizeGrade(m[2], m[3], lineLevel) };
+}
+
+// School documents (predicted grades, school transcripts) use their own tables.
+function levelFromToken(token) {
+  const t = token.toUpperCase().replace(/[\s-]/g, '');
+  if(['ALEVEL', 'AL', 'A2', 'IAL', 'A'].includes(t)) return 'a-level';
+  if(['ASLEVEL', 'AS', 'IAS'].includes(t)) return 'as-level';
+  if(['IGCSE', 'GCSE', 'OLEVEL', 'OL'].includes(t)) return 'o-level';
+  return '';
+}
+
+// Pearson subject codes printed next to the name: Y… = A-Level award, X… = AS award.
+function levelFromCode(text) {
+  const m = text.match(/\(\s*([YX])[A-Z]{2}\d{2}\s*\)/);
+  return m ? (m[1] === 'Y' ? 'a-level' : 'as-level') : '';
+}
+
+function cleanSchoolSubject(s) {
+  return s.replace(/\(\s*[A-Z0-9]{4,6}\s*\)/g, ' ').replace(/^[^A-Za-z]+/, '').replace(/[^A-Za-z)]+$/, '').replace(/\s+/g, ' ').trim();
+}
+
+// A school-table row is only accepted when its subject is a known subject at
+// that level, so headings and grade keys ("A* A B C D E") are never taken as results.
+function isKnownSubject(subject, level) {
+  return (subject.match(/[A-Za-z]/g) || []).length >= 3 && matchOcrSubject(subject, level).how !== 'none';
+}
+
+// Rows with a level column: "Biology  A  A*  2025-2026", "Physics (YPH11)  A Level  B".
+const SCHOOL_ROW = /^(.+?)\s+(A[\s-]?[Ll][Ee][Vv][Ee][Ll]|AS[\s-]?[Ll][Ee][Vv][Ee][Ll]|O[\s-]?[Ll][Ee][Vv][Ee][Ll]|I?GCSE|IAL|IAS|A2|AL|AS|OL|A)\s+(A\*|[A-EU]|[1-9])(?=\s|$)/;
+function parseSchoolTableLine(line) {
+  const m = line.match(SCHOOL_ROW);
+  if(!m) return null;
+  const level = levelFromToken(m[2]);
+  const subject = cleanSchoolSubject(m[1]);
+  if(!level || !isKnownSubject(subject, level)) return null;
+  const grade = normalizeGrade(m[3], '', level);
+  return grade ? { rawSubject: subject, level, grade } : null;
+}
+
+// Rows without a level column ("Physics (YPH11)  B") on predicted-grade or
+// school-report pages. The level comes from the subject code or the page
+// heading, so these rows are always flagged for checking.
+function parseSchoolGradeOnlyLine(line, level, pageText) {
+  if(!/predicted|forecast|transcript|school report|academic record/i.test(pageText)) return null;
+  const m = line.match(/^(.+?)\s+(A\*|[A-EU]|[1-9])(?:\s+\d{4}(?:\s*[-\/]\s*\d{2,4})?)?\s*$/);
+  if(!m) return null;
+  const rowLevel = levelFromCode(line) || level;
+  const subject = cleanSchoolSubject(m[1]);
+  if(!isKnownSubject(subject, rowLevel)) return null;
+  const grade = normalizeGrade(m[2], '', rowLevel);
+  return grade ? { rawSubject: subject, level: rowLevel, grade, uncertain: 'Level taken from the subject code or page heading, please check' } : null;
+}
+
+function parseResultLine(line, level, pageText) {
+  return parseAwardLine(line) || parseGradeLine(line, level) || parseSyllabusLine(line, level)
+    || parseCambridgeCertLine(line, level) || parseSchoolTableLine(line) || parseSchoolGradeOnlyLine(line, level, pageText);
+}
+
+function isSkippedLine(line) {
+  return !line || /^UNIT\b/i.test(line) || /contributing/i.test(line);
+}
+
+// True when text contains at least one line that reads as a subject result.
+function hasResultLines(text) {
+  if(!text || text.trim().length < 10) return false;
+  const level = pageLevel(text);
+  return text.split('\n').some(raw => {
+    const line = cleanOcrLine(raw);
+    return !isSkippedLine(line) && !!parseResultLine(line, level, text);
+  });
+}
+
 // ── Grade 12 (MOE) documents ──
+// Patterns run on normalised Arabic (see normalizeArabic), so spelling
+// variants such as الإسلامية / الاسلامية / الاسلاميه all match.
 const MOE_SUBJECTS = [
-  { subject: 'Grade 12 Islamic', rawSubject: 'Islamic Education (Grade 12)', find: /التربية\s*ال[إا]سلامية|Islamic Education/i, rowWords: /التربية|ال[إا]سلامية/ },
-  { subject: 'Grade 12 Arabic', rawSubject: 'Arabic Language (Grade 12)', find: /اللغة\s*العربية|Arabic Language/i, rowWords: /اللغة|العربية/ }
+  { subject: 'Grade 12 Islamic', rawSubject: 'Islamic Education (Grade 12)',
+    // "االسالميه" is how some PDF text layers scramble الإسلامية.
+    find: /التربيه\s*الاسلاميه|االسالميه|islamic education/i, rowWords: /الاسلاميه|االسالميه|التربيه/, notRow: /البدنيه|وزاره|والتعليم/ },
+  { subject: 'Grade 12 Arabic', rawSubject: 'Arabic Language (Grade 12)',
+    find: /اللغه\s*العربيه|arabic language/i, rowWords: /اللغه|العربيه/, notRow: /الامارات|المتحده/ }
 ];
 
 const AR_NUMBER_WORDS = {
@@ -4166,7 +4275,10 @@ const AR_NUMBER_WORDS = {
 };
 
 function normalizeArabic(text) {
-  return text.replace(/[ً-ْـ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
+  return text
+    .replace(/[ً-ْـ]/g, '')
+    .replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
+    .replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660));
 }
 
 // Finds marks written in Arabic words, e.g. "تسعة وستون" = 69. Only phrases
@@ -4192,26 +4304,58 @@ function arabicWordMarks(line) {
   return found;
 }
 
-function findMoeMark(text, subjectDef, allowAnywhere) {
-  const lines = text.split('\n');
-  const near = new Set(), anywhere = new Set();
-  const phrases = {};
-  lines.forEach(line => {
-    arabicWordMarks(line).forEach(m => {
-      anywhere.add(m.value); phrases[m.value] = m.phrase;
-      if(subjectDef.rowWords.test(line)) near.add(m.value);
-    });
-  });
-  // Prefer a mark on the subject's own row; fall back to the only mark on the page.
-  const pick = near.size === 1 ? [...near][0] : (allowAnywhere && near.size === 0 && anywhere.size === 1 ? [...anywhere][0] : null);
-  return pick === null ? null : { value: pick, phrase: phrases[pick] };
+// Marks written as digits in a table row, e.g. "اللغة العربية 100 50 72":
+// the maximum (100), the minimum (50) and the student's mark. Only rows that
+// show both limits are trusted, so a lone "50" is never taken as the mark.
+function digitMark(line) {
+  const nums = (line.match(/(?<![\d.\/])\d{1,3}(?:\.\d+)?(?![\d\/])/g) || []).map(Number).filter(n => n >= 0 && n <= 100);
+  const i100 = nums.indexOf(100);
+  if(i100 < 0) return null;
+  nums.splice(i100, 1);
+  const i50 = nums.indexOf(50);
+  if(i50 < 0) return null;
+  nums.splice(i50, 1);
+  return nums.length === 1 ? nums[0] : null;
 }
 
-function parseMoeRows(text) {
-  const present = MOE_SUBJECTS.filter(def => def.find.test(text));
+function findMoeMark(text, subjectDef, allowAnywhere) {
+  const lines = normalizeArabic(text).split('\n');
+  const nearDigits = new Set(), nearWords = new Set(), anyWords = new Set();
+  const phrases = {};
+  lines.forEach(line => {
+    const onRow = subjectDef.rowWords.test(line) && !subjectDef.notRow.test(line);
+    if(onRow) { const d = digitMark(line); if(d !== null) nearDigits.add(d); }
+    arabicWordMarks(line).forEach(m => {
+      anyWords.add(m.value); phrases[m.value] = m.phrase;
+      if(onRow) nearWords.add(m.value);
+    });
+  });
+  // Prefer the digits on the subject's own row, then the mark in words on that
+  // row, then (single-subject pages only) the only mark in words on the page.
+  if(nearDigits.size === 1) return { value: [...nearDigits][0], source: 'digits' };
+  if(nearWords.size === 1) { const v = [...nearWords][0]; return { value: v, source: 'words', phrase: phrases[v] }; }
+  if(allowAnywhere && nearWords.size === 0 && anyWords.size === 1) { const v = [...anyWords][0]; return { value: v, source: 'words', phrase: phrases[v] }; }
+  return null;
+}
+
+// layerText: the PDF's own (possibly scrambled) Arabic text, whose digits are exact.
+// ocrArabic: what the Arabic OCR model read. englishText: what the English model read;
+// it cannot read Arabic words but reads digits more reliably than the Arabic model.
+function parseMoeRows(layerText, ocrArabic, englishText) {
+  const norm = normalizeArabic([layerText, ocrArabic, englishText].join('\n'));
+  const present = MOE_SUBJECTS.filter(def => def.find.test(norm));
+  const englishMarks = new Set(englishText.split('\n').map(digitMark).filter(v => v !== null));
   return present.map(def => {
     // With two Grade 12 subjects on one page, only marks on the subject's own row are trusted.
-    const mark = findMoeMark(text, def, present.length === 1);
+    const single = present.length === 1;
+    let mark = layerText ? findMoeMark(layerText, def, single) : null;
+    if(!mark) {
+      mark = findMoeMark(ocrArabic, def, single);
+      // Cross-check Arabic-OCR digits against the digits the English model saw.
+      if(mark && mark.source === 'digits' && englishMarks.size && !englishMarks.has(mark.value)) {
+        mark = englishMarks.size === 1 ? { value: [...englishMarks][0], source: 'digits' } : null;
+      }
+    }
     return { rawSubject: def.rawSubject, level: 'moe', subject: def.subject, moeMark: mark };
   });
 }
@@ -4264,19 +4408,25 @@ function matchOcrSubject(rawSubject, level) {
 function parseDocument(pages, fileName, engine) {
   const found = [];
   const allText = pages.map(p => p.text).join('\n');
+  const arabicText = pages.map(p => p.arabicText || '').join('\n');
   const provisional = /PROVISIONAL/i.test(allText);
+  // School letters with predicted grades come before the board certificate.
+  const predicted = !provisional && /PREDICTED|FORECAST/i.test(allText);
   pages.forEach(pg => {
     const level = pageLevel(pg.text);
     pg.text.split('\n').forEach(raw => {
       const line = cleanOcrLine(raw);
-      if(!line || /^UNIT\b/i.test(line) || /contributing/i.test(line)) return;
-      const row = parseAwardLine(line) || parseGradeLine(line, level) || parseSyllabusLine(line, level);
+      if(isSkippedLine(line)) return;
+      const row = parseResultLine(line, level, pg.text);
       if(row) found.push({ ...row, raw: raw.trim(), page: pg.page, pageConfidence: pg.confidence, source: pg.source });
     });
   });
-  if(!found.length && looksLikeMoeDocument(allText)) {
-    parseMoeRows(allText).forEach(r => found.push({ ...r, raw: r.rawSubject, page: 1, pageConfidence: pages[0]?.confidence ?? 0, source: pages[0]?.source }));
+  const layerArabic = pages.map(p => p.layerArabic || '').join('\n');
+  if(!found.length && looksLikeMoeDocument([allText, arabicText, layerArabic].join('\n'))) {
+    const moePage = pages.find(p => p.arabicText || p.layerArabic) || pages[0];
+    parseMoeRows(layerArabic, arabicText, allText).forEach(r => found.push({ ...r, raw: r.rawSubject, page: moePage?.page ?? 1, pageConfidence: moePage?.confidence ?? 0, source: moePage?.source }));
   }
+  const expected = provisional || predicted;
   return found.map(r => {
     const match = r.subject ? { subject: r.subject, how: 'exact' } : matchOcrSubject(r.rawSubject, r.level);
     const notes = [], reasons = new Set();
@@ -4289,13 +4439,16 @@ function parseDocument(pages, fileName, engine) {
       reasons.add('moe');
       if(r.moeMark) {
         mark = String(r.moeMark.value);
-        notes.push(`Mark read from the words "${r.moeMark.phrase}" = ${r.moeMark.value}. Please confirm against the document`);
+        notes.push(r.moeMark.source === 'digits'
+          ? `Mark ${r.moeMark.value} read from the marks table (out of 100). Please confirm against the document`
+          : `Mark read from the words "${r.moeMark.phrase}" = ${r.moeMark.value}. Please confirm against the document`);
       } else {
         notes.push('Enter the mark from the document (it could not be read reliably)');
       }
     }
     if(r.source === 'ocr' && r.pageConfidence < 70) { notes.push(`Low scan quality (${r.pageConfidence}%)`); reasons.add('quality'); }
     if(provisional && r.level !== 'moe') notes.push('Provisional result, set to Expected');
+    if(predicted && r.level !== 'moe') notes.push('Predicted grade from the school, set to Expected');
     if((gradeNotes[r.level] || {})[r.grade]) notes.push('Conditional grade (*)');
     return {
       include: true,
@@ -4303,7 +4456,7 @@ function parseDocument(pages, fileName, engine) {
       subject: match.subject,
       grade: r.grade || '',
       mark,
-      status: provisional && r.level !== 'moe' ? 'expected' : 'final',
+      status: expected && r.level !== 'moe' ? 'expected' : 'final',
       raw: r.raw, file: fileName, page: r.page, engine,
       notes, reasons
     };
