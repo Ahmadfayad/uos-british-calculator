@@ -833,6 +833,17 @@
     .admin-actions { display: flex; gap: 6px; white-space: nowrap; }
     .admin-badge { display: inline-block; min-width: 18px; padding: 1px 6px; margin-left: 5px; border-radius: 999px; background: #ef4444; color: #fff; font-size: 0.68rem; font-weight: 700; text-decoration: none; line-height: 1.5; vertical-align: middle; }
     .admin-badge.hidden { display: none; }
+    .ocr-camera-btn { align-self: center; display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; padding: 7px 14px; }
+    .camera-modal-box { max-width: 760px; }
+    .camera-view { position: relative; background: #000; border-radius: var(--r); overflow: hidden; margin: 8px 0; }
+    .camera-view video { display: block; width: 100%; max-height: 56vh; object-fit: contain; }
+    .camera-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+    .camera-flash.on { animation: cameraFlash 0.35s ease-out; }
+    @keyframes cameraFlash { from { opacity: 0.85; } to { opacity: 0; } }
+    .camera-shots { display: flex; gap: 8px; flex-wrap: wrap; min-height: 10px; }
+    .camera-shot { position: relative; width: 84px; text-align: center; font-size: 0.68rem; color: var(--text-3); }
+    .camera-shot img { width: 84px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); display: block; }
+    .camera-shot button { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; border: none; background: #ef4444; color: #fff; cursor: pointer; font-size: 0.8rem; line-height: 1; }
     #admin-link:has(.admin-badge:not(.hidden)) { opacity: 1; }
     .teach-share { flex-basis: 100%; display: flex; flex-direction: column; gap: 6px; border-top: 1px dashed var(--border); padding-top: 8px; }
     .teach-share .teach-name input { max-width: 320px; }
@@ -1102,6 +1113,11 @@
         <label for="ocr-engine">Reading engine</label>
         <select id="ocr-engine"></select>
       </div>
+      <button type="button" class="btn btn-ghost ocr-camera-btn" id="ocr-camera-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Take a photo of a paper certificate
+      </button>
+      <input type="file" id="ocr-camera-input" accept="image/*" capture="environment" hidden>
       <input type="file" id="ocr-file-input" accept=".pdf,application/pdf,image/*" multiple hidden>
       <div class="ocr-privacy">🔒 Files are read on this computer only. Nothing is uploaded.</div>
     </div>
@@ -1308,6 +1324,19 @@
     <div class="ocr-actions">
       <button class="btn btn-ghost" onclick="closeOcrModal()">Cancel</button>
       <button class="btn btn-primary" id="ocr-add-btn" onclick="addOcrRowsToCalculator()" disabled>Add selected subjects</button>
+    </div>
+  </div>
+</div>
+<div id="camera-modal" class="modal-overlay" data-static="true">
+  <div class="modal-box camera-modal-box">
+    <div class="modal-header"><h2 class="modal-title">Photograph the certificate</h2><button class="modal-close" onclick="closeCamera()">×</button></div>
+    <p class="teach-help">Lay the page flat in good light, fill the frame with it and hold steady. Take one photo per page, then click <strong>Read</strong>.</p>
+    <div class="camera-view"><video id="camera-video" playsinline muted></video><div id="camera-flash" class="camera-flash"></div></div>
+    <div id="camera-shots" class="camera-shots"></div>
+    <div class="ocr-actions">
+      <button class="btn btn-ghost" onclick="closeCamera()">Cancel</button>
+      <button class="btn btn-ghost" id="camera-capture-btn" onclick="capturePhoto()">📷 Take photo</button>
+      <button class="btn btn-primary" id="camera-read-btn" onclick="readCameraShots()" disabled>Read photos</button>
     </div>
   </div>
 </div>
@@ -5002,7 +5031,78 @@ function closeOcrModal(force = false) {
   document.getElementById('ocr-modal').classList.remove('open');
 }
 
+// ── Taking photos of paper certificates ──
+// Uses the computer's webcam (or the phone camera in the browser). Where live camera
+// access is not available, the phone's own camera app opens instead.
+let _camStream = null, _camShots = [];
+
+async function openCamera() {
+  if(!navigator.mediaDevices?.getUserMedia) { document.getElementById('ocr-camera-input').click(); return; }
+  try {
+    _camStream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+  } catch(e) {
+    if(e.name === 'NotAllowedError') appAlert('Camera access was blocked. Allow the camera for this site in the browser (the camera icon in the address bar), or choose files instead.', 'Camera blocked');
+    else document.getElementById('ocr-camera-input').click(); // no webcam: fall back to the device camera / file picker
+    return;
+  }
+  _camShots = [];
+  renderCameraShots();
+  const video = document.getElementById('camera-video');
+  video.srcObject = _camStream;
+  document.getElementById('camera-modal').classList.add('open');
+  try { await video.play(); } catch(e) {}
+}
+
+function capturePhoto() {
+  const video = document.getElementById('camera-video');
+  if(!video.videoWidth) return;
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  canvas.toBlob(blob => {
+    if(!blob) return;
+    _camShots.push(new File([blob], `Photo ${_camShots.length + 1}.jpg`, { type: 'image/jpeg' }));
+    canvas.width = canvas.height = 0;
+    renderCameraShots();
+    const flash = document.getElementById('camera-flash');
+    flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
+  }, 'image/jpeg', 0.92);
+}
+
+function renderCameraShots() {
+  const box = document.getElementById('camera-shots');
+  box.querySelectorAll('img').forEach(img => URL.revokeObjectURL(img.src));
+  box.innerHTML = _camShots.map((f, i) => `<div class="camera-shot"><img src="${URL.createObjectURL(f)}" alt="Photo ${i + 1}"><button type="button" title="Remove" onclick="removeCameraShot(${i})">×</button><span>Page ${i + 1}</span></div>`).join('');
+  const btn = document.getElementById('camera-read-btn');
+  btn.disabled = !_camShots.length;
+  btn.textContent = _camShots.length ? `Read ${_camShots.length} photo${_camShots.length > 1 ? 's' : ''}` : 'Read photos';
+}
+
+function removeCameraShot(i) {
+  _camShots.splice(i, 1);
+  _camShots = _camShots.map((f, n) => new File([f], `Photo ${n + 1}.jpg`, { type: 'image/jpeg' }));
+  renderCameraShots();
+}
+
+function closeCamera() {
+  _camStream?.getTracks().forEach(t => t.stop());
+  _camStream = null;
+  document.getElementById('camera-video').srcObject = null;
+  document.querySelectorAll('#camera-shots img').forEach(img => URL.revokeObjectURL(img.src));
+  document.getElementById('camera-modal').classList.remove('open');
+}
+
+function readCameraShots() {
+  const files = [..._camShots];
+  _camShots = [];
+  closeCamera();
+  if(files.length) handleCertificateFiles(files);
+}
+
 (function initCertificateUpload() {
+  document.getElementById('ocr-camera-btn').addEventListener('click', () => { warmUpOcr(); openCamera(); });
+  const cameraInput = document.getElementById('ocr-camera-input');
+  cameraInput.addEventListener('change', () => { handleCertificateFiles(cameraInput.files); cameraInput.value = ''; });
   const input = document.getElementById('ocr-file-input');
   const drop = document.getElementById('ocr-drop');
   const engineSelect = document.getElementById('ocr-engine');
@@ -5373,6 +5473,7 @@ function setAdminSession(token, user) {
   _adminToken = token;
   _adminUser = user;
   try { sessionStorage.setItem('ocrAdminToken', token); sessionStorage.setItem('ocrAdminUser', JSON.stringify(user)); } catch(e) {}
+  if(typeof refreshPendingBadge === 'function') refreshPendingBadge();
 }
 
 function openAdminPanel() {
@@ -5455,6 +5556,7 @@ async function renderAdminPanel(message = '', kind = '') {
       <h3>Waiting for approval (${pending.length})</h3>${table(pending)}
       <h3>Approved (used by everyone)</h3>${table(rules.filter(r => r.status === 'approved'))}
       ${await adminAlertsHTML()}
+      ${await adminStorageHTML()}
       <div class="ocr-actions">
         ${offerChange ? '' : `<button class="btn btn-ghost" onclick="adminShowChangePassword()">Change password</button>`}
         <button class="btn btn-ghost" onclick="adminSignOut()">Sign out</button>
@@ -5541,6 +5643,7 @@ function adminSignOut() {
   _adminUser = null;
   _passwordPromptHidden = false;
   try { sessionStorage.removeItem('ocrAdminToken'); sessionStorage.removeItem('ocrAdminUser'); } catch(e) {}
+  document.getElementById('admin-badge')?.classList.add('hidden');
   renderAdminPanel();
 }
 
@@ -5588,16 +5691,19 @@ async function adminViewSample(path) {
 // 3. An optional Microsoft Teams link gets a message the moment a rule is sent (set in the Admin panel).
 async function refreshPendingBadge() {
   if(!supabaseReady()) return;
-  let count = 0;
-  try { count = Number(await sbFetch('/rest/v1/rpc/ocr_pending_count', { method: 'POST', body: {} })) || 0; } catch(e) { return; }
   const badge = document.getElementById('admin-badge');
-  if(badge) {
-    badge.textContent = count;
-    badge.classList.toggle('hidden', count === 0);
-    badge.title = `${count} taught rule${count === 1 ? '' : 's'} waiting for admin approval`;
-  }
   let notify = false, seen = 0;
   try { notify = localStorage.getItem('ocrAdminNotify') === '1'; seen = Number(localStorage.getItem('ocrPendingSeen') || 0); } catch(e) {}
+  // Staff never see the badge: only a signed-in admin, or an admin computer with
+  // notifications turned on, asks the server for the count.
+  if(!_adminToken && !notify) { badge?.classList.add('hidden'); return; }
+  let count = 0;
+  try { count = Number(await sbFetch('/rest/v1/rpc/ocr_pending_count', { method: 'POST', body: {} })) || 0; } catch(e) { return; }
+  if(badge) {
+    badge.textContent = count;
+    badge.classList.toggle('hidden', !_adminToken || count === 0);
+    badge.title = `${count} taught rule${count === 1 ? '' : 's'} waiting for admin approval`;
+  }
   if(notify && count > seen && 'Notification' in window && Notification.permission === 'granted') {
     const n = new Notification('UOS British Calculator', { body: `${count} taught rule${count === 1 ? '' : 's'} waiting for your approval. Click to review.`, tag: 'ocr-pending' });
     n.onclick = () => { window.focus(); openAdminPanel(); n.close(); };
@@ -5628,6 +5734,49 @@ async function adminSaveWebhook(clear = false) {
     renderAdminPanel(clear ? 'Teams alerts turned off.' : 'Teams alerts turned on: a message is posted whenever staff send a rule.');
   } catch(e) {
     renderAdminPanel(/https/.test(e.message) ? 'The link must start with https://' : 'The link could not be saved (' + e.message + ').', 'error');
+  }
+}
+
+// ── Stored certificate pages (retention) ──
+// Pages are deleted when an admin approves or rejects a rule, and a nightly job
+// deletes any page older than 30 days. Admins can also clear them sooner.
+async function adminStorageHTML() {
+  let stats = null;
+  try { stats = await sbFetch('/rest/v1/rpc/ocr_storage_stats', { method: 'POST', token: _adminToken, body: {} }); } catch(e) { return ''; }
+  const files = Number(stats?.files || 0), bytes = Number(stats?.bytes || 0);
+  const size = bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  const oldest = stats?.oldest ? new Date(stats.oldest).toLocaleDateString('en-GB', { dateStyle: 'medium' }) : '';
+  return `<h3>Stored certificate pages</h3>
+    <div class="teach-box admin-alerts">
+      <div>${files ? `<strong>${files}</strong> page${files === 1 ? '' : 's'} stored (${size})${oldest ? `, oldest from ${oldest}` : ''}.` : 'No pages stored.'}</div>
+      <div class="teach-help">Pages are deleted automatically when you approve or reject a rule, and any page older than 30 days is deleted every night. The free plan includes 1 GB of storage.</div>
+      ${files ? `<div class="admin-webhook-row">
+        <button class="btn btn-ghost" onclick="adminCleanupPages(7)">Delete pages older than 7 days</button>
+        <button class="btn btn-ghost" onclick="adminConfirmDeleteAllPages()">Delete all stored pages now</button>
+      </div>` : ''}
+    </div>`;
+}
+
+function adminConfirmDeleteAllPages() {
+  appConfirm({
+    title: 'Delete all stored pages?',
+    message: 'All attached certificate pages are deleted now, including those of rules still waiting for approval. The rules themselves are kept.',
+    okText: 'Delete all', onConfirm: () => adminCleanupPages(0)
+  });
+}
+
+async function adminCleanupPages(days) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/cleanup-teach-samples`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${_adminToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ days })
+    });
+    const out = await res.json().catch(() => ({}));
+    if(!res.ok) throw new Error(out.error || res.status);
+    renderAdminPanel(`${out.deleted} stored page${out.deleted === 1 ? '' : 's'} deleted.`);
+  } catch(e) {
+    renderAdminPanel('The pages could not be deleted (' + e.message + ').', 'error');
   }
 }
 
