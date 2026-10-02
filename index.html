@@ -1693,8 +1693,8 @@ const subjectLists = {
     'Arts and Design': ['Art & Design','Drama','Music']
   },
   'as-level': {
-    'Languages': ['Afrikaans - Language','Arabic - Language','Chinese Language','English - Language and Literature','French - Language','German - Language','Hindi - Language','Portuguese - Language','Spanish - Language','Spanish Literature','Tamil','Urdu','Japanese Language','English General Paper'],
-    'Social Studies': ['Accounting','Business','Economics','Geography','Global Perspectives & Research','Law','Media Studies','Physical Education','Psychology','Sociology','Thinking Skills'],
+    'Languages': ['Afrikaans - Language','Arabic - Language','Chinese Language','English Language','English - Language and Literature','French - Language','German - Language','Hindi - Language','Portuguese - Language','Spanish - Language','Spanish Literature','Tamil','Urdu','Japanese Language','English General Paper'],
+    'Social Studies': ['Accounting','Business','Commerce','Economics','Geography','Global Perspectives & Research','Law','Media Studies','Physical Education','Psychology','Sociology','Thinking Skills'],
     'Sciences': ['Biology','Human Biology','Chemistry','Computer Science','Design & Technology','Environmental Management','Information Technology','Marine Science','Physics'],
     'Math': ['Mathematics','Further Mathematics','Further Pure Mathematics'],
     'Arts and Design': ['Drama']
@@ -4219,18 +4219,30 @@ function parseSyllabusLine(line, level) {
   return { rawSubject: subject, level: lineLevel, grade: normalizeGrade(m[3], m[4], lineLevel), uncertain: 'Cambridge-style line, please check' };
 }
 
-// Cambridge certificates: "Chemistry A(a)", "English as a Second Language B(b)".
+// Cambridge statements of results and certificates (official layouts):
+//   "9701 Chemistry Advanced Level A(a) 85%", "9702 Physics Advanced Subsidiary a(a) 86%",
+//   "Geography Advanced Level A*(a*)", "Biology Ordinary Level A*(a*)", "0470 History A*(a*) 90%",
+//   "Chemistry A(a)", "English as a Second Language B(b)".
+// Cambridge prints AS grades in lower case. The opening bracket is sometimes lost in OCR ("Aa)").
+// OCR sometimes joins the words ("AdvancedSubsidiary").
+const CAMBRIDGE_QUALIFICATION = /\b(Advanced\s*Subsidiary|Advanced\s*Level|AS\s*Level|A\s*Level|Ordinary\s*Level|O\s*Level|IGCSE)\b/i;
 function parseCambridgeCertLine(line, level) {
-  // The opening bracket is sometimes lost in OCR ("Chemistry Aa)").
-  const m = line.match(/^([A-Za-z][A-Za-z .,&'()\/-]{2,70}?)\s+(A\*|[A-GU]|[1-9])\s*\(?\s*([a-z]\*?|a\s*star|[a-z]+)\s*\)\s*$/);
+  const m = line.match(/^(?:(\d{4})\s+)?([A-Za-z][A-Za-z .,&'()\/-]{1,80}?)\s+(A\*|[A-GU]\*?|[a-eu]\*?|[1-9])\s*\(?\s*([a-z]\*?|a\s*star|[a-z]+)\s*\)\s*(?:\d{1,3}\s*%)?\s*$/);
   if(!m) return null;
-  let subject = m[1].replace(/[.,]/g, ' ').replace(/\s+/g, ' ').trim();
-  let lineLevel = level;
-  if(/\bAS LEVEL\b|ADVANCED SUBSIDIARY/i.test(subject)) lineLevel = 'as-level';
-  else if(/\bA LEVEL\b|ADVANCED LEVEL/i.test(subject)) lineLevel = 'a-level';
-  subject = subject.replace(/\b(AS|A) LEVEL\b|ADVANCED SUBSIDIARY|ADVANCED LEVEL/gi, '').trim();
+  const [, code, rawSubject, gradeToken, word] = m;
+  let subject = rawSubject.replace(/[.,]/g, ' ').replace(/\s+/g, ' ').trim();
+  const qual = (subject.match(CAMBRIDGE_QUALIFICATION) || [])[1] || '';
+  let lineLevel = '';
+  if(/subsidiary|^AS/i.test(qual)) lineLevel = 'as-level';
+  else if(/advanced|^A Level/i.test(qual)) lineLevel = 'a-level';
+  else if(qual) lineLevel = 'o-level';
+  else if(code && /^[0-7]/.test(code)) lineLevel = 'o-level';            // IGCSE 0xxx, O Level 1xxx–7xxx
+  else if(/^[a-eu]\*?$/.test(gradeToken)) lineLevel = 'as-level';         // lower-case grade = AS
+  else if(level === 'as-level' || level === 'a-level') lineLevel = 'a-level'; // upper case on an AS & A page = A Level
+  else lineLevel = level;
+  subject = subject.replace(CAMBRIDGE_QUALIFICATION, '').replace(/\s+/g, ' ').trim();
   if((subject.match(/[A-Za-z]/g) || []).length < 3) return null;
-  return { rawSubject: subject, level: lineLevel, grade: normalizeGrade(m[2], m[3], lineLevel) };
+  return { rawSubject: subject, level: lineLevel, grade: normalizeGrade(gradeToken.toUpperCase(), word, lineLevel) };
 }
 
 // School documents (predicted grades, school transcripts) use their own tables.
@@ -4290,6 +4302,17 @@ function parseSchoolGradeOnlyLine(line, level, pageText, sectionKnown = false) {
   return row;
 }
 
+// Cambridge electronic statements of results:
+//   "9700 BIOLOGY d(d) 57", "8291 * ENVIRONMENTAL MANAGEMENT 50 b(b)", "9719 * SPANISH 120 A(a)".
+// Lower-case grades are AS Level; upper case is A Level (O Level/IGCSE for syllabus codes 0xxx–7xxx).
+function parseCambridgeElectronicLine(line) {
+  const m = line.match(/^(\d{4})\s+\*?\s*([A-Z][A-Z &'(),.\-]+?)\s+(?:\d{1,3}\s+)?(A\*|[A-GU]|[a-eu]\*?)\s*\(\s*([a-z]\*?)\s*\)(?:\s+\d{1,3})?\s*$/);
+  if(!m) return null;
+  const [, code, rawSubject, gradeToken, word] = m;
+  const level = /^[a-eu]/.test(gradeToken) ? 'as-level' : /^[0-7]/.test(code) ? 'o-level' : 'a-level';
+  return { rawSubject: cleanBoardSubject(rawSubject), level, grade: normalizeGrade(gradeToken.toUpperCase(), word, level) };
+}
+
 // AQA / OCR style statements: "8182 PSYCHOLOGY 139 / 200 7(seven)". Paper lines have no grade and are skipped.
 function parseBoardMarkLine(line, level, pageText) {
   const m = line.match(/^(\d{4})\s+([A-Z][A-Z .&'()\-]+?)\s+\d{1,3}(?:\.\d+)?\s*\/\s*\d{2,3}\s+(\d|A\*|[A-G]|U)(?:\s*-\s*(\d))?\s*\(\s*([a-z*]+)(?:\s*-\s*([a-z]+))?\s*\)/);
@@ -4310,7 +4333,7 @@ function parseReviewOutcomeLine(line, level, pageText) {
 }
 
 function parseResultLine(line, level, pageText, sectionKnown = false) {
-  return parseAwardLine(line, pageText) || parseGradeLine(line, level) || parseBoardMarkLine(line, level, pageText)
+  return parseAwardLine(line, pageText) || parseGradeLine(line, level) || parseCambridgeElectronicLine(line) || parseBoardMarkLine(line, level, pageText)
     || parseSyllabusLine(line, level) || parseCambridgeCertLine(line, level) || parseReviewOutcomeLine(line, level, pageText)
     || parseSchoolTableLine(line) || parseSchoolGradeOnlyLine(line, level, pageText, sectionKnown)
     || (typeof parseLearnedLayoutLine === 'function' ? parseLearnedLayoutLine(line, pageText) : null);
@@ -4459,9 +4482,9 @@ const OCR_SUBJECT_ALIASES = {
     'islamiyat': 'Islamic Studies', 'religious education': 'Religious Studies', 'business': 'Business Studies',
     'science double award': 'Co-ordinated Sciences (Double Award)', 'combined science': 'Combined Science',
     'english literature': 'English - Literature', 'literature in english': 'English - Literature',
-    'media': 'Media Studies', 'pe': 'Physical Education'
+    'media': 'Media Studies', 'pe': 'Physical Education', 'literature': 'English - Literature'
   },
-  'as-level': { 'maths': 'Mathematics', 'english language & literature': 'English - Language and Literature', 'media': 'Media Studies', 'pe': 'Physical Education' },
+  'as-level': { 'maths': 'Mathematics', 'english language & literature': 'English - Language and Literature', 'language & literature in english': 'English - Language and Literature', 'language & literature in eng': 'English - Language and Literature', 'media': 'Media Studies', 'pe': 'Physical Education' },
   'a-level': { 'maths': 'Mathematics', 'english language & literature': 'English Language', 'pe': 'Physical Education' }
 };
 
@@ -4490,15 +4513,23 @@ function matchOcrSubject(rawSubject, level) {
   rawSubject = expandSubjectAbbreviations(rawSubject);
   const norm = normalizeSearch(rawSubject.replace(/\(.*?\)/g, ' ').replace(/\band\b/gi, '&').replace(/\b9\s*1\b/g, ' '));
   const candidates = allSubjects.filter(s => s.level === level);
-  const exact = candidates.find(s => normalizeSearch(s.subject) === norm);
+  // Compare "and" and "&" alike ("Art and Design" = "Art & Design").
+  const subjectNorm = s => normalizeSearch(s.subject.replace(/\band\b/gi, '&'));
+  const exact = candidates.find(s => subjectNorm(s) === norm);
   if(exact) return { subject: exact.subject, how: 'exact' };
   const taught = typeof learnedAliasFor === 'function' ? learnedAliasFor(level, norm) : '';
   if(taught && candidates.some(s => s.subject === taught)) return { subject: taught, how: 'alias' };
+  // "German Language" where the list says "German" (Cambridge certificates).
+  const withoutLanguage = norm.replace(/ language$/, '');
+  if(withoutLanguage !== norm) {
+    const plain = candidates.find(s => subjectNorm(s) === withoutLanguage);
+    if(plain) return { subject: plain.subject, how: 'alias' };
+  }
   const alias = OCR_SUBJECT_ALIASES[level]?.[norm];
   if(alias && candidates.some(s => s.subject === alias)) return { subject: alias, how: 'alias' };
   let best = null, bestScore = 0;
   candidates.forEach(s => {
-    const score = bigramSimilarity(normalizeSearch(s.subject), norm);
+    const score = bigramSimilarity(subjectNorm(s), norm);
     if(score > bestScore) { best = s; bestScore = score; }
   });
   if(best && bestScore >= 0.72) return { subject: best.subject, how: 'fuzzy' };
@@ -4786,7 +4817,9 @@ async function handleCertificateFiles(fileList) {
       const n = res.rows.length;
       p.state = n ? `${n} subject${n > 1 ? 's' : ''} found · ${res.used}` : `No subjects found · ${res.used}`;
       p.cls = n ? 'done' : 'error';
-      if(!n) warnings.push(`No subjects were recognised in <strong>${escHtml(file.name)}</strong>. Add them manually, teach the reader its layout below, or try another reading engine.`);
+      const readText = (_ocrPageCache.get(fp + '|paddle') || _ocrPageCache.get(fp + '|tesseract') || []).map(pg => pg.text).join(' ');
+      if(!n && /AICE\s+Diploma/i.test(readText)) warnings.push(`<strong>${escHtml(file.name)}</strong> is an AICE Diploma certificate: it shows the diploma award but no subjects. Upload the AS & A Level statement of results or certificate instead.`);
+      else if(!n) warnings.push(`No subjects were recognised in <strong>${escHtml(file.name)}</strong>. Add them manually, teach the reader its layout below, or try another reading engine.`);
     } catch(e) {
       p.state = 'Could not read this file'; p.cls = 'error';
       warnings.push(`<strong>${escHtml(file.name)}</strong> could not be read (${escHtml(String(e.message || e))}).${mode !== 'tesseract' ? ' Try again with "Tesseract only".' : ''}`);
