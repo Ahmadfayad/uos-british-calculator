@@ -819,6 +819,8 @@
     .teach-line.selected { border: 2px solid var(--primary); background: rgba(99,102,241,0.14); color: var(--text); font-weight: 600; }
     .teach-line.selected span::before { content: "✓ Selected  "; color: var(--primary); font-weight: 700; }
     .teach-step { font-size: 0.74rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 8px; flex-basis: 100%; }
+    .teach-snap { flex-basis: 100%; }
+    .teach-snap:empty { display: none; }
     .teach-selected-line { flex-basis: 100%; font-size: 0.8rem; color: var(--text); background: rgba(99,102,241,0.1); border-left: 3px solid var(--primary); padding: 6px 10px; border-radius: 6px; }
     .teach-form select.needs-value { border: 2px solid #f59e0b; background: rgba(245,158,11,0.08); }
     #teach-btn:disabled { opacity: 0.45; cursor: not-allowed; }
@@ -834,6 +836,7 @@
     .admin-badge { display: inline-block; min-width: 18px; padding: 1px 6px; margin-left: 5px; border-radius: 999px; background: #ef4444; color: #fff; font-size: 0.68rem; font-weight: 700; text-decoration: none; line-height: 1.5; vertical-align: middle; }
     .admin-badge.hidden { display: none; }
     .ocr-snap-wrap { margin-top: 6px; }
+    .ocr-raw:has(.ocr-snap-wrap) { min-width: 300px; max-width: 420px; }
     .ocr-snap { display: block; max-width: 420px; width: 100%; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
     .ocr-snap-wrap.whole-page .ocr-snap { max-height: 320px; object-fit: contain; }
     .ocr-snap-caption { font-size: 0.68rem; color: #f59e0b; margin-top: 3px; }
@@ -4599,8 +4602,22 @@ function matchOcrSubject(rawSubject, level) {
 
 // Turns one engine's page texts into review rows. Each row carries a set of
 // "check" reasons; a row with no reasons is shown as OK.
+// "Subject + something that looks like a broken grade" (Cc, A+*, 8l…): the subject is
+// known but the grade is not, so the row is shown with the grade left for staff.
+function nearMissLine(line, level) {
+  if(!level || level === 'moe') return null;
+  const tokens = line.split(' ');
+  if(tokens.length < 2 || tokens.length > 8) return null;
+  const last = tokens[tokens.length - 1];
+  if(!/^[A-GUa-gu*+0-9|lIi]{1,3}$/.test(last) || !/[A-GUa-gu*0-9]/.test(last)) return null;
+  const rawSubject = tokens.slice(0, -1).join(' ');
+  if(!/[A-Za-z]{4}/.test(rawSubject)) return null;
+  if(matchOcrSubject(rawSubject, level).how === 'none') return null;
+  return { rawSubject, level, grade: '', uncertain: `Grade read as "${last}", which is not a valid grade. Enter it from the document` };
+}
+
 function parseDocument(pages, fileName, engine) {
-  const found = [];
+  const found = [], nearMisses = [];
   const allText = pages.map(p => p.text).join('\n');
   const arabicText = pages.map(p => p.arabicText || '').join('\n');
   const provisional = /PROVISIONAL/i.test(allText);
@@ -4624,9 +4641,14 @@ function parseDocument(pages, fileName, engine) {
       const row = parseResultLine(line, section.level || pgLevel, pg.text, !!section.level);
       if(row) { pushRow(row, { raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, sectionPredicted: section.predicted }); return; }
       const h = sectionHeading(line);
-      if(h) section = { level: h.level || section.level, predicted: h.predicted ? true : (h.attained || h.level ? false : section.predicted) };
+      if(h) { section = { level: h.level || section.level, predicted: h.predicted ? true : (h.attained || h.level ? false : section.predicted) }; return; }
+      const miss = nearMissLine(line, section.level || pgLevel);
+      if(miss) nearMisses.push({ ...miss, raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, sectionPredicted: section.predicted });
     });
   });
+  // A known subject whose grade was misread ("Biology Cc") is shown for staff to
+  // confirm instead of being dropped, but only on pages where other results were read.
+  nearMisses.filter(m => found.some(f => f.page === m.page)).forEach(m => found.push(m));
   const layerArabic = pages.map(p => p.layerArabic || '').join('\n');
   if(!found.length && looksLikeMoeDocument([allText, arabicText, layerArabic].join('\n'))) {
     const moePage = pages.find(p => p.arabicText || p.layerArabic) || pages[0];
@@ -4646,7 +4668,7 @@ function parseDocument(pages, fileName, engine) {
     // A grade that was read but is not on the UOS scale (e.g. IGCSE E, F, G or 1–2) is below the minimum.
     const belowScale = r.level !== 'moe' && !r.grade && r.rawGrade;
     if(belowScale) notes.push(`Grade ${r.rawGrade} is below the grades UOS accepts at this level, so it is not added`);
-    else if(r.level !== 'moe' && !r.grade) { notes.push('Grade could not be read'); reasons.add('grade'); }
+    else if(r.level !== 'moe' && !r.grade) { if(!r.uncertain) notes.push('Grade could not be read'); reasons.add('grade'); }
     let mark = '';
     if(r.level === 'moe') {
       reasons.add('moe');
@@ -4951,24 +4973,28 @@ async function renderPageForSnapshot(file, pageNo) {
   return canvas;
 }
 
-// A strip across the full page width around the line (so the grade column is
-// included), with the line itself outlined. Without a known position: the whole page.
+// A strip around the line, wide enough to keep the grade column, with the line itself
+// outlined. Without a known position: the whole page.
 function cropSnapshot(canvas, box) {
   const W = canvas.width, H = canvas.height;
-  let y0 = 0, y1 = H;
+  let x0 = 0, x1 = W, y0 = 0, y1 = H;
   if(box) {
     const lineH = Math.max(12, (box.y1 - box.y0) * H);
     y0 = Math.max(0, box.y0 * H - lineH * 1.4);
     y1 = Math.min(H, box.y1 * H + lineH * 1.4);
+    // Keep at least 60% of the page width so a grade printed further right is not cut off.
+    const minW = W * 0.6, pad = W * 0.04;
+    x0 = Math.max(0, box.x0 * W - pad); x1 = Math.min(W, box.x1 * W + pad);
+    if(x1 - x0 < minW) { x1 = Math.min(W, x0 + minW); x0 = Math.max(0, x1 - minW); }
   }
-  const outW = Math.min(1000, W), scale = outW / W;
+  const cw = x1 - x0, outW = Math.min(1000, cw), scale = outW / cw;
   const out = document.createElement('canvas');
-  out.width = outW; out.height = Math.max(1, Math.round((y1 - y0) * scale));
+  out.width = Math.round(outW); out.height = Math.max(1, Math.round((y1 - y0) * scale));
   const ctx = out.getContext('2d');
-  ctx.drawImage(canvas, 0, y0, W, y1 - y0, 0, 0, out.width, out.height);
+  ctx.drawImage(canvas, x0, y0, cw, y1 - y0, 0, 0, out.width, out.height);
   if(box) {
     ctx.strokeStyle = 'rgba(245, 158, 11, 0.95)'; ctx.lineWidth = 3;
-    ctx.strokeRect(box.x0 * W * scale - 5, (box.y0 * H - y0) * scale - 4, (box.x1 - box.x0) * W * scale + 10, (box.y1 - box.y0) * H * scale + 8);
+    ctx.strokeRect((box.x0 * W - x0) * scale - 5, (box.y0 * H - y0) * scale - 4, (box.x1 - box.x0) * W * scale + 10, (box.y1 - box.y0) * H * scale + 8);
   }
   const url = out.toDataURL('image/jpeg', 0.82);
   out.width = out.height = 0;
@@ -5056,7 +5082,10 @@ document.getElementById('ocr-review').addEventListener('click', e => {
   const ok = e.target.closest('[data-confirm]');
   if(ok) {
     const row = window._ocrRows[Number(ok.dataset.confirm)];
-    if(row) { row.confirmed = true; row.edited = true; renderOcrReview(); }
+    if(!row) return;
+    const missing = [!row.subject && 'subject', row.level !== 'moe' && !row.grade && 'grade', row.level === 'moe' && !row.mark && 'mark'].filter(Boolean);
+    if(missing.length) { appAlert(`Choose the ${missing.join(' and ')} from the document first, then click Confirm.`); return; }
+    row.confirmed = true; row.edited = true; renderOcrReview();
   }
 });
 
@@ -5397,6 +5426,22 @@ function guessTeachValues(line, pageText) {
   return { level, grade: gradeTok, subject: best >= 0.6 ? subject : '' };
 }
 
+// The selected line cut from the document, so staff read the values off the real scan.
+async function showTeachSnapshot(t) {
+  const el = document.getElementById('teach-snap');
+  if(!el || !t.docFile || !t.box) return;
+  if(!t.snapshot) {
+    el.innerHTML = '<div class="ocr-snap-caption">Loading the line from the document…</div>';
+    try {
+      const canvas = await renderPageForSnapshot(t.docFile, t.page);
+      t.snapshot = cropSnapshot(canvas, t.box);
+      canvas.width = canvas.height = 0;
+    } catch(e) { el.innerHTML = ''; return; }
+  }
+  if(_teachLine !== t) return;
+  el.innerHTML = `<img class="ocr-snap" src="${t.snapshot}" alt="This line on the document"><div class="ocr-snap-caption">On the document (outlined)</div>`;
+}
+
 function openTeachForm(i) {
   _teachLine = window._teachLines[i];
   if(!_teachLine) return;
@@ -5413,6 +5458,7 @@ function openTeachForm(i) {
     <div class="teach-form">
       <div class="teach-step">Step 2 · What does this line show?</div>
       <div class="teach-selected-line">✓ Teaching from: <strong>${escHtml(_teachLine.line)}</strong></div>
+      <div id="teach-snap" class="teach-snap"></div>
       <label>Level <select id="teach-level">${levels}</select></label>
       <label>Subject <select id="teach-subject">${ocrSubjectOptions(guess.level, guess.subject)}</select></label>
       <label>Grade <select id="teach-grade"><option value="">—</option>${grades(guess.level, guess.grade)}</select></label>
@@ -5441,6 +5487,7 @@ function openTeachForm(i) {
   });
   ['teach-subject', 'teach-grade'].forEach(id => document.getElementById(id).addEventListener('change', refresh));
   refresh();
+  showTeachSnapshot(_teachLine);
   document.getElementById('teach-form').scrollIntoView({ block: 'nearest' });
 }
 
