@@ -4858,16 +4858,16 @@ function closeOcrModal(force = false) {
 // layout patterns only, never student names, marks or documents.
 // The publishable (anon) key is designed to be public: row-level security in
 // supabase/setup.sql controls what it can do. Never put the service_role key here.
-const SUPABASE_URL = '';
-const SUPABASE_KEY = '';
+const SUPABASE_URL = 'https://vpchkmmxidjrqepghxxz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_IimPgVJXlozTeU2QEqni5Q_nCV9RGe5'; // key name: uos_british_calculator
 const LOCAL_RULES_KEY = 'ocrLocalRules';
 
 const learned = { aliases: new Map(), layouts: [], approved: [], loadedAt: 0, error: '' };
 
 function supabaseReady() { return !!(SUPABASE_URL && SUPABASE_KEY); }
 
-async function sbFetch(path, { method = 'GET', body, token } = {}) {
-  const headers = { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=representation' };
+async function sbFetch(path, { method = 'GET', body, token, prefer = 'return=representation' } = {}) {
+  const headers = { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: prefer };
   if(token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(SUPABASE_URL.replace(/\/$/, '') + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
   const text = await res.text();
@@ -4936,7 +4936,8 @@ async function saveLearnedRule(rule) {
   if(!local.some(x => ruleKey(x) === ruleKey(r))) { local.push(r); writeLocalRules(local); }
   compileLearnedRules([...learned.approved, ...readLocalRules()]);
   if(!supabaseReady()) return 'local';
-  try { await sbFetch('/rest/v1/ocr_rules', { method: 'POST', body: r }); return 'sent'; }
+  // return=minimal: a pending rule is (correctly) not readable by the public, so don't ask for it back.
+  try { await sbFetch('/rest/v1/ocr_rules', { method: 'POST', body: r, prefer: 'return=minimal' }); return 'sent'; }
   catch(e) { return 'local'; }
 }
 
