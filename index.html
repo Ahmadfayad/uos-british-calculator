@@ -4148,7 +4148,7 @@ function cleanOcrLine(line) {
 
 function pageLevel(text) {
   if(/ADVANCED SUBSIDIARY|\bAS LEVEL\b/i.test(text)) return 'as-level';
-  if(/ADVANCED LEVEL|\bA LEVEL\b|GCE A/i.test(text)) return 'a-level';
+  if(/ADVANCED LEVEL|ADVANCED\s+GCE|\bA LEVEL\b|GCE A/i.test(text)) return 'a-level';
   return 'o-level';
 }
 
@@ -4176,14 +4176,22 @@ function parseAwardLine(line, pageText) {
   if(isGcsePage(pageText)) {
     const g = line.match(/\bAWARD\b\s*-?\s*([A-Z0-9]{3,6})\s+(.+?)\s+0?(\d{2,4})\s*\/\s*0?(\d{2,4})\s+(\d|A\*|[A-G]|U)(?:\s*-\s*(\d|A\*|[A-G]))?\s*(?:\(\s*([a-z*]+)(?:\s*-\s*([a-z*]+))?\s*\))?/i);
     if(g) {
-      return { rawSubject: cleanBoardSubject(g[2]), level: 'o-level', mark: `${g[3]}/${g[4]}`,
-        grade: normalizeGrade(g[5], g[7], 'o-level'), grade2: g[6] ? normalizeGrade(g[6], g[8], 'o-level') : '' };
+      const grade = normalizeGrade(g[5], g[7], 'o-level');
+      return { rawSubject: cleanBoardSubject(g[2]), level: 'o-level', mark: `${g[3]}/${g[4]}`, grade, rawGrade: grade ? '' : g[5],
+        grade2: g[6] ? normalizeGrade(g[6], g[8], 'o-level') : '' };
     }
+  }
+  // Pearson UK GCE awards: codes starting 9 = A Level, 8 = AS Level ("AWARD 9MA0 MATHEMATICS A*(a*)").
+  const uk = line.match(/\bAWARD\b\s*-?\s*([89][A-Z]{2}[0-9O])\s+(.+?)\s+(?:[06]?\d{2,4}\s*\/\s*[06]?\d{2,4}\s+)?(A\*|[A-EU])\s*\(\s*([a-e]\*?|u)\s*\)/i);
+  if(uk) {
+    const lvl = uk[1][0] === '9' ? 'a-level' : 'as-level';
+    return { rawSubject: cleanBoardSubject(uk[2]), level: lvl, grade: normalizeGrade(uk[3], uk[4], lvl) };
   }
   // The maximum is always printed as 0300 or 0600; OCR sometimes reads the leading 0 as 6.
   const m = line.match(/\bAWARD\b\s*-?\s*([A-Z0-9]{4,6})\s+(.+?)\s+[06]?(\d{2,3})\s*[\/A7]?\s*[06]?(600|300)\b\s*(.*)$/i);
   if(!m) return null;
-  const level = m[4] === '600' ? 'a-level' : 'as-level';
+  // Pearson award codes: X… = IAS (AS Level), Y… = IAL (A Level); otherwise go by the maximum mark.
+  const level = /^X/i.test(m[1]) ? 'as-level' : /^Y/i.test(m[1]) ? 'a-level' : m[4] === '600' ? 'a-level' : 'as-level';
   const rest = m[5];
   const g = rest.match(/^\W*([A-E]\*?|U)\b/i);
   const w = rest.match(/\(\s*([a-e]\*?|u)\s*\)/i);
@@ -4314,11 +4322,14 @@ function parseCambridgeElectronicLine(line) {
 }
 
 // AQA / OCR style statements: "8182 PSYCHOLOGY 139 / 200 7(seven)". Paper lines have no grade and are skipped.
+// AQA codes may carry a tier letter ("8464F", "7408A"); double awards read "4-4(four four)".
 function parseBoardMarkLine(line, level, pageText) {
-  const m = line.match(/^(\d{4})\s+([A-Z][A-Z .&'()\-]+?)\s+\d{1,3}(?:\.\d+)?\s*\/\s*\d{2,3}\s+(\d|A\*|[A-G]|U)(?:\s*-\s*(\d))?\s*\(\s*([a-z*]+)(?:\s*-\s*([a-z]+))?\s*\)/);
+  const m = line.match(/^(\d{4}[A-Z]?)\s+([A-Z][A-Z .&'():\-]+?)\s+\d{1,3}(?:\.\d+)?\s*[\/I]\s*\d{2,3}\s+(\d|A\*|[A-G]|U)(?:\s*-\s*(\d))?\s*\(\s*([a-z*]+)(?:[\s\-]+([a-z*]+))?\s*\)/);
   if(!m) return null;
   const lvl = isGcsePage(pageText) ? 'o-level' : level;
-  return { rawSubject: cleanBoardSubject(m[2]), level: lvl, grade: normalizeGrade(m[3], m[5], lvl), grade2: m[4] ? normalizeGrade(m[4], m[6], lvl) : '' };
+  const grade = normalizeGrade(m[3], m[5], lvl);
+  return { rawSubject: cleanBoardSubject(m[2]).replace(/:\s*/g, ' '), level: lvl, grade, rawGrade: grade ? '' : m[3],
+    grade2: m[4] ? normalizeGrade(m[4], m[6], lvl) : '' };
 }
 
 // Review-of-marking letters: "1PE0 PHYS.ED. 7 to 8 02 HEALTH AND PERFORMANCE 041 to 042".
@@ -4343,7 +4354,7 @@ function parseResultLine(line, level, pageText, sectionKnown = false) {
 // or "A Level & BTEC Courses Predicted Grade": they set the level and whether grades are predicted.
 function sectionHeading(line) {
   if(line.length > 90) return null;
-  const level = /\bA[\s-]?LEVELS?\b|\bGCE A\b|\bA2\b/i.test(line) ? 'a-level'
+  const level = /\bA[\s-]?LEVELS?\b|\bGCE A\b|\bA2\b|ADVANCED\s+GCE/i.test(line) ? 'a-level'
     : /\bAS[\s-]?LEVELS?\b|ADVANCED SUBSIDIARY/i.test(line) ? 'as-level'
     : /\bI?GCSE\b|\bO[\s-]?LEVELS?\b/i.test(line) ? 'o-level' : '';
   const predicted = /PREDICTED|FORECAST/i.test(line);
@@ -4482,7 +4493,11 @@ const OCR_SUBJECT_ALIASES = {
     'islamiyat': 'Islamic Studies', 'religious education': 'Religious Studies', 'business': 'Business Studies',
     'science double award': 'Co-ordinated Sciences (Double Award)', 'combined science': 'Combined Science',
     'english literature': 'English - Literature', 'literature in english': 'English - Literature',
-    'media': 'Media Studies', 'pe': 'Physical Education', 'literature': 'English - Literature'
+    'media': 'Media Studies', 'pe': 'Physical Education', 'literature': 'English - Literature',
+    'esl': 'English - Second Language', 'efl': 'English - Second Language',
+    // A GCSE in a modern language without a qualifier is the foreign-language syllabus.
+    'french': 'French - Foreign Language', 'spanish': 'Spanish - Foreign Language', 'german': 'German - Foreign Language',
+    'italian': 'Italian - Foreign Language', 'dutch': 'Dutch - Foreign Language', 'malay': 'Malay - Foreign Language'
   },
   'as-level': { 'maths': 'Mathematics', 'english language & literature': 'English - Language and Literature', 'language & literature in english': 'English - Language and Literature', 'language & literature in eng': 'English - Language and Literature', 'media': 'Media Studies', 'pe': 'Physical Education' },
   'a-level': { 'maths': 'Mathematics', 'english language & literature': 'English Language', 'pe': 'Physical Education' }
@@ -4500,7 +4515,8 @@ function bigramSimilarity(a, b) {
 
 // Abbreviations used on board statements, e.g. "COM.SCIENCE", "PHYS.ED.", "ENGLISH LIT.".
 const SUBJECT_ABBREVIATIONS = [
-  [/\bPHYS\.?\s*ED\b\.?/gi, 'Physical Education'], [/\bCOMB?\.\s*/gi, 'Combined '], [/\bADD\.\s*/gi, 'Additional '],
+  [/\bF\.?\s*P\.?\s*MATHS?\b\.?/gi, 'Further Pure Mathematics'], [/\bADD\.?\s*MATHS?\b\.?/gi, 'Additional Mathematics'],
+  [/\bMATHS\b\.?/gi, 'Mathematics'], [/\bPHYS\.?\s*ED\b\.?/gi, 'Physical Education'], [/\bCOMB?\.\s*/gi, 'Combined '], [/\bADD\.\s*/gi, 'Additional '],
   [/\bENG\.\s*/gi, 'English '], [/\bLIT\b\.?/gi, 'Literature'], [/\bLANG\b\.?/gi, 'Language'], [/\bSTUD\b\.?/gi, 'Studies'],
   [/\bTECH\b\.?/gi, 'Technology'], [/\bGEOG\b\.?/gi, 'Geography'], [/\bHIST\b\.?/gi, 'History'], [/\bECON\b\.?/gi, 'Economics'],
   [/\bCHEM\b\.?/gi, 'Chemistry'], [/\bBIOL?\b\.?/gi, 'Biology'], [/\bRELIG(?:IOUS)?\.?\s*ST(?:UDIES)?\b\.?/gi, 'Religious Studies']
@@ -4582,7 +4598,10 @@ function parseDocument(pages, fileName, engine) {
     if(r.learned) notes.push(r.learned === 'pending' ? 'Read with a layout taught on this computer (waiting for admin approval)' : 'Read with a learned layout');
     if(match.how === 'fuzzy') { notes.push(`Subject guessed from "${r.rawSubject}"`); reasons.add('subject'); }
     if(match.how === 'none') { notes.push(`No matching subject for "${r.rawSubject}", please choose one`); reasons.add('subject'); }
-    if(r.level !== 'moe' && !r.grade) { notes.push('Grade could not be read'); reasons.add('grade'); }
+    // A grade that was read but is not on the UOS scale (e.g. IGCSE E, F, G or 1–2) is below the minimum.
+    const belowScale = r.level !== 'moe' && !r.grade && r.rawGrade;
+    if(belowScale) notes.push(`Grade ${r.rawGrade} is below the grades UOS accepts at this level, so it is not added`);
+    else if(r.level !== 'moe' && !r.grade) { notes.push('Grade could not be read'); reasons.add('grade'); }
     let mark = '';
     if(r.level === 'moe') {
       reasons.add('moe');
@@ -4600,7 +4619,7 @@ function parseDocument(pages, fileName, engine) {
     if(predicted && r.level !== 'moe') notes.push('Predicted grade from the school, set to Expected');
     if((gradeNotes[r.level] || {})[r.grade]) notes.push('Conditional grade (*)');
     return {
-      include: true,
+      include: !belowScale,
       level: r.level,
       subject: match.subject,
       grade: r.grade || '',
