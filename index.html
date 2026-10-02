@@ -833,18 +833,13 @@
     .admin-actions { display: flex; gap: 6px; white-space: nowrap; }
     .admin-badge { display: inline-block; min-width: 18px; padding: 1px 6px; margin-left: 5px; border-radius: 999px; background: #ef4444; color: #fff; font-size: 0.68rem; font-weight: 700; text-decoration: none; line-height: 1.5; vertical-align: middle; }
     .admin-badge.hidden { display: none; }
-    .ocr-camera-btn { align-self: center; display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; padding: 7px 14px; }
-    .camera-modal-box { max-width: 760px; }
-    .camera-view { position: relative; background: #000; border-radius: var(--r); overflow: hidden; margin: 8px 0; }
-    .camera-view video { display: block; width: 100%; max-height: 56vh; object-fit: contain; }
-    .camera-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
-    .camera-flash.on { animation: cameraFlash 0.35s ease-out; }
-    @keyframes cameraFlash { from { opacity: 0.85; } to { opacity: 0; } }
-    .camera-shots { display: flex; gap: 8px; flex-wrap: wrap; min-height: 10px; }
-    .camera-shot { position: relative; width: 84px; text-align: center; font-size: 0.68rem; color: var(--text-3); }
-    .camera-shot img { width: 84px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); display: block; }
-    .camera-shot button { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; border: none; background: #ef4444; color: #fff; cursor: pointer; font-size: 0.8rem; line-height: 1; }
-    #admin-link:has(.admin-badge:not(.hidden)) { opacity: 1; }
+    .ocr-snap-wrap { margin-top: 6px; }
+    .ocr-snap { display: block; max-width: 420px; width: 100%; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+    .ocr-snap-wrap.whole-page .ocr-snap { max-height: 320px; object-fit: contain; }
+    .ocr-snap-caption { font-size: 0.68rem; color: #f59e0b; margin-top: 3px; }
+    .ocr-table tr.needs-check td { background: rgba(245,158,11,0.06); }
+    .ocr-confirm { display: block; margin-top: 4px; padding: 3px 8px; font-size: 0.7rem; }
+    .ocr-see { font-size: 0.7rem; margin-top: 4px; }
     .teach-share { flex-basis: 100%; display: flex; flex-direction: column; gap: 6px; border-top: 1px dashed var(--border); padding-top: 8px; }
     .teach-share .teach-name input { max-width: 320px; }
     .teach-attach { flex-direction: row !important; align-items: center; gap: 8px !important; font-weight: 600; }
@@ -1113,11 +1108,6 @@
         <label for="ocr-engine">Reading engine</label>
         <select id="ocr-engine"></select>
       </div>
-      <button type="button" class="btn btn-ghost ocr-camera-btn" id="ocr-camera-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Take a photo of a paper certificate
-      </button>
-      <input type="file" id="ocr-camera-input" accept="image/*" capture="environment" hidden>
       <input type="file" id="ocr-file-input" accept=".pdf,application/pdf,image/*" multiple hidden>
       <div class="ocr-privacy">🔒 Files are read on this computer only. Nothing is uploaded.</div>
     </div>
@@ -1324,19 +1314,6 @@
     <div class="ocr-actions">
       <button class="btn btn-ghost" onclick="closeOcrModal()">Cancel</button>
       <button class="btn btn-primary" id="ocr-add-btn" onclick="addOcrRowsToCalculator()" disabled>Add selected subjects</button>
-    </div>
-  </div>
-</div>
-<div id="camera-modal" class="modal-overlay" data-static="true">
-  <div class="modal-box camera-modal-box">
-    <div class="modal-header"><h2 class="modal-title">Photograph the certificate</h2><button class="modal-close" onclick="closeCamera()">×</button></div>
-    <p class="teach-help">Lay the page flat in good light, fill the frame with it and hold steady. Take one photo per page, then click <strong>Read</strong>.</p>
-    <div class="camera-view"><video id="camera-video" playsinline muted></video><div id="camera-flash" class="camera-flash"></div></div>
-    <div id="camera-shots" class="camera-shots"></div>
-    <div class="ocr-actions">
-      <button class="btn btn-ghost" onclick="closeCamera()">Cancel</button>
-      <button class="btn btn-ghost" id="camera-capture-btn" onclick="capturePhoto()">📷 Take photo</button>
-      <button class="btn btn-primary" id="camera-read-btn" onclick="readCameraShots()" disabled>Read photos</button>
     </div>
   </div>
 </div>
@@ -3885,8 +3862,16 @@ async function resetTessWorker(langs) {
 async function tessRecognize(canvas, langs) {
   for(let attempt = 1; ; attempt++) {
     try {
-      const { data } = await (await getTessWorker(langs)).recognize(canvas);
-      return { text: data.text, confidence: Math.round(data.confidence) };
+      const { data } = await (await getTessWorker(langs)).recognize(canvas, {}, { text: true, blocks: true });
+      // Build the text line by line so each line keeps its position on the page.
+      const lines = (data.blocks || []).flatMap(b => (b.paragraphs || []).flatMap(p => p.lines || []))
+        .map(l => ({ text: (l.text || '').replace(/\s*\n\s*/g, ' ').trim(), bbox: l.bbox })).filter(l => l.text);
+      if(!lines.length) return { text: data.text, confidence: Math.round(data.confidence) };
+      return {
+        text: lines.map(l => l.text).join('\n'),
+        lineBoxes: normalizeBoxes(lines.map(l => l.bbox), canvas.width, canvas.height),
+        confidence: Math.round(data.confidence)
+      };
     } catch(e) {
       await resetTessWorker(langs);
       if(attempt >= 2) throw e;
@@ -4030,6 +4015,8 @@ async function paddleRecognize(canvas, box, model, classes, rtl) {
 }
 
 // Groups boxes that share a baseline into text lines.
+// Groups boxes that share a baseline into text lines. Returns the text and each
+// line's box (in canvas pixels), in the same order as the lines of text.
 function groupPaddleLines(items, rtl) {
   items.sort((a, b) => (a.y0 + a.y1) / 2 - (b.y0 + b.y1) / 2);
   const lines = [];
@@ -4038,7 +4025,16 @@ function groupPaddleLines(items, rtl) {
     const line = lines.find(l => Math.abs(l.cy - cy) < Math.min(l.h, hh) * 0.5);
     if(line) line.items.push(it); else lines.push({ cy, h: hh, items: [it] });
   }
-  return lines.map(l => l.items.sort((a, b) => rtl ? b.x0 - a.x0 : a.x0 - b.x0).map(i => i.text).join(' ')).join('\n');
+  return {
+    text: lines.map(l => l.items.sort((a, b) => rtl ? b.x0 - a.x0 : a.x0 - b.x0).map(i => i.text).join(' ')).join('\n'),
+    boxes: lines.map(l => ({ x0: Math.min(...l.items.map(i => i.x0)), y0: Math.min(...l.items.map(i => i.y0)), x1: Math.max(...l.items.map(i => i.x1)), y1: Math.max(...l.items.map(i => i.y1)) }))
+  };
+}
+
+// Line boxes are stored as fractions of the page, so snapshots can be cut from a
+// re-rendered page of any size.
+function normalizeBoxes(boxes, width, height) {
+  return boxes.map(b => ({ x0: b.x0 / width, y0: b.y0 / height, x1: b.x1 / width, y1: b.y1 / height }));
 }
 
 async function paddleReadWith(canvas, boxes, lang) {
@@ -4050,8 +4046,10 @@ async function paddleReadWith(canvas, boxes, lang) {
     const r = await paddleRecognize(canvas, box, model.rec, classes, lang === 'ar');
     if(r.text.trim()) { items.push({ ...box, text: r.text }); confSum += r.conf; if(r.conf < 0.6) weak++; }
   }
+  const grouped = groupPaddleLines(items, lang === 'ar');
   return {
-    text: groupPaddleLines(items, lang === 'ar'),
+    text: grouped.text,
+    lineBoxes: normalizeBoxes(grouped.boxes, canvas.width, canvas.height),
     confidence: Math.round((items.length ? confSum / items.length : 0) * 100),
     weakShare: items.length ? weak / items.length : 0
   };
@@ -4061,7 +4059,7 @@ async function paddleReadPage(canvas, opts = {}) {
   // Detect text once and reuse the boxes for the English and (if needed) Arabic readers.
   const boxes = await paddleDetect(canvas);
   const en = await paddleReadWith(canvas, boxes, 'en');
-  const result = { text: en.text, confidence: en.confidence };
+  const result = { text: en.text, lineBoxes: en.lineBoxes, confidence: en.confidence };
   // A page where many lines read poorly in English is likely Arabic (e.g. a
   // Grade 12 letter). The Arabic text is kept separate and only used to find
   // Grade 12 subjects and marks, never British grades.
@@ -4110,18 +4108,23 @@ async function imageFileToCanvas(file) {
 }
 
 // Rebuilds text lines from a PDF's own text layer, so digital PDFs need no OCR.
-function textLayerToLines(items) {
+// Returns the text and each line's box as fractions of the page (PDF y runs upwards).
+function textLayerToLines(items, viewport) {
   const rows = [];
   items.filter(i => i.str.trim()).forEach(i => {
     const x = i.transform[4], y = i.transform[5];
+    const w = i.width || 0, h = i.height || Math.abs(i.transform[3]) || 10;
     let row = rows.find(r => Math.abs(r.y - y) < 3);
-    if(!row) { row = { y, parts: [] }; rows.push(row); }
+    if(!row) { row = { y, parts: [], x0: x, x1: x + w, top: y + h }; rows.push(row); }
     row.parts.push({ x, s: i.str });
+    row.x0 = Math.min(row.x0, x); row.x1 = Math.max(row.x1, x + w); row.top = Math.max(row.top, y + h);
   });
-  return rows
-    .sort((a, b) => b.y - a.y)
-    .map(r => r.parts.sort((a, b) => a.x - b.x).map(p => p.s).join(' '))
-    .join('\n');
+  rows.sort((a, b) => b.y - a.y);
+  const W = viewport?.width || 1, H = viewport?.height || 1;
+  return {
+    text: rows.map(r => r.parts.sort((a, b) => a.x - b.x).map(p => p.s).join(' ')).join('\n'),
+    boxes: rows.map(r => ({ x0: r.x0 / W, x1: r.x1 / W, y0: 1 - r.top / H, y1: 1 - (r.y - 2) / H }))
+  };
 }
 
 function looksLikeMoeDocument(text) {
@@ -4152,14 +4155,15 @@ async function extractPages(file, engines, onStatus) {
     for(let p = 1; p <= pdf.numPages; p++) {
       onStatus(`Reading page ${p} of ${pdf.numPages}…`);
       const page = await pdf.getPage(p);
-      const layerText = textLayerToLines((await page.getTextContent()).items);
+      const layer = textLayerToLines((await page.getTextContent()).items, page.getViewport({ scale: 1 }));
+      const layerText = layer.text;
       // Use a PDF's own text only when it contains recognisable result lines
       // and no Arabic. Scanner apps and verification stamps often add a hidden
       // layer holding just a QR number or a web address, and Arabic text layers
       // are frequently scrambled, so those pages are always read with OCR.
       const layerHasArabic = /[؀-ۿ]{3,}/.test(layerText);
       if(!layerHasArabic && hasResultLines(layerText)) {
-        engines.forEach(e => result[e].push({ page: p, text: layerText, confidence: 100, source: 'text' }));
+        engines.forEach(e => result[e].push({ page: p, text: layerText, lineBoxes: layer.boxes, confidence: 100, source: 'text' }));
       } else {
         await readCanvas(await renderPdfPage(page), p, layerHasArabic ? layerText : '');
       }
@@ -4614,11 +4618,11 @@ function parseDocument(pages, fileName, engine) {
   pages.forEach(pg => {
     const pgLevel = pageLevel(pg.text);
     let section = { level: '', predicted: false };
-    pg.text.split('\n').forEach(raw => {
+    pg.text.split('\n').forEach((raw, lineNo) => {
       const line = cleanOcrLine(raw);
       if(isSkippedLine(line)) return;
       const row = parseResultLine(line, section.level || pgLevel, pg.text, !!section.level);
-      if(row) { pushRow(row, { raw: raw.trim(), page: pg.page, pageConfidence: pg.confidence, source: pg.source, sectionPredicted: section.predicted }); return; }
+      if(row) { pushRow(row, { raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, sectionPredicted: section.predicted }); return; }
       const h = sectionHeading(line);
       if(h) section = { level: h.level || section.level, predicted: h.predicted ? true : (h.attained || h.level ? false : section.predicted) };
     });
@@ -4666,7 +4670,7 @@ function parseDocument(pages, fileName, engine) {
       grade: r.grade || '',
       mark,
       status: expected && r.level !== 'moe' ? 'expected' : 'final',
-      raw: r.raw, file: fileName, page: r.page, engine, rawSubject: r.rawSubject, matchHow: match.how, revised: !!r.revised,
+      raw: r.raw, file: fileName, page: r.page, box: r.box || null, engine, rawSubject: r.rawSubject, matchHow: match.how, revised: !!r.revised,
       notes, reasons
     };
   });
@@ -4914,9 +4918,97 @@ function ocrGradeCell(row, idx) {
     `<option value="${g}"${g === row.grade ? ' selected' : ''}>${g}${(gradeNotes[row.level] || {})[g] ? ' *' : ''}</option>`).join('')}</select>`;
 }
 
-function ocrFlag(row) {
+// ── Snapshots of doubtful lines ──
+// For every row the reader is unsure about, cut the line out of the document so
+// staff can compare the reading with the real scan and confirm or correct it.
+function needsConfirmation(row) {
+  return row.include && row.reasons.size > 0 && !row.edited;
+}
+
+function ocrFileFor(row) {
+  return (window._ocrBatch || []).find(d => d.name === row.file)?.file || null;
+}
+
+async function renderPageForSnapshot(file, pageNo) {
+  let canvas;
+  if(file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
+    await loadPdfLibrary();
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    const page = await pdf.getPage(Math.min(pageNo, pdf.numPages));
+    const viewport = page.getViewport({ scale: 2 });
+    canvas = document.createElement('canvas');
+    canvas.width = Math.round(viewport.width); canvas.height = Math.round(viewport.height);
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport, intent: 'print' }).promise;
+    pdf.destroy();
+  } else {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 2400 / bitmap.width);
+    canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale); canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close?.();
+  }
+  return canvas;
+}
+
+// A strip across the full page width around the line (so the grade column is
+// included), with the line itself outlined. Without a known position: the whole page.
+function cropSnapshot(canvas, box) {
+  const W = canvas.width, H = canvas.height;
+  let y0 = 0, y1 = H;
+  if(box) {
+    const lineH = Math.max(12, (box.y1 - box.y0) * H);
+    y0 = Math.max(0, box.y0 * H - lineH * 1.4);
+    y1 = Math.min(H, box.y1 * H + lineH * 1.4);
+  }
+  const outW = Math.min(1000, W), scale = outW / W;
+  const out = document.createElement('canvas');
+  out.width = outW; out.height = Math.max(1, Math.round((y1 - y0) * scale));
+  const ctx = out.getContext('2d');
+  ctx.drawImage(canvas, 0, y0, W, y1 - y0, 0, 0, out.width, out.height);
+  if(box) {
+    ctx.strokeStyle = 'rgba(245, 158, 11, 0.95)'; ctx.lineWidth = 3;
+    ctx.strokeRect(box.x0 * W * scale - 5, (box.y0 * H - y0) * scale - 4, (box.x1 - box.x0) * W * scale + 10, (box.y1 - box.y0) * H * scale + 8);
+  }
+  const url = out.toDataURL('image/jpeg', 0.82);
+  out.width = out.height = 0;
+  return url;
+}
+
+// Renders each needed page once and cuts all its snapshots from it.
+async function makeSnapshots(rows) {
+  const groups = new Map();
+  rows.forEach(r => {
+    if(r.snapshot || !ocrFileFor(r)) return;
+    const key = `${r.file}|${r.page}`;
+    if(!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  });
+  for(const list of groups.values()) {
+    try {
+      const canvas = await renderPageForSnapshot(ocrFileFor(list[0]), list[0].page);
+      list.forEach(r => { r.snapshot = cropSnapshot(canvas, r.box); });
+      canvas.width = canvas.height = 0;
+    } catch(e) {
+      list.forEach(r => { r.snapshot = 'unavailable'; });
+    }
+  }
+}
+
+function snapshotCell(r, i) {
+  if(r.snapshot && r.snapshot !== 'unavailable') {
+    return `<div class="ocr-snap-wrap${r.box ? '' : ' whole-page'}"><img class="ocr-snap" src="${r.snapshot}" alt="This line on the document"><div class="ocr-snap-caption">${r.box ? 'On the document (outlined)' : 'The document page'}${needsConfirmation(r) ? ': check the subject and grade, then click Confirm' : ''}</div></div>`;
+  }
+  if(r.snapshot === 'unavailable') return '';
+  if(needsConfirmation(r)) return '<div class="ocr-snap-caption">Loading the snapshot from the document…</div>';
+  return ocrFileFor(r) ? `<button type="button" class="footer-link ocr-see" data-snap="${i}">See on document</button>` : '';
+}
+
+function ocrFlag(row, i) {
+  if(row.confirmed) return '<span class="ocr-flag ok">Confirmed</span>';
   if(row.edited) return '<span class="ocr-flag ok">Edited</span>';
-  return row.reasons.size ? '<span class="ocr-flag check">Check</span>' : '<span class="ocr-flag ok">OK</span>';
+  if(!row.reasons.size) return '<span class="ocr-flag ok">OK</span>';
+  return `<span class="ocr-flag check">Check</span>${row.include ? `<button type="button" class="btn btn-ghost ocr-confirm" data-confirm="${i}">✓ Confirm</button>` : ''}`;
 }
 
 function renderOcrReview() {
@@ -4928,25 +5020,45 @@ function renderOcrReview() {
     return;
   }
   const levelOptions = sel => Object.entries(shortLevelLabels).map(([k, v]) => `<option value="${k}"${k === sel ? ' selected' : ''}>${v}</option>`).join('');
-  const checks = rows.filter(r => r.include && r.reasons.size && !r.edited).length;
+  const checks = rows.filter(needsConfirmation).length;
   container.innerHTML = `
-    <div class="ocr-review-summary">${rows.length} row${rows.length > 1 ? 's' : ''} detected${checks ? ` · <strong>${checks}</strong> marked “Check”: compare ${checks > 1 ? 'them' : 'it'} with the document` : ' · all read clearly'}</div>
+    <div class="ocr-review-summary">${rows.length} row${rows.length > 1 ? 's' : ''} detected${checks ? ` · <strong>${checks}</strong> need${checks > 1 ? '' : 's'} your confirmation: compare ${checks > 1 ? 'each' : 'it'} with the snapshot from the document, correct it if needed, then click <em>Confirm</em>` : ' · all read clearly'}</div>
     <div class="ocr-table-wrap"><table class="ocr-table">
       <thead><tr><th>Add</th><th>Read from document</th><th>Subject</th><th>Level</th><th>Grade / Mark</th><th>Result</th><th>Check</th></tr></thead>
       <tbody>${rows.map((r, i) => `
-        <tr class="${r.include ? '' : 'excluded'}">
+        <tr class="${r.include ? '' : 'excluded'}${needsConfirmation(r) ? ' needs-check' : ''}">
           <td><input type="checkbox" data-idx="${i}" data-field="include" ${r.include ? 'checked' : ''}></td>
-          <td><div class="ocr-raw">${escHtml(r.raw)}</div><div class="ocr-source">${escHtml(r.file)} · p.${r.page}${r.engine ? ` · ${r.engine === 'both' ? 'both engines' : ENGINE_NAMES[r.engine]}` : ''}</div></td>
+          <td><div class="ocr-raw">${escHtml(r.raw)}</div><div class="ocr-source">${escHtml(r.file)} · p.${r.page}${r.engine ? ` · ${r.engine === 'both' ? 'both engines' : ENGINE_NAMES[r.engine]}` : ''}</div>${snapshotCell(r, i)}</td>
           <td><select data-idx="${i}" data-field="subject">${ocrSubjectOptions(r.level, r.subject)}</select></td>
           <td><select data-idx="${i}" data-field="level">${levelOptions(r.level)}</select></td>
           <td>${ocrGradeCell(r, i)}</td>
           <td><select data-idx="${i}" data-field="status"><option value="final"${r.status === 'final' ? ' selected' : ''}>Final</option><option value="expected"${r.status === 'expected' ? ' selected' : ''}>Expected</option></select></td>
-          <td>${ocrFlag(r)}${r.notes.length ? `<div class="ocr-notes">${r.notes.map(escHtml).join('<br>')}</div>` : ''}</td>
+          <td>${ocrFlag(r, i)}${r.notes.length ? `<div class="ocr-notes">${r.notes.map(escHtml).join('<br>')}</div>` : ''}</td>
         </tr>`).join('')}
       </tbody>
     </table></div>` + renderTeachSection();
   updateOcrAddButton();
+  // Cut snapshots for the rows that need confirming, then show them.
+  const missing = rows.filter(r => needsConfirmation(r) && !r.snapshot && ocrFileFor(r));
+  if(missing.length && !window._snapshotsRunning) {
+    window._snapshotsRunning = true;
+    makeSnapshots(missing).finally(() => { window._snapshotsRunning = false; renderOcrReview(); });
+  }
 }
+
+document.getElementById('ocr-review').addEventListener('click', e => {
+  const see = e.target.closest('[data-snap]');
+  if(see) {
+    const row = window._ocrRows[Number(see.dataset.snap)];
+    if(row) { see.textContent = 'Loading…'; makeSnapshots([row]).then(renderOcrReview); }
+    return;
+  }
+  const ok = e.target.closest('[data-confirm]');
+  if(ok) {
+    const row = window._ocrRows[Number(ok.dataset.confirm)];
+    if(row) { row.confirmed = true; row.edited = true; renderOcrReview(); }
+  }
+});
 
 function updateOcrAddButton() {
   const count = window._ocrRows.filter(r => r.include).length;
@@ -4979,8 +5091,19 @@ document.getElementById('ocr-review').addEventListener('change', e => {
   renderOcrReview();
 });
 
-function addOcrRowsToCalculator() {
+function addOcrRowsToCalculator(force = false) {
   const chosen = window._ocrRows.filter(r => r.include);
+  // Rows the reader was unsure about should be confirmed against their snapshot first.
+  const unconfirmed = chosen.filter(needsConfirmation);
+  if(unconfirmed.length && force !== true) {
+    appConfirm({
+      title: 'Some rows are not confirmed',
+      message: `${unconfirmed.length} row${unconfirmed.length > 1 ? 's are' : ' is'} still marked "Check". Compare ${unconfirmed.length > 1 ? 'each one' : 'it'} with the snapshot from the document, correct it if needed and click Confirm. Add ${unconfirmed.length > 1 ? 'them' : 'it'} anyway?`,
+      okText: 'Add anyway', cancelText: 'Go back and check',
+      onConfirm: () => addOcrRowsToCalculator(true)
+    });
+    return;
+  }
   const problems = [];
   chosen.forEach(r => {
     if(!r.subject) problems.push(`"${r.raw}": choose a subject`);
@@ -5031,78 +5154,7 @@ function closeOcrModal(force = false) {
   document.getElementById('ocr-modal').classList.remove('open');
 }
 
-// ── Taking photos of paper certificates ──
-// Uses the computer's webcam (or the phone camera in the browser). Where live camera
-// access is not available, the phone's own camera app opens instead.
-let _camStream = null, _camShots = [];
-
-async function openCamera() {
-  if(!navigator.mediaDevices?.getUserMedia) { document.getElementById('ocr-camera-input').click(); return; }
-  try {
-    _camStream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } });
-  } catch(e) {
-    if(e.name === 'NotAllowedError') appAlert('Camera access was blocked. Allow the camera for this site in the browser (the camera icon in the address bar), or choose files instead.', 'Camera blocked');
-    else document.getElementById('ocr-camera-input').click(); // no webcam: fall back to the device camera / file picker
-    return;
-  }
-  _camShots = [];
-  renderCameraShots();
-  const video = document.getElementById('camera-video');
-  video.srcObject = _camStream;
-  document.getElementById('camera-modal').classList.add('open');
-  try { await video.play(); } catch(e) {}
-}
-
-function capturePhoto() {
-  const video = document.getElementById('camera-video');
-  if(!video.videoWidth) return;
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-  canvas.getContext('2d').drawImage(video, 0, 0);
-  canvas.toBlob(blob => {
-    if(!blob) return;
-    _camShots.push(new File([blob], `Photo ${_camShots.length + 1}.jpg`, { type: 'image/jpeg' }));
-    canvas.width = canvas.height = 0;
-    renderCameraShots();
-    const flash = document.getElementById('camera-flash');
-    flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
-  }, 'image/jpeg', 0.92);
-}
-
-function renderCameraShots() {
-  const box = document.getElementById('camera-shots');
-  box.querySelectorAll('img').forEach(img => URL.revokeObjectURL(img.src));
-  box.innerHTML = _camShots.map((f, i) => `<div class="camera-shot"><img src="${URL.createObjectURL(f)}" alt="Photo ${i + 1}"><button type="button" title="Remove" onclick="removeCameraShot(${i})">×</button><span>Page ${i + 1}</span></div>`).join('');
-  const btn = document.getElementById('camera-read-btn');
-  btn.disabled = !_camShots.length;
-  btn.textContent = _camShots.length ? `Read ${_camShots.length} photo${_camShots.length > 1 ? 's' : ''}` : 'Read photos';
-}
-
-function removeCameraShot(i) {
-  _camShots.splice(i, 1);
-  _camShots = _camShots.map((f, n) => new File([f], `Photo ${n + 1}.jpg`, { type: 'image/jpeg' }));
-  renderCameraShots();
-}
-
-function closeCamera() {
-  _camStream?.getTracks().forEach(t => t.stop());
-  _camStream = null;
-  document.getElementById('camera-video').srcObject = null;
-  document.querySelectorAll('#camera-shots img').forEach(img => URL.revokeObjectURL(img.src));
-  document.getElementById('camera-modal').classList.remove('open');
-}
-
-function readCameraShots() {
-  const files = [..._camShots];
-  _camShots = [];
-  closeCamera();
-  if(files.length) handleCertificateFiles(files);
-}
-
 (function initCertificateUpload() {
-  document.getElementById('ocr-camera-btn').addEventListener('click', () => { warmUpOcr(); openCamera(); });
-  const cameraInput = document.getElementById('ocr-camera-input');
-  cameraInput.addEventListener('change', () => { handleCertificateFiles(cameraInput.files); cameraInput.value = ''; });
   const input = document.getElementById('ocr-file-input');
   const drop = document.getElementById('ocr-drop');
   const engineSelect = document.getElementById('ocr-engine');
@@ -5301,12 +5353,12 @@ function unrecognisedLines() {
   const out = [];
   (window._ocrBatch || []).forEach(doc => doc.pages.forEach(pg => {
     const level = pageLevel(pg.text);
-    pg.text.split('\n').forEach(raw => {
+    pg.text.split('\n').forEach((raw, lineNo) => {
       const line = cleanOcrLine(raw);
       if(line.length < 5 || line.length > 160 || !/[A-Za-z]{3}/.test(line) || isSkippedLine(line)) return;
       if(parseResultLine(line, level, pg.text)) return;
       if(!/(A\*|\b[A-GU]\b|\b[1-9]\b)/.test(line)) return; // must contain something that looks like a grade
-      out.push({ line, file: doc.name, docFile: doc.file, page: pg.page, pageText: pg.text });
+      out.push({ line, file: doc.name, docFile: doc.file, page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageText: pg.text });
     });
   }));
   return out.slice(0, 80);
