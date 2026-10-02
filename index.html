@@ -816,6 +816,13 @@
     .teach-lines { display: flex; flex-direction: column; gap: 4px; max-height: 220px; overflow-y: auto; margin: 6px 0; }
     .teach-line { text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; color: var(--text-2); font: inherit; font-size: 0.74rem; cursor: pointer; display: flex; justify-content: space-between; gap: 10px; }
     .teach-line:hover { border-color: var(--primary); }
+    .teach-line.selected { border: 2px solid var(--primary); background: rgba(99,102,241,0.14); color: var(--text); font-weight: 600; }
+    .teach-line.selected span::before { content: "✓ Selected  "; color: var(--primary); font-weight: 700; }
+    .teach-step { font-size: 0.74rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 8px; flex-basis: 100%; }
+    .teach-selected-line { flex-basis: 100%; font-size: 0.8rem; color: var(--text); background: rgba(99,102,241,0.1); border-left: 3px solid var(--primary); padding: 6px 10px; border-radius: 6px; }
+    .teach-form select.needs-value { border: 2px solid #f59e0b; background: rgba(245,158,11,0.08); }
+    #teach-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .teach-guess { flex-basis: 100%; margin: 0; }
     .teach-line small { color: var(--text-3); white-space: nowrap; }
     .teach-form { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: flex-end; margin-top: 8px; padding: 10px; border: 1px solid var(--border); border-radius: var(--r); }
     .teach-form .ocr-raw { flex-basis: 100%; max-width: none; }
@@ -4997,31 +5004,71 @@ function renderTeachSection() {
   return `<details class="teach-box" id="teach-box"${window._teachOpen ? ' open' : ''}>
     <summary>Something missing? Teach the reader a new layout (${lines.length} unrecognised line${lines.length > 1 ? 's' : ''})</summary>
     <p class="teach-help">Click the line that holds a subject result, then say what it means. The reader learns the pattern and reads similar lines automatically. It works on this computer straight away; an admin approves it for everyone.</p>
+    <div class="teach-step">Step 1 · Click the line that shows a subject and its grade</div>
     <div class="teach-lines">${lines.map((l, i) => `<button type="button" class="teach-line" data-teach="${i}"><span>${escHtml(l.line)}</span><small>${escHtml(l.file)} · p.${l.page}</small></button>`).join('')}</div>
     <div id="teach-form"></div>
   </details>`;
 }
 
+// Best guesses for a line, so staff only confirm or correct them.
+function guessTeachValues(line, pageText) {
+  const tokens = cleanOcrLine(line).split(' ');
+  let level = '';
+  for(let i = 0; i < tokens.length && !level; i++) {
+    const two = tokens.slice(i, i + 2).join(' ');
+    level = (/level$/i.test(two) && levelFromToken(two)) || (i > 0 && /^(IAL|IAS|IGCSE|GCSE|AS|A2|AL|OL)$/.test(tokens[i]) ? levelFromToken(tokens[i]) : '');
+  }
+  level = level || levelFromCode(line) || pageLevel(pageText);
+  const gradeTok = [...tokens].reverse().find(t => /^(A\*|[A-GU]|[1-9])$/.test(t) && gradingScheme[level]?.[t] !== undefined) || '';
+  let subject = '', best = 0;
+  allSubjects.filter(s => s.level === level).forEach(s => {
+    for(let k = 1; k <= Math.min(tokens.length, 6); k++) {
+      const score = bigramSimilarity(normalizeSearch(cleanSchoolSubject(tokens.slice(0, k).join(' '))), normalizeSearch(s.subject));
+      if(score > best) { best = score; subject = s.subject; }
+    }
+  });
+  return { level, grade: gradeTok, subject: best >= 0.6 ? subject : '' };
+}
+
 function openTeachForm(i) {
   _teachLine = window._teachLines[i];
   if(!_teachLine) return;
-  const level = pageLevel(_teachLine.pageText);
-  const grades = l => Object.keys(gradingScheme[l] || {}).map(g => `<option value="${g}">${g}</option>`).join('');
-  const levels = ['o-level', 'as-level', 'a-level'].map(l => `<option value="${l}"${l === level ? ' selected' : ''}>${shortLevelLabels[l]}</option>`).join('');
+  // Show clearly which line is being taught.
+  document.querySelectorAll('.teach-line').forEach(b => {
+    const on = Number(b.dataset.teach) === i;
+    b.classList.toggle('selected', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  const guess = guessTeachValues(_teachLine.line, _teachLine.pageText);
+  const grades = (l, sel) => Object.keys(gradingScheme[l] || {}).map(g => `<option value="${g}"${g === sel ? ' selected' : ''}>${g}</option>`).join('');
+  const levels = ['o-level', 'as-level', 'a-level'].map(l => `<option value="${l}"${l === guess.level ? ' selected' : ''}>${shortLevelLabels[l]}</option>`).join('');
   document.getElementById('teach-form').innerHTML = `
     <div class="teach-form">
-      <div class="ocr-raw">${escHtml(_teachLine.line)}</div>
+      <div class="teach-step">Step 2 · What does this line show?</div>
+      <div class="teach-selected-line">✓ Teaching from: <strong>${escHtml(_teachLine.line)}</strong></div>
       <label>Level <select id="teach-level">${levels}</select></label>
-      <label>Subject <select id="teach-subject">${ocrSubjectOptions(level, matchOcrSubject(_teachLine.line, level).subject)}</select></label>
-      <label>Grade <select id="teach-grade"><option value="">—</option>${grades(level)}</select></label>
+      <label>Subject <select id="teach-subject">${ocrSubjectOptions(guess.level, guess.subject)}</select></label>
+      <label>Grade <select id="teach-grade"><option value="">—</option>${grades(guess.level, guess.grade)}</select></label>
       <label class="teach-keywords">Only on documents containing <input type="text" id="teach-keywords" placeholder="e.g. school name (optional)" maxlength="120"></label>
-      <button type="button" class="btn btn-primary" onclick="submitTeach()">Teach</button>
+      <button type="button" class="btn btn-primary" id="teach-btn" onclick="submitTeach()">Teach</button>
+      <div class="teach-help teach-guess">${guess.subject || guess.grade ? 'Pre-filled with the reader\'s best guess. Check each value against the line before clicking Teach.' : 'Choose the subject and grade shown in this line.'}</div>
       <div id="teach-msg" class="teach-help"></div>
     </div>`;
+  const refresh = () => {
+    const subjectEl = document.getElementById('teach-subject'), gradeEl = document.getElementById('teach-grade');
+    subjectEl.classList.toggle('needs-value', !subjectEl.value);
+    gradeEl.classList.toggle('needs-value', !gradeEl.value);
+    document.getElementById('teach-btn').disabled = !subjectEl.value || !gradeEl.value;
+  };
   document.getElementById('teach-level').addEventListener('change', e => {
+    const g = guessTeachValues(_teachLine.line, _teachLine.pageText);
     document.getElementById('teach-subject').innerHTML = ocrSubjectOptions(e.target.value, '');
-    document.getElementById('teach-grade').innerHTML = `<option value="">—</option>${grades(e.target.value)}`;
+    document.getElementById('teach-grade').innerHTML = `<option value="">—</option>${grades(e.target.value, gradingScheme[e.target.value]?.[g.grade] !== undefined ? g.grade : '')}`;
+    refresh();
   });
+  ['teach-subject', 'teach-grade'].forEach(id => document.getElementById(id).addEventListener('change', refresh));
+  refresh();
+  document.getElementById('teach-form').scrollIntoView({ block: 'nearest' });
 }
 
 async function submitTeach() {
