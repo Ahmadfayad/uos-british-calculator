@@ -831,6 +831,17 @@
     .teach-form .teach-keywords { flex: 1; min-width: 200px; }
     .teach-form #teach-msg { flex-basis: 100%; }
     .admin-actions { display: flex; gap: 6px; white-space: nowrap; }
+    .admin-badge { display: inline-block; min-width: 18px; padding: 1px 6px; margin-left: 5px; border-radius: 999px; background: #ef4444; color: #fff; font-size: 0.68rem; font-weight: 700; text-decoration: none; line-height: 1.5; vertical-align: middle; }
+    .admin-badge.hidden { display: none; }
+    #admin-link:has(.admin-badge:not(.hidden)) { opacity: 1; }
+    .teach-share { flex-basis: 100%; display: flex; flex-direction: column; gap: 6px; border-top: 1px dashed var(--border); padding-top: 8px; }
+    .teach-share .teach-name input { max-width: 320px; }
+    .teach-attach { flex-direction: row !important; align-items: center; gap: 8px !important; font-weight: 600; }
+    .admin-view-page { margin-top: 4px; padding: 3px 8px; font-size: 0.7rem; }
+    .admin-alerts { margin-bottom: 12px; }
+    .admin-alerts .btn { padding: 4px 10px; font-size: 0.74rem; margin-left: 6px; }
+    .admin-webhook-row { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .admin-webhook-row input { flex: 1; min-width: 220px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font: inherit; font-size: 0.78rem; }
     .admin-password-card { margin: 0 0 14px; display: flex; flex-direction: column; gap: 6px; }
     .admin-password-card .admin-actions { flex-wrap: wrap; }
     .admin-actions .btn { padding: 5px 10px; font-size: 0.74rem; }
@@ -1171,7 +1182,7 @@
       <div class="sidebar-title">Subjects Breakdown</div>
     </div>
   </div>
-  <footer class="site-footer">Powered by Ahmad Albalbissi · <button type="button" class="footer-link" onclick="openAdminPanel()">Admin</button></footer>
+  <footer class="site-footer">Powered by Ahmad Albalbissi · <button type="button" class="footer-link" id="admin-link" onclick="openAdminPanel()">Admin<span id="admin-badge" class="admin-badge hidden"></span></button></footer>
 </div>
 <button id="mobile-breakdown-fab" class="mobile-breakdown-fab" type="button" aria-label="Open subjects breakdown" onclick="openMobileBreakdown()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -4817,7 +4828,7 @@ async function handleCertificateFiles(fileList) {
   await loadLearnedRules();
   if(learned.error) warnings.push(escHtml(learned.error) + '. Built-in and this computer\'s rules are still used.');
 
-  const seen = new Map();
+  const seen = new Map(), batchFiles = new Map();
   const rows = [];
   for(let i = 0; i < files.length; i++) {
     if(_ocrCancelled) break;
@@ -4832,6 +4843,7 @@ async function handleCertificateFiles(fileList) {
         continue;
       }
       seen.set(fp, file.name);
+      batchFiles.set(fp, file);
       const res = await readCertificateFile(file, fp, mode, msg => { p.state = msg; setOcrProgress(progress); });
       rows.push(...res.rows);
       const n = res.rows.length;
@@ -4849,7 +4861,7 @@ async function handleCertificateFiles(fileList) {
 
   if(_ocrCancelled) { _ocrBusy = false; return; }
   // Keep what was read so staff can teach layouts from unrecognised lines.
-  window._ocrBatch = [...seen].map(([fp, name]) => ({ name, pages: _ocrPageCache.get(`${fp}|paddle`) || _ocrPageCache.get(`${fp}|tesseract`) || [] }));
+  window._ocrBatch = [...seen].map(([fp, name]) => ({ name, file: batchFiles.get(fp), pages: _ocrPageCache.get(`${fp}|paddle`) || _ocrPageCache.get(`${fp}|tesseract`) || [] }));
   window._ocrRows = resolveRepeatedSubjects(rows);
   const secs = Math.round((performance.now() - started) / 1000);
   setOcrProgress(progress, `Finished in ${secs} s · ${OCR_ENGINES[mode]}`);
@@ -4966,7 +4978,11 @@ function addOcrRowsToCalculator() {
     added++;
   });
 
-  learnCorrectedSubjects(chosen).catch(() => {});
+  learnCorrectedSubjects(chosen).then(n => {
+    if(!n) return;
+    const box = document.querySelector('#feedback .msg-box.success > div');
+    if(box) box.insertAdjacentHTML('beforeend', `<br>${n} subject spelling correction${n === 1 ? ' was' : 's were'} sent to the admins, so the reader can learn ${n === 1 ? 'it' : 'them'}.`);
+  }).catch(() => {});
   updateLevelCounter();
   markResultsStale();
   closeOcrModal();
@@ -5079,16 +5095,64 @@ async function loadLearnedRules(force = false) {
   learned.loadedAt = Date.now();
 }
 
-async function saveLearnedRule(rule) {
+// Renders one page of an uploaded file as a JPEG for the admin to look at.
+async function renderPageJpeg(file, pageNo) {
+  let canvas;
+  if(file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
+    await loadPdfLibrary();
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    const page = await pdf.getPage(Math.min(pageNo, pdf.numPages));
+    const base = page.getViewport({ scale: 1 });
+    const viewport = page.getViewport({ scale: Math.min(2, 1400 / base.width) });
+    canvas = document.createElement('canvas');
+    canvas.width = Math.round(viewport.width); canvas.height = Math.round(viewport.height);
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport, intent: 'print' }).promise;
+    pdf.destroy();
+  } else {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 1400 / bitmap.width);
+    canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale); canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  }
+  const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.72));
+  canvas.width = canvas.height = 0;
+  return blob;
+}
+
+// Stores the page privately (only admins can open it; it is deleted once they decide).
+async function uploadTeachSample(blob) {
+  const name = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}.jpg`;
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/teach-samples/${name}`, {
+    method: 'POST', headers: { apikey: SUPABASE_KEY, 'Content-Type': 'image/jpeg', 'x-upsert': 'false' }, body: blob
+  });
+  if(!res.ok) throw new Error('upload ' + res.status);
+  return name;
+}
+
+function rememberedTeacherName() {
+  try { return localStorage.getItem('ocrTeacherName') || ''; } catch(e) { return ''; }
+}
+
+// Returns 'sent', 'sent-with-page' or 'local'.
+async function saveLearnedRule(rule, options = {}) {
   const r = { kind: rule.kind, level: rule.level, pattern: rule.pattern.slice(0, 300), subject: rule.subject || null,
     keywords: (rule.keywords || '').slice(0, 200) || null, example: (rule.example || '').slice(0, 300) || null, status: 'pending' };
   const local = readLocalRules();
   if(!local.some(x => ruleKey(x) === ruleKey(r))) { local.push(r); writeLocalRules(local); }
   compileLearnedRules([...learned.approved, ...readLocalRules()]);
   if(!supabaseReady()) return 'local';
+  const row = { ...r, taught_by: (options.taughtBy || rememberedTeacherName() || '').slice(0, 80) || null };
+  let withPage = false;
+  if(options.sample) {
+    try { row.sample_path = await uploadTeachSample(options.sample); withPage = true; } catch(e) { /* send the rule without the page */ }
+  }
   // return=minimal: a pending rule is (correctly) not readable by the public, so don't ask for it back.
-  try { await sbFetch('/rest/v1/ocr_rules', { method: 'POST', body: r, prefer: 'return=minimal' }); return 'sent'; }
-  catch(e) { return 'local'; }
+  try {
+    await sbFetch('/rest/v1/ocr_rules', { method: 'POST', body: row, prefer: 'return=minimal' });
+    refreshPendingBadge();
+    return withPage ? 'sent-with-page' : 'sent';
+  } catch(e) { return 'local'; }
 }
 
 function learnedAliasFor(level, norm) {
@@ -5142,7 +5206,7 @@ function unrecognisedLines() {
       if(line.length < 5 || line.length > 160 || !/[A-Za-z]{3}/.test(line) || isSkippedLine(line)) return;
       if(parseResultLine(line, level, pg.text)) return;
       if(!/(A\*|\b[A-GU]\b|\b[1-9]\b)/.test(line)) return; // must contain something that looks like a grade
-      out.push({ line, file: doc.name, page: pg.page, pageText: pg.text });
+      out.push({ line, file: doc.name, docFile: doc.file, page: pg.page, pageText: pg.text });
     });
   }));
   return out.slice(0, 80);
@@ -5201,6 +5265,12 @@ function openTeachForm(i) {
       <label>Subject <select id="teach-subject">${ocrSubjectOptions(guess.level, guess.subject)}</select></label>
       <label>Grade <select id="teach-grade"><option value="">—</option>${grades(guess.level, guess.grade)}</select></label>
       <label class="teach-keywords">Only on documents containing <input type="text" id="teach-keywords" placeholder="e.g. school name (optional)" maxlength="120"></label>
+      ${supabaseReady() ? `<div class="teach-share">
+        <div class="teach-step">Step 3 · Send it to the admins</div>
+        <label class="teach-name">Your name (optional) <input type="text" id="teach-name" maxlength="60" value="${escHtml(rememberedTeacherName())}" placeholder="So the admin knows who taught it"></label>
+        ${_teachLine.docFile ? `<label class="teach-attach"><input type="checkbox" id="teach-attach" checked> Attach this certificate page so the admin can check the rule against it</label>
+        <div class="teach-help">The page is stored privately: only admins can open it, and it is deleted as soon as they approve or reject the rule.</div>` : ''}
+      </div>` : ''}
       <button type="button" class="btn btn-primary" id="teach-btn" onclick="submitTeach()">Teach</button>
       <div class="teach-help teach-guess">${guess.subject || guess.grade ? 'Pre-filled with the reader\'s best guess. Check each value against the line before clicking Teach.' : 'Choose the subject and grade shown in this line.'}</div>
       <div id="teach-msg" class="teach-help"></div>
@@ -5237,8 +5307,18 @@ async function submitTeach() {
   const rules = [{ kind: 'layout', level, pattern: t.pattern, keywords, example: _teachLine.line }];
   const norm = normalizeSearch(cleanSchoolSubject(t.subjectText));
   if(matchOcrSubject(t.subjectText, level).subject !== subject) rules.push({ kind: 'alias', level, pattern: norm, subject, example: t.subjectText });
+
+  const btn = document.getElementById('teach-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  const taughtBy = (document.getElementById('teach-name')?.value || '').trim();
+  try { if(taughtBy) localStorage.setItem('ocrTeacherName', taughtBy); } catch(e) {}
+  const wantPage = !!document.getElementById('teach-attach')?.checked && !!_teachLine.docFile;
+  let sample = null;
+  if(wantPage) { try { sample = await renderPageJpeg(_teachLine.docFile, _teachLine.page); } catch(e) { sample = null; } }
   const results = [];
-  for(const r of rules) results.push(await saveLearnedRule(r));
+  for(const [i, r] of rules.entries()) results.push(await saveLearnedRule(r, { taughtBy, sample: i === 0 ? sample : null }));
+  btn.textContent = 'Teach';
+  btn.disabled = false;
   // Check the new rule reads the example line correctly.
   const row = parseLearnedLayoutLine(cleanOcrLine(_teachLine.line), _teachLine.pageText);
   if(!row || row.grade !== grade) { msg.textContent = 'Saved, but the new pattern did not read this line back correctly. Please add this subject manually.'; return; }
@@ -5248,9 +5328,17 @@ async function submitTeach() {
     parseDocument(doc.pages, doc.name, '').forEach(r => { if(!have.has(`${r.file}|${r.raw}`)) { window._ocrRows.push(r); have.add(`${r.file}|${r.raw}`); } });
   });
   resolveRepeatedSubjects(window._ocrRows);
-  const shared = results.includes('sent');
   renderOcrReview();
-  showOcrWarnings([`<strong>Layout learned.</strong> ${shared ? 'It works on this computer now and was sent to an admin for approval.' : 'It works on this computer now. ' + (supabaseReady() ? 'It could not be sent for approval (offline?) and will stay on this computer.' : 'Sharing is not set up yet, so it stays on this computer.')}`]);
+  // Tell the staff member clearly what happened to their rule.
+  const sent = results[0] === 'sent' || results[0] === 'sent-with-page';
+  const withPage = results[0] === 'sent-with-page';
+  const message = sent
+    ? `Thank you! The new layout already works on this computer and has been sent to the admins for approval${withPage ? ', together with the certificate page' : ''}. Once an admin approves it, everyone's reader will use it.${wantPage && !withPage ? ' (The certificate page could not be attached.)' : ''}`
+    : supabaseReady()
+      ? 'The new layout works on this computer, but it could not be sent to the admins right now (no internet connection?). It stays on this computer.'
+      : 'The new layout works on this computer. Sharing with admins is not set up, so it stays on this computer.';
+  showOcrWarnings([`<strong>${sent ? 'Sent to the admins.' : 'Saved on this computer.'}</strong> ${escHtml(message)}`]);
+  appConfirm({ icon: sent ? '✅' : 'ℹ️', title: sent ? 'Sent to the admins' : 'Saved on this computer', message, okText: 'OK', cancelText: '' });
 }
 
 document.getElementById('ocr-review').addEventListener('click', e => {
@@ -5264,12 +5352,14 @@ document.getElementById('ocr-review').addEventListener('toggle', e => {
 
 // Subject spellings staff corrected in the review table become alias suggestions.
 async function learnCorrectedSubjects(rows) {
+  let sent = 0;
   for(const r of rows) {
     if(!r.edited || !r.subject || !r.rawSubject || r.level === 'moe' || r.matchHow === 'exact' || r.matchHow === 'alias') continue;
     const norm = normalizeSearch(r.rawSubject.replace(/\(.*?\)/g, ' ').replace(/\band\b/gi, '&'));
     if(norm.length < 3 || learnedAliasFor(r.level, norm) === r.subject) continue;
-    await saveLearnedRule({ kind: 'alias', level: r.level, pattern: norm, subject: r.subject, example: r.rawSubject });
+    if((await saveLearnedRule({ kind: 'alias', level: r.level, pattern: norm, subject: r.subject, example: r.rawSubject })).startsWith('sent')) sent++;
   }
+  return sent;
 }
 
 // ── Admin: approve, reject or remove shared rules ──
@@ -5351,15 +5441,20 @@ async function renderAdminPanel(message = '', kind = '') {
     const row = r => `<tr>
       <td>${r.kind === 'layout' ? 'Layout' : 'Spelling'}</td><td>${escHtml(shortLevelLabels[r.level] || r.level)}</td>
       <td><code>${escHtml(r.pattern)}</code>${r.subject ? ` → <strong>${escHtml(r.subject)}</strong>` : ''}${r.keywords ? `<div class="teach-help">Only on documents containing: ${escHtml(r.keywords)}</div>` : ''}</td>
-      <td class="ocr-raw">${escHtml(r.example || '')}</td>
+      <td class="ocr-raw">${escHtml(r.example || '')}
+        <div class="teach-help">${r.taught_by ? `by ${escHtml(r.taught_by)} · ` : ''}${new Date(r.created_at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}</div>
+        ${r.sample_path ? `<button type="button" class="btn btn-ghost admin-view-page" onclick="adminViewSample('${escHtml(r.sample_path)}')">View certificate page</button>` : ''}</td>
       <td class="admin-actions">${r.status === 'pending'
-        ? `<button class="btn btn-primary" onclick="adminSetStatus(${r.id}, 'approved')">Approve</button><button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected')">Reject</button>`
-        : `<button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected')">Remove</button>`}</td></tr>`;
+        ? `<button class="btn btn-primary" onclick="adminSetStatus(${r.id}, 'approved', '${escHtml(r.sample_path || '')}')">Approve</button><button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected', '${escHtml(r.sample_path || '')}')">Reject</button>`
+        : `<button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected', '${escHtml(r.sample_path || '')}')">Remove</button>`}</td></tr>`;
     const table = list => list.length ? `<div class="ocr-table-wrap"><table class="ocr-table"><thead><tr><th>Type</th><th>Level</th><th>Rule</th><th>Taught from</th><th></th></tr></thead><tbody>${list.map(row).join('')}</tbody></table></div>` : '<p class="teach-help">None.</p>';
+    const pending = rules.filter(r => r.status === 'pending');
+    markPendingSeen(pending.length);
     body.innerHTML = `${adminMsg(kind || 'success', message)}${passwordCard}
       <p class="teach-help">Signed in as ${escHtml(_adminUser?.email || 'admin')}</p>
-      <h3>Waiting for approval</h3>${table(rules.filter(r => r.status === 'pending'))}
+      <h3>Waiting for approval (${pending.length})</h3>${table(pending)}
       <h3>Approved (used by everyone)</h3>${table(rules.filter(r => r.status === 'approved'))}
+      ${await adminAlertsHTML()}
       <div class="ocr-actions">
         ${offerChange ? '' : `<button class="btn btn-ghost" onclick="adminShowChangePassword()">Change password</button>`}
         <button class="btn btn-ghost" onclick="adminSignOut()">Sign out</button>
@@ -5459,15 +5554,102 @@ function adminSignOut() {
   setTimeout(openAdminPanel, 0);
 })();
 
-async function adminSetStatus(id, status) {
+async function adminSetStatus(id, status, samplePath = '') {
   try {
-    await sbFetch(`/rest/v1/ocr_rules?id=eq.${id}`, { method: 'PATCH', token: _adminToken, body: { status, approved_at: status === 'approved' ? new Date().toISOString() : null } });
+    // The certificate page is only kept until an admin decides.
+    if(samplePath) {
+      try { await fetch(`${SUPABASE_URL}/storage/v1/object/teach-samples/${samplePath}`, { method: 'DELETE', headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${_adminToken}` } }); } catch(e) {}
+    }
+    await sbFetch(`/rest/v1/ocr_rules?id=eq.${id}`, { method: 'PATCH', token: _adminToken, body: { status, approved_at: status === 'approved' ? new Date().toISOString() : null, sample_path: null } });
     learned.loadedAt = 0;
+    refreshPendingBadge();
     renderAdminPanel(status === 'approved' ? 'Rule approved: it now applies for everyone.' : 'Rule removed.');
   } catch(e) {
     renderAdminPanel(e.message, 'error');
   }
 }
+
+// Opens the attached certificate page through a short-lived private link.
+async function adminViewSample(path) {
+  const win = window.open('', '_blank');
+  try {
+    const res = await sbFetch(`/storage/v1/object/sign/teach-samples/${path}`, { method: 'POST', token: _adminToken, body: { expiresIn: 300 } });
+    const url = `${SUPABASE_URL}/storage/v1${res.signedURL || res.signedUrl}`;
+    if(win) win.location = url; else window.open(url, '_blank');
+  } catch(e) {
+    if(win) win.close();
+    appAlert('The certificate page could not be opened (' + e.message + ').');
+  }
+}
+
+// ── Notifying admins ──
+// 1. A badge on the footer's Admin link shows how many rules are waiting (visible on every computer).
+// 2. Admin computers can turn on desktop notifications (while the calculator is open in any tab).
+// 3. An optional Microsoft Teams link gets a message the moment a rule is sent (set in the Admin panel).
+async function refreshPendingBadge() {
+  if(!supabaseReady()) return;
+  let count = 0;
+  try { count = Number(await sbFetch('/rest/v1/rpc/ocr_pending_count', { method: 'POST', body: {} })) || 0; } catch(e) { return; }
+  const badge = document.getElementById('admin-badge');
+  if(badge) {
+    badge.textContent = count;
+    badge.classList.toggle('hidden', count === 0);
+    badge.title = `${count} taught rule${count === 1 ? '' : 's'} waiting for admin approval`;
+  }
+  let notify = false, seen = 0;
+  try { notify = localStorage.getItem('ocrAdminNotify') === '1'; seen = Number(localStorage.getItem('ocrPendingSeen') || 0); } catch(e) {}
+  if(notify && count > seen && 'Notification' in window && Notification.permission === 'granted') {
+    const n = new Notification('UOS British Calculator', { body: `${count} taught rule${count === 1 ? '' : 's'} waiting for your approval. Click to review.`, tag: 'ocr-pending' });
+    n.onclick = () => { window.focus(); openAdminPanel(); n.close(); };
+  }
+  if(count < seen || count > seen) { try { localStorage.setItem('ocrPendingSeen', String(count)); } catch(e) {} }
+}
+
+function markPendingSeen(count) {
+  try { localStorage.setItem('ocrPendingSeen', String(count)); } catch(e) {}
+}
+
+async function adminToggleNotifications() {
+  let on = false;
+  try { on = localStorage.getItem('ocrAdminNotify') === '1'; } catch(e) {}
+  if(on) { try { localStorage.removeItem('ocrAdminNotify'); } catch(e) {} renderAdminPanel('Notifications turned off on this computer.'); return; }
+  if(!('Notification' in window)) { renderAdminPanel('This browser does not support notifications.', 'error'); return; }
+  const permission = await Notification.requestPermission();
+  if(permission !== 'granted') { renderAdminPanel('Notifications were blocked. Allow them for this site in the browser settings, then try again.', 'error'); return; }
+  try { localStorage.setItem('ocrAdminNotify', '1'); } catch(e) {}
+  new Notification('UOS British Calculator', { body: 'Notifications are on. You will be told when staff send new rules.' });
+  renderAdminPanel('Notifications turned on for this computer.');
+}
+
+async function adminSaveWebhook(clear = false) {
+  const url = clear ? '' : (document.getElementById('admin-webhook')?.value || '').trim();
+  try {
+    await sbFetch('/rest/v1/rpc/set_ocr_webhook', { method: 'POST', token: _adminToken, body: { url } });
+    renderAdminPanel(clear ? 'Teams alerts turned off.' : 'Teams alerts turned on: a message is posted whenever staff send a rule.');
+  } catch(e) {
+    renderAdminPanel(/https/.test(e.message) ? 'The link must start with https://' : 'The link could not be saved (' + e.message + ').', 'error');
+  }
+}
+
+async function adminAlertsHTML() {
+  let notifyOn = false, hookSet = false;
+  try { notifyOn = localStorage.getItem('ocrAdminNotify') === '1'; } catch(e) {}
+  try { hookSet = !!(await sbFetch('/rest/v1/rpc/get_ocr_webhook_set', { method: 'POST', token: _adminToken, body: {} })); } catch(e) {}
+  return `<h3>Alerts</h3>
+    <div class="teach-box admin-alerts">
+      <div><strong>On this computer:</strong> ${notifyOn ? 'desktop notifications are on.' : 'desktop notifications are off.'}
+        <button class="btn btn-ghost" onclick="adminToggleNotifications()">${notifyOn ? 'Turn off' : 'Notify me on this computer'}</button>
+        <div class="teach-help">Shows a notification when staff send a rule, while the calculator is open in any tab. The Admin link in the footer also shows how many are waiting.</div></div>
+      <div style="margin-top:10px;"><strong>Microsoft Teams:</strong> ${hookSet ? 'alerts are on.' : 'not set up.'}
+        <div class="teach-help">For an instant message (also on your phone) whenever a rule is sent: in Teams, open a channel or chat → <em>…</em> → <em>Workflows</em> → <em>"Post to a channel when a webhook request is received"</em>, finish the steps, copy the link it gives you and paste it here.</div>
+        <div class="admin-webhook-row"><input type="url" id="admin-webhook" placeholder="${hookSet ? 'Paste a new link to replace the current one' : 'https://…'}">
+          <button class="btn btn-primary" onclick="adminSaveWebhook()">Save</button>
+          ${hookSet ? '<button class="btn btn-ghost" onclick="adminSaveWebhook(true)">Turn off</button>' : ''}</div></div>
+    </div>`;
+}
+
+refreshPendingBadge();
+setInterval(refreshPendingBadge, 3 * 60 * 1000);
 </script>
 <div id="cond-confirm-modal" onclick="if(event.target===this)cancelCondConfirm()">
   <div id="cond-confirm-box" role="dialog" aria-modal="true" aria-labelledby="cond-confirm-title">
