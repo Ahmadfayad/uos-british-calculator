@@ -37,4 +37,19 @@ loaded from `file://`, so the certificate reader falls back to Tesseract.
   - Both engines combined
 - Dark/Light theme, responsive design
 
+### Teaching the reader (shared rules)
+
+When a document's layout is not recognised, staff click a line under
+**"Teach the reader a new layout"** and say which subject, level and grade it
+shows. Corrected subject spellings are remembered too. A taught rule works at once
+on that computer and is sent to Supabase as *pending*; an admin approves it
+(footer → **Admin**) and it then applies for everyone. Rules contain layout
+patterns only, never student data.
+
+Setup: run [`supabase/setup.sql`](supabase/setup.sql) in the Supabase SQL editor,
+create an admin user, then set `SUPABASE_URL` and `SUPABASE_KEY` (the
+**publishable/anon** key, never the `service_role` key) at the top of the
+"Learned reading rules" script in `index.html`. Without them, taught rules stay on
+the computer that taught them.
+
 PaddleOCR model details and licences: [`models/paddleocr/README.md`](models/paddleocr/README.md).

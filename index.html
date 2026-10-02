@@ -809,6 +809,22 @@
     .major-check-title { font-weight: 700; color: var(--text); font-size: 0.8rem; }
     .major-check-title .verdict { font-weight: 600; font-size: 0.72rem; margin-left: 6px; }
     #result.stale { opacity: 0.45; transition: opacity 0.2s ease; }
+    .footer-link { background: none; border: none; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
+    .teach-box { margin-top: 14px; border: 1px dashed var(--border); border-radius: var(--r); padding: 10px 12px; font-size: 0.8rem; color: var(--text-2); }
+    .teach-box summary { cursor: pointer; font-weight: 700; color: var(--text); }
+    .teach-help { font-size: 0.74rem; color: var(--text-3); margin: 6px 0; line-height: 1.5; }
+    .teach-lines { display: flex; flex-direction: column; gap: 4px; max-height: 220px; overflow-y: auto; margin: 6px 0; }
+    .teach-line { text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; color: var(--text-2); font: inherit; font-size: 0.74rem; cursor: pointer; display: flex; justify-content: space-between; gap: 10px; }
+    .teach-line:hover { border-color: var(--primary); }
+    .teach-line small { color: var(--text-3); white-space: nowrap; }
+    .teach-form { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: flex-end; margin-top: 8px; padding: 10px; border: 1px solid var(--border); border-radius: var(--r); }
+    .teach-form .ocr-raw { flex-basis: 100%; max-width: none; }
+    .teach-form label { display: flex; flex-direction: column; gap: 3px; font-size: 0.72rem; font-weight: 600; }
+    .teach-form select, .teach-form input { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 7px; font: inherit; font-size: 0.78rem; }
+    .teach-form .teach-keywords { flex: 1; min-width: 200px; }
+    .teach-form #teach-msg { flex-basis: 100%; }
+    .admin-actions { display: flex; gap: 6px; white-space: nowrap; }
+    .admin-actions .btn { padding: 5px 10px; font-size: 0.74rem; }
     .site-footer {
       text-align: center; font-size: 0.75rem; letter-spacing: 0.02em; color: var(--text-2);
       opacity: 0.55; padding: 28px 16px 36px;
@@ -1146,7 +1162,7 @@
       <div class="sidebar-title">Subjects Breakdown</div>
     </div>
   </div>
-  <footer class="site-footer">Powered by Ahmad Albalbissi</footer>
+  <footer class="site-footer">Powered by Ahmad Albalbissi · <button type="button" class="footer-link" onclick="openAdminPanel()">Admin</button></footer>
 </div>
 <button id="mobile-breakdown-fab" class="mobile-breakdown-fab" type="button" aria-label="Open subjects breakdown" onclick="openMobileBreakdown()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1273,6 +1289,12 @@
       <button class="btn btn-ghost" onclick="closeOcrModal()">Cancel</button>
       <button class="btn btn-primary" id="ocr-add-btn" onclick="addOcrRowsToCalculator()" disabled>Add selected subjects</button>
     </div>
+  </div>
+</div>
+<div id="admin-modal" class="modal-overlay">
+  <div class="modal-box ocr-modal-box">
+    <div class="modal-header"><h2 class="modal-title">Reader rules (admin)</h2><button class="modal-close" onclick="closeAdminPanel()">×</button></div>
+    <div class="modal-body" id="admin-body"></div>
   </div>
 </div>
 <div id="student-info-modal" class="modal-overlay">
@@ -4238,7 +4260,8 @@ function parseSchoolGradeOnlyLine(line, level, pageText) {
 
 function parseResultLine(line, level, pageText) {
   return parseAwardLine(line) || parseGradeLine(line, level) || parseSyllabusLine(line, level)
-    || parseCambridgeCertLine(line, level) || parseSchoolTableLine(line) || parseSchoolGradeOnlyLine(line, level, pageText);
+    || parseCambridgeCertLine(line, level) || parseSchoolTableLine(line) || parseSchoolGradeOnlyLine(line, level, pageText)
+    || (typeof parseLearnedLayoutLine === 'function' ? parseLearnedLayoutLine(line, pageText) : null);
 }
 
 function isSkippedLine(line) {
@@ -4392,6 +4415,8 @@ function matchOcrSubject(rawSubject, level) {
   const candidates = allSubjects.filter(s => s.level === level);
   const exact = candidates.find(s => normalizeSearch(s.subject) === norm);
   if(exact) return { subject: exact.subject, how: 'exact' };
+  const taught = typeof learnedAliasFor === 'function' ? learnedAliasFor(level, norm) : '';
+  if(taught && candidates.some(s => s.subject === taught)) return { subject: taught, how: 'alias' };
   const alias = OCR_SUBJECT_ALIASES[level]?.[norm];
   if(alias && candidates.some(s => s.subject === alias)) return { subject: alias, how: 'alias' };
   let best = null, bestScore = 0;
@@ -4431,6 +4456,7 @@ function parseDocument(pages, fileName, engine) {
     const match = r.subject ? { subject: r.subject, how: 'exact' } : matchOcrSubject(r.rawSubject, r.level);
     const notes = [], reasons = new Set();
     if(r.uncertain) { notes.push(r.uncertain); reasons.add('format'); }
+    if(r.learned) notes.push(r.learned === 'pending' ? 'Read with a layout taught on this computer (waiting for admin approval)' : 'Read with a learned layout');
     if(match.how === 'fuzzy') { notes.push(`Subject guessed from "${r.rawSubject}"`); reasons.add('subject'); }
     if(match.how === 'none') { notes.push(`No matching subject for "${r.rawSubject}", please choose one`); reasons.add('subject'); }
     if(r.level !== 'moe' && !r.grade) { notes.push('Grade could not be read'); reasons.add('grade'); }
@@ -4457,7 +4483,7 @@ function parseDocument(pages, fileName, engine) {
       grade: r.grade || '',
       mark,
       status: expected && r.level !== 'moe' ? 'expected' : 'final',
-      raw: r.raw, file: fileName, page: r.page, engine,
+      raw: r.raw, file: fileName, page: r.page, engine, rawSubject: r.rawSubject, matchHow: match.how,
       notes, reasons
     };
   });
@@ -4632,6 +4658,10 @@ async function handleCertificateFiles(fileList) {
     return;
   }
 
+  // Rules taught by staff (approved for everyone, or pending on this computer).
+  await loadLearnedRules();
+  if(learned.error) warnings.push(escHtml(learned.error) + '. Built-in and this computer\'s rules are still used.');
+
   const seen = new Map();
   const rows = [];
   for(let i = 0; i < files.length; i++) {
@@ -4652,7 +4682,7 @@ async function handleCertificateFiles(fileList) {
       const n = res.rows.length;
       p.state = n ? `${n} subject${n > 1 ? 's' : ''} found · ${res.used}` : `No subjects found · ${res.used}`;
       p.cls = n ? 'done' : 'error';
-      if(!n) warnings.push(`No subjects were recognised in <strong>${escHtml(file.name)}</strong>. Add them manually, try a clearer scan, or try another reading engine.`);
+      if(!n) warnings.push(`No subjects were recognised in <strong>${escHtml(file.name)}</strong>. Add them manually, teach the reader its layout below, or try another reading engine.`);
     } catch(e) {
       p.state = 'Could not read this file'; p.cls = 'error';
       warnings.push(`<strong>${escHtml(file.name)}</strong> could not be read (${escHtml(String(e.message || e))}).${mode !== 'tesseract' ? ' Try again with "Tesseract only".' : ''}`);
@@ -4661,6 +4691,8 @@ async function handleCertificateFiles(fileList) {
   }
 
   if(_ocrCancelled) { _ocrBusy = false; return; }
+  // Keep what was read so staff can teach layouts from unrecognised lines.
+  window._ocrBatch = [...seen].map(([fp, name]) => ({ name, pages: _ocrPageCache.get(`${fp}|paddle`) || _ocrPageCache.get(`${fp}|tesseract`) || [] }));
   window._ocrRows = resolveRepeatedSubjects(rows);
   const secs = Math.round((performance.now() - started) / 1000);
   setOcrProgress(progress, `Finished in ${secs} s · ${OCR_ENGINES[mode]}`);
@@ -4693,7 +4725,7 @@ function renderOcrReview() {
   const rows = window._ocrRows;
   const container = document.getElementById('ocr-review');
   if(!rows.length) {
-    container.innerHTML = '';
+    container.innerHTML = renderTeachSection();
     updateOcrAddButton();
     return;
   }
@@ -4714,7 +4746,7 @@ function renderOcrReview() {
           <td>${ocrFlag(r)}${r.notes.length ? `<div class="ocr-notes">${r.notes.map(escHtml).join('<br>')}</div>` : ''}</td>
         </tr>`).join('')}
       </tbody>
-    </table></div>`;
+    </table></div>` + renderTeachSection();
   updateOcrAddButton();
 }
 
@@ -4777,6 +4809,7 @@ function addOcrRowsToCalculator() {
     added++;
   });
 
+  learnCorrectedSubjects(chosen).catch(() => {});
   updateLevelCounter();
   markResultsStale();
   closeOcrModal();
@@ -4810,7 +4843,314 @@ function closeOcrModal(force = false) {
   drop.addEventListener('drop', e => handleCertificateFiles(e.dataTransfer.files));
 })();
 </script>
+<script>
+// ── Learned reading rules (shared through Supabase, approved by an admin) ──
+// Staff teach the reader new school layouts and subject spellings. A taught
+// rule works at once on the teacher's computer; it is sent to Supabase as
+// "pending" and applies for everyone after an admin approves it. Rules hold
+// layout patterns only, never student names, marks or documents.
+// The publishable (anon) key is designed to be public: row-level security in
+// supabase/setup.sql controls what it can do. Never put the service_role key here.
+const SUPABASE_URL = '';
+const SUPABASE_KEY = '';
+const LOCAL_RULES_KEY = 'ocrLocalRules';
 
+const learned = { aliases: new Map(), layouts: [], approved: [], loadedAt: 0, error: '' };
+
+function supabaseReady() { return !!(SUPABASE_URL && SUPABASE_KEY); }
+
+async function sbFetch(path, { method = 'GET', body, token } = {}) {
+  const headers = { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=representation' };
+  if(token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(SUPABASE_URL.replace(/\/$/, '') + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  const text = await res.text();
+  if(!res.ok) throw new Error(`${res.status}: ${text.slice(0, 200)}`);
+  return text ? JSON.parse(text) : null;
+}
+
+function readLocalRules() {
+  try { return JSON.parse(localStorage.getItem(LOCAL_RULES_KEY) || '[]'); } catch(e) { return []; }
+}
+function writeLocalRules(rules) {
+  try { localStorage.setItem(LOCAL_RULES_KEY, JSON.stringify(rules.slice(-200))); } catch(e) {}
+}
+const ruleKey = r => `${r.kind}|${r.level}|${r.pattern}|${r.subject || ''}|${r.keywords || ''}`;
+
+const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Template words: {subject} {grade} {code} (e.g. "(YPH11)") {num}; a trailing *
+// marks that the example had more text after the grade (always allowed).
+function buildLayoutRegex(pattern) {
+  const parts = pattern.trim().split(/\s+/).filter(tok => tok !== '*').map(tok => {
+    if(tok === '{subject}') return '(.+?)';
+    if(tok === '{grade}') return '(A\\*|[A-GU]|[1-9])';
+    if(tok === '{code}') return '\\(?\\s*[A-Z0-9]{3,6}\\s*\\)?';
+    if(tok === '{num}') return '\\d+';
+    return escapeRegex(tok);
+  });
+  return new RegExp('^' + parts.join('\\s+') + '(?:\\s.*)?$');
+}
+
+function compileLearnedRules(rules) {
+  learned.aliases = new Map();
+  learned.layouts = [];
+  rules.forEach(r => {
+    if(r.kind === 'alias' && r.subject) learned.aliases.set(`${r.level}||${r.pattern}`, r.subject);
+    if(r.kind === 'layout') {
+      try {
+        learned.layouts.push({ level: r.level, re: buildLayoutRegex(r.pattern), keywords: (r.keywords || '').toLowerCase().split(',').map(k => k.trim()).filter(Boolean), pending: r.status !== 'approved' });
+      } catch(e) { /* skip a malformed rule */ }
+    }
+  });
+}
+
+// Approved rules from Supabase plus this computer's own pending rules.
+async function loadLearnedRules(force = false) {
+  if(!force && Date.now() - learned.loadedAt < 5 * 60 * 1000) return;
+  let approved = [];
+  learned.error = '';
+  if(supabaseReady()) {
+    try {
+      approved = await sbFetch('/rest/v1/ocr_rules?status=eq.approved&select=kind,level,pattern,subject,keywords,status');
+    } catch(e) { learned.error = 'Shared rules could not be loaded (' + e.message + ')'; }
+  }
+  const approvedKeys = new Set(approved.map(ruleKey));
+  const local = readLocalRules().filter(r => !approvedKeys.has(ruleKey(r)));
+  writeLocalRules(local);
+  if(!learned.error) learned.approved = approved;
+  compileLearnedRules([...learned.approved, ...local]);
+  learned.loadedAt = Date.now();
+}
+
+async function saveLearnedRule(rule) {
+  const r = { kind: rule.kind, level: rule.level, pattern: rule.pattern.slice(0, 300), subject: rule.subject || null,
+    keywords: (rule.keywords || '').slice(0, 200) || null, example: (rule.example || '').slice(0, 300) || null, status: 'pending' };
+  const local = readLocalRules();
+  if(!local.some(x => ruleKey(x) === ruleKey(r))) { local.push(r); writeLocalRules(local); }
+  compileLearnedRules([...learned.approved, ...readLocalRules()]);
+  if(!supabaseReady()) return 'local';
+  try { await sbFetch('/rest/v1/ocr_rules', { method: 'POST', body: r }); return 'sent'; }
+  catch(e) { return 'local'; }
+}
+
+function learnedAliasFor(level, norm) {
+  return learned.aliases.get(`${level}||${norm}`) || '';
+}
+
+// Tried after the built-in readers, so a learned rule never overrides them.
+function parseLearnedLayoutLine(line, pageText) {
+  if(!learned.layouts.length) return null;
+  const page = (pageText || '').toLowerCase();
+  for(const rule of learned.layouts) {
+    if(rule.keywords.some(k => !page.includes(k))) continue;
+    const m = line.match(rule.re);
+    if(!m) continue;
+    const subject = cleanSchoolSubject(m[1]);
+    const known = isKnownSubject(subject, rule.level) || learnedAliasFor(rule.level, normalizeSearch(subject));
+    if(!known) continue;
+    const grade = normalizeGrade(m[2], '', rule.level);
+    if(!grade) continue;
+    return { rawSubject: subject, level: rule.level, grade, learned: rule.pending ? 'pending' : 'approved' };
+  }
+  return null;
+}
+
+// Builds a layout template from one example line the staff member labelled.
+function deriveLayoutTemplate(line, subject, grade) {
+  const tokens = cleanOcrLine(line).split(' ');
+  const gIdx = tokens.lastIndexOf(grade);
+  if(gIdx < 1) return { error: `The grade "${grade}" does not appear in this line.` };
+  const target = normalizeSearch(subject);
+  let bestK = 1, best = -1;
+  for(let k = 1; k <= gIdx; k++) {
+    const score = bigramSimilarity(normalizeSearch(tokens.slice(0, k).join(' ')), target);
+    if(score > best) { best = score; bestK = k; }
+  }
+  const middle = tokens.slice(bestK, gIdx).map(t => /^\(?[A-Z0-9]{3,6}\)?$/.test(t) && /\d/.test(t) ? '{code}' : (/^\d+$/.test(t) ? '{num}' : t));
+  const pattern = ['{subject}', ...middle, '{grade}', ...(gIdx < tokens.length - 1 ? ['*'] : [])].join(' ');
+  return { pattern, subjectText: tokens.slice(0, bestK).join(' '), hasLiteral: middle.some(t => !t.startsWith('{')) };
+}
+
+// ── Teaching inside the review dialog ──
+window._ocrBatch = [];
+let _teachLine = null;
+
+function unrecognisedLines() {
+  const out = [];
+  (window._ocrBatch || []).forEach(doc => doc.pages.forEach(pg => {
+    const level = pageLevel(pg.text);
+    pg.text.split('\n').forEach(raw => {
+      const line = cleanOcrLine(raw);
+      if(line.length < 5 || line.length > 160 || !/[A-Za-z]{3}/.test(line) || isSkippedLine(line)) return;
+      if(parseResultLine(line, level, pg.text)) return;
+      if(!/(A\*|\b[A-GU]\b|\b[1-9]\b)/.test(line)) return; // must contain something that looks like a grade
+      out.push({ line, file: doc.name, page: pg.page, pageText: pg.text });
+    });
+  }));
+  return out.slice(0, 80);
+}
+
+function renderTeachSection() {
+  const lines = unrecognisedLines();
+  if(!lines.length) return '';
+  window._teachLines = lines;
+  return `<details class="teach-box" id="teach-box"${window._teachOpen ? ' open' : ''}>
+    <summary>Something missing? Teach the reader a new layout (${lines.length} unrecognised line${lines.length > 1 ? 's' : ''})</summary>
+    <p class="teach-help">Click the line that holds a subject result, then say what it means. The reader learns the pattern and reads similar lines automatically. It works on this computer straight away; an admin approves it for everyone.</p>
+    <div class="teach-lines">${lines.map((l, i) => `<button type="button" class="teach-line" data-teach="${i}"><span>${escHtml(l.line)}</span><small>${escHtml(l.file)} · p.${l.page}</small></button>`).join('')}</div>
+    <div id="teach-form"></div>
+  </details>`;
+}
+
+function openTeachForm(i) {
+  _teachLine = window._teachLines[i];
+  if(!_teachLine) return;
+  const level = pageLevel(_teachLine.pageText);
+  const grades = l => Object.keys(gradingScheme[l] || {}).map(g => `<option value="${g}">${g}</option>`).join('');
+  const levels = ['o-level', 'as-level', 'a-level'].map(l => `<option value="${l}"${l === level ? ' selected' : ''}>${shortLevelLabels[l]}</option>`).join('');
+  document.getElementById('teach-form').innerHTML = `
+    <div class="teach-form">
+      <div class="ocr-raw">${escHtml(_teachLine.line)}</div>
+      <label>Level <select id="teach-level">${levels}</select></label>
+      <label>Subject <select id="teach-subject">${ocrSubjectOptions(level, matchOcrSubject(_teachLine.line, level).subject)}</select></label>
+      <label>Grade <select id="teach-grade"><option value="">—</option>${grades(level)}</select></label>
+      <label class="teach-keywords">Only on documents containing <input type="text" id="teach-keywords" placeholder="e.g. school name (optional)" maxlength="120"></label>
+      <button type="button" class="btn btn-primary" onclick="submitTeach()">Teach</button>
+      <div id="teach-msg" class="teach-help"></div>
+    </div>`;
+  document.getElementById('teach-level').addEventListener('change', e => {
+    document.getElementById('teach-subject').innerHTML = ocrSubjectOptions(e.target.value, '');
+    document.getElementById('teach-grade').innerHTML = `<option value="">—</option>${grades(e.target.value)}`;
+  });
+}
+
+async function submitTeach() {
+  const msg = document.getElementById('teach-msg');
+  const level = document.getElementById('teach-level').value;
+  const subject = document.getElementById('teach-subject').value;
+  const grade = document.getElementById('teach-grade').value;
+  const keywords = document.getElementById('teach-keywords').value.trim();
+  if(!subject || !grade) { msg.textContent = 'Choose the subject and the grade shown in this line.'; return; }
+  const t = deriveLayoutTemplate(_teachLine.line, subject, grade);
+  if(t.error) { msg.textContent = t.error; return; }
+  // A template with no fixed words would match too much: require a document keyword.
+  if(!t.hasLiteral && !keywords) { msg.textContent = 'This line has no fixed words to recognise it by. Add a word that appears on this kind of document (for example the school name).'; return; }
+  if(keywords && !_teachLine.pageText.toLowerCase().includes(keywords.toLowerCase().split(',')[0].trim())) { msg.textContent = 'That word does not appear on this document. Copy it exactly as printed.'; return; }
+  const rules = [{ kind: 'layout', level, pattern: t.pattern, keywords, example: _teachLine.line }];
+  const norm = normalizeSearch(cleanSchoolSubject(t.subjectText));
+  if(matchOcrSubject(t.subjectText, level).subject !== subject) rules.push({ kind: 'alias', level, pattern: norm, subject, example: t.subjectText });
+  const results = [];
+  for(const r of rules) results.push(await saveLearnedRule(r));
+  // Check the new rule reads the example line correctly.
+  const row = parseLearnedLayoutLine(cleanOcrLine(_teachLine.line), _teachLine.pageText);
+  if(!row || row.grade !== grade) { msg.textContent = 'Saved, but the new pattern did not read this line back correctly. Please add this subject manually.'; return; }
+  // Read the documents again so every line matching the new layout is added, not just this one.
+  const have = new Set(window._ocrRows.map(r => `${r.file}|${r.raw}`));
+  (window._ocrBatch || []).forEach(doc => {
+    parseDocument(doc.pages, doc.name, '').forEach(r => { if(!have.has(`${r.file}|${r.raw}`)) { window._ocrRows.push(r); have.add(`${r.file}|${r.raw}`); } });
+  });
+  resolveRepeatedSubjects(window._ocrRows);
+  const shared = results.includes('sent');
+  renderOcrReview();
+  showOcrWarnings([`<strong>Layout learned.</strong> ${shared ? 'It works on this computer now and was sent to an admin for approval.' : 'It works on this computer now. ' + (supabaseReady() ? 'It could not be sent for approval (offline?) and will stay on this computer.' : 'Sharing is not set up yet, so it stays on this computer.')}`]);
+}
+
+document.getElementById('ocr-review').addEventListener('click', e => {
+  const b = e.target.closest('[data-teach]');
+  if(b) openTeachForm(Number(b.dataset.teach));
+});
+// Keep the teaching panel open when the review table re-renders.
+document.getElementById('ocr-review').addEventListener('toggle', e => {
+  if(e.target.id === 'teach-box') window._teachOpen = e.target.open;
+}, true);
+
+// Subject spellings staff corrected in the review table become alias suggestions.
+async function learnCorrectedSubjects(rows) {
+  for(const r of rows) {
+    if(!r.edited || !r.subject || !r.rawSubject || r.level === 'moe' || r.matchHow === 'exact' || r.matchHow === 'alias') continue;
+    const norm = normalizeSearch(r.rawSubject.replace(/\(.*?\)/g, ' ').replace(/\band\b/gi, '&'));
+    if(norm.length < 3 || learnedAliasFor(r.level, norm) === r.subject) continue;
+    await saveLearnedRule({ kind: 'alias', level: r.level, pattern: norm, subject: r.subject, example: r.rawSubject });
+  }
+}
+
+// ── Admin: approve, reject or remove shared rules ──
+let _adminToken = '';
+try { _adminToken = sessionStorage.getItem('ocrAdminToken') || ''; } catch(e) {}
+
+function openAdminPanel() {
+  document.getElementById('admin-modal').classList.add('open');
+  renderAdminPanel();
+}
+function closeAdminPanel() { document.getElementById('admin-modal').classList.remove('open'); }
+
+async function renderAdminPanel(message = '') {
+  const body = document.getElementById('admin-body');
+  if(!supabaseReady()) {
+    body.innerHTML = '<p>Shared learning is not set up yet. Add the Supabase project URL and publishable key at the top of the learning script (see <code>supabase/setup.sql</code>).</p>';
+    return;
+  }
+  if(!_adminToken) {
+    body.innerHTML = `${message ? `<div class="msg-box error"><span class="msg-icon">⚠️</span><div>${escHtml(message)}</div></div>` : ''}
+      <p>Sign in with your Supabase admin account to review rules taught by staff.</p>
+      <div class="student-field"><label>Email</label><input type="email" id="admin-email" autocomplete="username"></div>
+      <div class="student-field"><label>Password</label><input type="password" id="admin-password" autocomplete="current-password"></div>
+      <button class="btn btn-primary" onclick="adminSignIn()">Sign in</button>`;
+    return;
+  }
+  body.innerHTML = '<p>Loading rules…</p>';
+  try {
+    const rules = await sbFetch('/rest/v1/ocr_rules?status=in.(pending,approved)&order=created_at.desc&select=*', { token: _adminToken });
+    const row = r => `<tr>
+      <td>${r.kind === 'layout' ? 'Layout' : 'Spelling'}</td><td>${escHtml(shortLevelLabels[r.level] || r.level)}</td>
+      <td><code>${escHtml(r.pattern)}</code>${r.subject ? ` → <strong>${escHtml(r.subject)}</strong>` : ''}${r.keywords ? `<div class="teach-help">Only on documents containing: ${escHtml(r.keywords)}</div>` : ''}</td>
+      <td class="ocr-raw">${escHtml(r.example || '')}</td>
+      <td class="admin-actions">${r.status === 'pending'
+        ? `<button class="btn btn-primary" onclick="adminSetStatus(${r.id}, 'approved')">Approve</button><button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected')">Reject</button>`
+        : `<button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected')">Remove</button>`}</td></tr>`;
+    const table = list => list.length ? `<div class="ocr-table-wrap"><table class="ocr-table"><thead><tr><th>Type</th><th>Level</th><th>Rule</th><th>Taught from</th><th></th></tr></thead><tbody>${list.map(row).join('')}</tbody></table></div>` : '<p class="teach-help">None.</p>';
+    body.innerHTML = `${message ? `<div class="msg-box success"><span class="msg-icon">✓</span><div>${escHtml(message)}</div></div>` : ''}
+      <h3>Waiting for approval</h3>${table(rules.filter(r => r.status === 'pending'))}
+      <h3>Approved (used by everyone)</h3>${table(rules.filter(r => r.status === 'approved'))}
+      <div class="ocr-actions"><button class="btn btn-ghost" onclick="adminSignOut()">Sign out</button></div>`;
+  } catch(e) {
+    if(/^401|JWT/i.test(e.message)) { adminSignOut(); renderAdminPanel('Your session expired. Please sign in again.'); return; }
+    body.innerHTML = `<div class="msg-box error"><span class="msg-icon">⚠️</span><div>${escHtml(e.message)}</div></div>`;
+  }
+}
+
+async function adminSignIn() {
+  const email = document.getElementById('admin-email').value.trim();
+  const password = document.getElementById('admin-password').value;
+  if(!email || !password) return;
+  try {
+    const res = await sbFetch('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password } });
+    const admins = await sbFetch(`/rest/v1/ocr_admins?user_id=eq.${res.user.id}&select=user_id`, { token: res.access_token });
+    if(!admins.length) { renderAdminPanel('This account is not an admin. Ask the project owner to add it to the ocr_admins table.'); return; }
+    _adminToken = res.access_token;
+    try { sessionStorage.setItem('ocrAdminToken', _adminToken); } catch(e) {}
+    renderAdminPanel();
+  } catch(e) {
+    renderAdminPanel('Sign-in failed: check the email and password.');
+  }
+}
+
+function adminSignOut() {
+  _adminToken = '';
+  try { sessionStorage.removeItem('ocrAdminToken'); } catch(e) {}
+  renderAdminPanel();
+}
+
+async function adminSetStatus(id, status) {
+  try {
+    await sbFetch(`/rest/v1/ocr_rules?id=eq.${id}`, { method: 'PATCH', token: _adminToken, body: { status, approved_at: status === 'approved' ? new Date().toISOString() : null } });
+    learned.loadedAt = 0;
+    renderAdminPanel(status === 'approved' ? 'Rule approved: it now applies for everyone.' : 'Rule removed.');
+  } catch(e) {
+    renderAdminPanel(e.message);
+  }
+}
+</script>
 <div id="cond-confirm-modal" onclick="if(event.target===this)cancelCondConfirm()">
   <div id="cond-confirm-box" role="dialog" aria-modal="true" aria-labelledby="cond-confirm-title">
     <div class="cond-icon" id="cond-confirm-icon">⚠️</div>
