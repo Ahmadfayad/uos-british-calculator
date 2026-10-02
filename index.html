@@ -831,6 +831,8 @@
     .teach-form .teach-keywords { flex: 1; min-width: 200px; }
     .teach-form #teach-msg { flex-basis: 100%; }
     .admin-actions { display: flex; gap: 6px; white-space: nowrap; }
+    .admin-password-card { margin: 0 0 14px; display: flex; flex-direction: column; gap: 6px; }
+    .admin-password-card .admin-actions { flex-wrap: wrap; }
     .admin-actions .btn { padding: 5px 10px; font-size: 0.74rem; }
     .site-footer {
       text-align: center; font-size: 0.75rem; letter-spacing: 0.02em; color: var(--text-2);
@@ -5123,8 +5125,17 @@ async function learnCorrectedSubjects(rows) {
 }
 
 // ── Admin: approve, reject or remove shared rules ──
-let _adminToken = '';
-try { _adminToken = sessionStorage.getItem('ocrAdminToken') || ''; } catch(e) {}
+let _adminToken = '', _adminUser = null, _passwordPromptHidden = false, _recoveryToken = '', _authLinkError = '';
+try {
+  _adminToken = sessionStorage.getItem('ocrAdminToken') || '';
+  _adminUser = JSON.parse(sessionStorage.getItem('ocrAdminUser') || 'null');
+} catch(e) {}
+
+function setAdminSession(token, user) {
+  _adminToken = token;
+  _adminUser = user;
+  try { sessionStorage.setItem('ocrAdminToken', token); sessionStorage.setItem('ocrAdminUser', JSON.stringify(user)); } catch(e) {}
+}
 
 function openAdminPanel() {
   document.getElementById('admin-modal').classList.add('open');
@@ -5132,20 +5143,60 @@ function openAdminPanel() {
 }
 function closeAdminPanel() { document.getElementById('admin-modal').classList.remove('open'); }
 
-async function renderAdminPanel(message = '') {
+const adminMsg = (kind, text) => text ? `<div class="msg-box ${kind}"><span class="msg-icon">${kind === 'success' ? '✓' : '⚠️'}</span><div>${escHtml(text)}</div></div>` : '';
+
+function newPasswordFields() {
+  return `<div class="student-field"><label>New password</label><input type="password" id="admin-new-password" autocomplete="new-password" minlength="8"></div>
+    <div class="student-field"><label>Repeat new password</label><input type="password" id="admin-new-password2" autocomplete="new-password" minlength="8"></div>
+    <div class="teach-help">At least 8 characters.</div><div id="admin-pw-msg"></div>`;
+}
+
+function readNewPassword() {
+  const p = document.getElementById('admin-new-password').value;
+  const c = document.getElementById('admin-new-password2').value;
+  if(p.length < 8) return { error: 'Use at least 8 characters.' };
+  if(p !== c) return { error: 'The two passwords do not match.' };
+  return { password: p };
+}
+
+async function renderAdminPanel(message = '', kind = '') {
   const body = document.getElementById('admin-body');
   if(!supabaseReady()) {
     body.innerHTML = '<p>Shared learning is not set up yet. Add the Supabase project URL and publishable key at the top of the learning script (see <code>supabase/setup.sql</code>).</p>';
     return;
   }
-  if(!_adminToken) {
-    body.innerHTML = `${message ? `<div class="msg-box error"><span class="msg-icon">⚠️</span><div>${escHtml(message)}</div></div>` : ''}
-      <p>Sign in with your Supabase admin account to review rules taught by staff.</p>
-      <div class="student-field"><label>Email</label><input type="email" id="admin-email" autocomplete="username"></div>
-      <div class="student-field"><label>Password</label><input type="password" id="admin-password" autocomplete="current-password"></div>
-      <button class="btn btn-primary" onclick="adminSignIn()">Sign in</button>`;
+  // Arrived from a "set your password" email link.
+  if(_recoveryToken) {
+    body.innerHTML = `${adminMsg(kind || 'error', message)}
+      <h3>Set your password</h3>
+      <p>Choose a new password for your admin account.</p>
+      ${newPasswordFields()}
+      <button class="btn btn-primary" onclick="adminSaveNewPassword(true)">Save password and sign in</button>`;
     return;
   }
+  if(!_adminToken) {
+    body.innerHTML = `${adminMsg(kind || 'error', message || _authLinkError)}
+      <p>Sign in with your admin account to review rules taught by staff.</p>
+      <div class="student-field"><label>Email</label><input type="email" id="admin-email" autocomplete="username"></div>
+      <div class="student-field"><label>Password</label><input type="password" id="admin-password" autocomplete="current-password"></div>
+      <button class="btn btn-primary" onclick="adminSignIn()">Sign in</button>
+      <p class="teach-help" style="margin-top:12px;">Forgot your password? Enter your email above and
+        <button type="button" class="footer-link" onclick="adminSendPasswordLink()">email me a link to set a new one</button>.</p>`;
+    _authLinkError = '';
+    return;
+  }
+  // Optional: offer to replace the password that was set for this admin.
+  const offerChange = !_passwordPromptHidden && !_adminUser?.user_metadata?.password_set;
+  const passwordCard = offerChange ? `<div class="teach-box admin-password-card">
+      <strong>Choose your own password (optional)</strong>
+      <p class="teach-help">You signed in with the password that was set for you. You can replace it with one only you know.</p>
+      ${newPasswordFields()}
+      <div class="admin-actions">
+        <button class="btn btn-primary" onclick="adminSaveNewPassword(false)">Save new password</button>
+        <button class="btn btn-ghost" onclick="adminPasswordPrompt('later')">Not now</button>
+        <button class="btn btn-ghost" onclick="adminPasswordPrompt('never')">Don't ask again</button>
+      </div>
+    </div>` : '';
   body.innerHTML = '<p>Loading rules…</p>';
   try {
     const rules = await sbFetch('/rest/v1/ocr_rules?status=in.(pending,approved)&order=created_at.desc&select=*', { token: _adminToken });
@@ -5157,13 +5208,17 @@ async function renderAdminPanel(message = '') {
         ? `<button class="btn btn-primary" onclick="adminSetStatus(${r.id}, 'approved')">Approve</button><button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected')">Reject</button>`
         : `<button class="btn btn-ghost" onclick="adminSetStatus(${r.id}, 'rejected')">Remove</button>`}</td></tr>`;
     const table = list => list.length ? `<div class="ocr-table-wrap"><table class="ocr-table"><thead><tr><th>Type</th><th>Level</th><th>Rule</th><th>Taught from</th><th></th></tr></thead><tbody>${list.map(row).join('')}</tbody></table></div>` : '<p class="teach-help">None.</p>';
-    body.innerHTML = `${message ? `<div class="msg-box success"><span class="msg-icon">✓</span><div>${escHtml(message)}</div></div>` : ''}
+    body.innerHTML = `${adminMsg(kind || 'success', message)}${passwordCard}
+      <p class="teach-help">Signed in as ${escHtml(_adminUser?.email || 'admin')}</p>
       <h3>Waiting for approval</h3>${table(rules.filter(r => r.status === 'pending'))}
       <h3>Approved (used by everyone)</h3>${table(rules.filter(r => r.status === 'approved'))}
-      <div class="ocr-actions"><button class="btn btn-ghost" onclick="adminSignOut()">Sign out</button></div>`;
+      <div class="ocr-actions">
+        ${offerChange ? '' : `<button class="btn btn-ghost" onclick="adminShowChangePassword()">Change password</button>`}
+        <button class="btn btn-ghost" onclick="adminSignOut()">Sign out</button>
+      </div>`;
   } catch(e) {
     if(/^401|JWT/i.test(e.message)) { adminSignOut(); renderAdminPanel('Your session expired. Please sign in again.'); return; }
-    body.innerHTML = `<div class="msg-box error"><span class="msg-icon">⚠️</span><div>${escHtml(e.message)}</div></div>`;
+    body.innerHTML = adminMsg('error', e.message);
   }
 }
 
@@ -5175,19 +5230,86 @@ async function adminSignIn() {
     const res = await sbFetch('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password } });
     const admins = await sbFetch(`/rest/v1/ocr_admins?user_id=eq.${res.user.id}&select=user_id`, { token: res.access_token });
     if(!admins.length) { renderAdminPanel('This account is not an admin. Ask the project owner to add it to the ocr_admins table.'); return; }
-    _adminToken = res.access_token;
-    try { sessionStorage.setItem('ocrAdminToken', _adminToken); } catch(e) {}
+    setAdminSession(res.access_token, res.user);
     renderAdminPanel();
   } catch(e) {
     renderAdminPanel('Sign-in failed: check the email and password.');
   }
 }
 
-function adminSignOut() {
-  _adminToken = '';
-  try { sessionStorage.removeItem('ocrAdminToken'); } catch(e) {}
+// Sends a Supabase "reset password" email; the link opens this page.
+async function adminSendPasswordLink() {
+  const email = (document.getElementById('admin-email')?.value || '').trim();
+  if(!/^\S+@\S+\.\S+$/.test(email)) { renderAdminPanel('Enter your email address first, then click the link again.'); return; }
+  try {
+    await sbFetch('/auth/v1/recover?redirect_to=' + encodeURIComponent(location.origin + location.pathname), { method: 'POST', body: { email }, prefer: 'return=minimal' });
+    renderAdminPanel('If this email belongs to an admin account, a link to set a new password is on its way. Open it on this computer.', 'success');
+  } catch(e) {
+    renderAdminPanel(/429|rate/i.test(e.message) ? 'Too many emails were requested. Please wait a few minutes and try again.' : 'The email could not be sent right now (' + e.message + ').');
+  }
+}
+
+async function adminSaveNewPassword(fromRecovery) {
+  const r = readNewPassword();
+  const msgEl = document.getElementById('admin-pw-msg');
+  if(r.error) { msgEl.innerHTML = adminMsg('error', r.error); return; }
+  const token = fromRecovery ? _recoveryToken : _adminToken;
+  try {
+    const user = await sbFetch('/auth/v1/user', { method: 'PUT', token, body: { password: r.password, data: { password_set: true } } });
+    if(fromRecovery) {
+      _recoveryToken = '';
+      const admins = await sbFetch(`/rest/v1/ocr_admins?user_id=eq.${user.id}&select=user_id`, { token });
+      if(admins.length) { setAdminSession(token, user); renderAdminPanel('Your password is saved and you are signed in.', 'success'); }
+      else renderAdminPanel('Your password is saved, but this account is not an admin.');
+    } else {
+      setAdminSession(_adminToken, user);
+      _passwordPromptHidden = true;
+      renderAdminPanel('Your new password is saved. Use it next time you sign in.', 'success');
+    }
+  } catch(e) {
+    const text = /same|different/i.test(e.message) ? 'Choose a password different from the current one.'
+      : /weak|short|characters/i.test(e.message) ? 'That password is too weak. Use a longer one with letters and numbers.'
+      : /401|expired|JWT/i.test(e.message) ? 'This link or session has expired. Request a new link from the sign-in form.'
+      : 'The password could not be saved (' + e.message + ').';
+    msgEl.innerHTML = adminMsg('error', text);
+  }
+}
+
+async function adminPasswordPrompt(action) {
+  if(action === 'never') {
+    try {
+      const user = await sbFetch('/auth/v1/user', { method: 'PUT', token: _adminToken, body: { data: { password_set: true } } });
+      setAdminSession(_adminToken, user);
+    } catch(e) { /* fall back to hiding it for this session */ }
+  }
+  _passwordPromptHidden = true;
   renderAdminPanel();
 }
+
+// "Change password" button for admins who already dismissed or used the prompt.
+function adminShowChangePassword() {
+  _passwordPromptHidden = false;
+  if(_adminUser?.user_metadata) _adminUser = { ..._adminUser, user_metadata: { ..._adminUser.user_metadata, password_set: false } };
+  renderAdminPanel();
+}
+
+function adminSignOut() {
+  _adminToken = '';
+  _adminUser = null;
+  _passwordPromptHidden = false;
+  try { sessionStorage.removeItem('ocrAdminToken'); sessionStorage.removeItem('ocrAdminUser'); } catch(e) {}
+  renderAdminPanel();
+}
+
+// Handle the return from a Supabase password email (#access_token=…&type=recovery).
+(function readAuthRedirect() {
+  const params = new URLSearchParams(location.hash.slice(1));
+  if(params.get('type') === 'recovery' && params.get('access_token')) _recoveryToken = params.get('access_token');
+  else if(params.get('error_description')) _authLinkError = 'The password link could not be used: ' + params.get('error_description').replace(/\+/g, ' ') + '. Request a new one below.';
+  else return;
+  history.replaceState(null, '', location.pathname + location.search);
+  setTimeout(openAdminPanel, 0);
+})();
 
 async function adminSetStatus(id, status) {
   try {
@@ -5195,7 +5317,7 @@ async function adminSetStatus(id, status) {
     learned.loadedAt = 0;
     renderAdminPanel(status === 'approved' ? 'Rule approved: it now applies for everyone.' : 'Rule removed.');
   } catch(e) {
-    renderAdminPanel(e.message);
+    renderAdminPanel(e.message, 'error');
   }
 }
 </script>
