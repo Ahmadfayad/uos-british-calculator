@@ -16,3 +16,4 @@ npm-debug.log*
 
 # Sample student documents (never commit)
 samples/
+node_modules/

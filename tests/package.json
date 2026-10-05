@@ -1,0 +1,9 @@
+﻿{
+  "name": "uos-british-calculator-tests",
+  "private": true,
+  "scripts": {
+    "test": "node below-minimum.test.js",
+    "test:ocr": "node ocr-status.test.js"
+  },
+  "devDependencies": { "playwright": "^1.50.0" }
+}

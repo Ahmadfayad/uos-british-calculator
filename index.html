@@ -919,6 +919,14 @@
       text-align: center;
     }
     .success-icon { font-size: 2.8rem; display: block; margin-bottom: 10px; animation: bounceIn 0.5s var(--ease-bounce) both; }
+    .success-modal-box.not-eligible { border-color: rgba(239,68,68,0.45); box-shadow: 0 20px 60px rgba(239,68,68,0.18); }
+    .success-modal-box.not-eligible .modal-title { color: #ef4444; }
+    #success-message .ineligible-lead { font-size: 1.05rem; font-weight: 700; color: #ef4444; }
+    #success-message .big-pct.x, .success-modal-box.not-eligible #success-message .big-pct {
+      background: linear-gradient(135deg, #f87171, #dc2626); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    #success-message .ineligible-box { margin: 12px 0 10px; padding: 10px 14px; border-radius: 12px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); font-size: 0.88rem; line-height: 1.6; }
+    #success-message .ineligible-note { font-size: 0.8rem; color: var(--text-3); }
     #success-message { font-size: 0.95rem; color: var(--text-2); line-height: 1.7; overflow-wrap: anywhere; word-break: break-word; }
     #success-message p { margin: 0 0 8px; }
     #success-message .success-note { font-size: 0.82rem; color: var(--text-3); margin-top: 4px; }
@@ -1297,15 +1305,15 @@
   </div>
 </div>
 <div id="success-modal" class="modal-overlay">
-  <div class="modal-box success-modal-box">
-    <div class="modal-header"><h2 class="modal-title">Result</h2><button class="modal-close" onclick="closeSuccessModal()">×</button></div>
-    <span class="success-icon">🎉</span>
+  <div class="modal-box success-modal-box" id="success-modal-box">
+    <div class="modal-header"><h2 class="modal-title" id="success-title">Result</h2><button class="modal-close" onclick="closeSuccessModal()">×</button></div>
+    <span class="success-icon" id="success-icon">🎉</span>
     <div id="success-message"></div>
     <div class="success-actions">
-      <button class="btn btn-primary" onclick="closeSuccessModalAndScrollToScenarios()">View My Scenarios</button>
+      <button class="btn btn-primary" onclick="closeSuccessModalAndScrollToScenarios()" id="success-primary-btn">View My Scenarios</button>
       <button class="btn btn-ghost" onclick="closeSuccessModal()" style="margin-top:8px;">Done</button>
     </div>
-    <p style="font-size:0.72rem;color:var(--text-3);margin-top:10px;text-align:center;">This message will close automatically in a few seconds.</p>
+    <p id="success-autoclose-note" style="font-size:0.72rem;color:var(--text-3);margin-top:10px;text-align:center;">This message will close automatically in a few seconds.</p>
   </div>
 </div>
 <div id="ocr-modal" class="modal-overlay" data-static="true">
@@ -1691,6 +1699,17 @@ function getPdfMajorPriority(key) {
   return ({ med: 1, dent: 2, pharm: 3, sci: 4, gen: 5, com: 6, lit: 7 }[key] || 99);
 }
 const PERCENTAGE_DECIMALS = 4;
+// Below this average a student is not eligible for any UOS program.
+const MIN_ADMISSION_PCT = 70;
+// Compared at the precision shown, so "70.0000%" is never reported as below 70%.
+function isBelowMinimum(value) {
+  const num = Number(value);
+  return Number.isFinite(num) && Number(num.toFixed(PERCENTAGE_DECIMALS)) < MIN_ADMISSION_PCT;
+}
+function eligibleMajorsText(scenario) {
+  if(scenario.belowMinimum) return `Not eligible: average below ${MIN_ADMISSION_PCT}%`;
+  return scenario.majorTypes.map(m => m.label).join(', ') || 'None';
+}
 function formatPercentage(value) {
   const num = Number(value);
   return Number.isFinite(num) ? `${num.toFixed(PERCENTAGE_DECIMALS)}%` : '-';
@@ -2478,6 +2497,7 @@ function recalculateScenario(scenario) {
   scenario.aCount = scenario.subjects.filter(s => s.level === 'a-level').length;
   scenario.moeCount = scenario.subjects.filter(s => s.level === 'moe').length;
   scenario.isValidCombination = meetsBaseCombination(scenario.subjects);
+  scenario.belowMinimum = isBelowMinimum(scenario.percentage);
   const pool = eligibilityPool(scenario);
   scenario.majorChecks = evaluateMajorRequirements(pool, scenario.percentage);
   scenario.majorTypes = detectMajorTypes(scenario.subjects.filter(s => s.level !== 'moe'), scenario.percentage, pool);
@@ -2747,6 +2767,7 @@ function renderScenarioCards() {
         ${scenarioTypeChip}
         ${scenario.isValidCombination ? '' : '<span class="scenario-meta-chip invalid" title="After editing, this scenario no longer contains an accepted 7-subject combination">⚠ Not a valid combination</span>'}
         ${scenario.categories.map(c=>`<span class="scenario-meta-chip">${c}</span>`).join('')}
+        ${scenario.belowMinimum ? `<span class="scenario-meta-chip invalid" title="Averages below ${MIN_ADMISSION_PCT}% are not eligible for any UOS program">🚫 Not eligible: below ${MIN_ADMISSION_PCT}%</span>` : ''}
         ${scenario.majorTypes.map(m=>`<span class="scenario-meta-chip ${m.key}">✓ ${m.label}</span>`).join('')}
       </div>
       <div class="scenario-table-wrap">
@@ -2909,9 +2930,29 @@ function calculateOverallPercentage() {
     ${best.majorTypes.map(m=>`<p class="success-major" style="color:${majorColor(m.key)}">✅ Eligible: ${m.label} Majors</p>`).join('')}
   `;
   closeMobileBreakdown();
+  const box = document.getElementById('success-modal-box');
+  const ineligible = !!best.belowMinimum;
+  box.classList.toggle('not-eligible', ineligible);
+  document.getElementById('success-icon').textContent = ineligible ? '🚫' : '🎉';
+  document.getElementById('success-title').textContent = ineligible ? 'Not Eligible' : 'Result';
+  document.getElementById('success-primary-btn').textContent = ineligible ? 'View Breakdown' : 'View My Scenarios';
+  document.getElementById('success-autoclose-note').style.display = ineligible ? 'none' : '';
+  if(ineligible) {
+    const gap = MIN_ADMISSION_PCT - best.percentage;
+    document.getElementById('success-message').innerHTML=`
+      <p class="ineligible-lead">The average is below the UOS minimum.</p>
+      <span class="big-pct">${formatPercentage(best.percentage)}</span>
+      <p class="success-note">Highest Overall Admission Percentage</p>
+      <div class="ineligible-box">
+        <div><strong>Minimum required:</strong> ${MIN_ADMISSION_PCT}%</div>
+        <div><strong>Shortfall:</strong> ${gap.toFixed(PERCENTAGE_DECIMALS)} points</div>
+      </div>
+      <p class="ineligible-note">With an average below ${MIN_ADMISSION_PCT}%, the student is <strong>not eligible for any UOS program</strong>, so no majors are shown. The breakdown shows how the average was calculated.</p>
+    `;
+  }
   document.getElementById('success-modal').classList.add('open');
-  if(_successModalAutoCloseTimer){clearTimeout(_successModalAutoCloseTimer);}
-  _successModalAutoCloseTimer=setTimeout(()=>{document.getElementById('success-modal').classList.remove('open');_successModalAutoCloseTimer=null;},3500);
+  if(_successModalAutoCloseTimer){clearTimeout(_successModalAutoCloseTimer);_successModalAutoCloseTimer=null;}
+  if(!ineligible) _successModalAutoCloseTimer=setTimeout(()=>{document.getElementById('success-modal').classList.remove('open');_successModalAutoCloseTimer=null;},3500);
   }, 0)); // end deferred block
 }
 
@@ -3126,6 +3167,7 @@ function evaluateMajorRequirements(pool, overallPercentage) {
 }
 
 function detectMajorTypes(subjects, overallPercentage = null, allStudentSubjects = subjects) {
+  if(isBelowMinimum(overallPercentage)) return [];
   const majors = [];
   const addMajor = (key, label) => {
     if(!majors.some(m=>m.key===key)) majors.push({key, label});
@@ -3231,11 +3273,18 @@ function downloadScenarioPDF(idx, studentName='', studentId='', employeeName='')
   if(!scenarios || !scenarios[idx]) return;
   loadJsPDF(()=>_preloadLogo(()=>_doDownloadScenarioPDF(idx, studentName, studentId, employeeName)));
 }
+function drawNotEligiblePill(doc, y) {
+  const label = `Not eligible: average below ${MIN_ADMISSION_PCT}%`;
+  doc.setFontSize(7); doc.setFont('helvetica','bold');
+  doc.setFillColor(254, 226, 226); doc.roundedRect(15, y, doc.getTextWidth(label) + 8, 6, 1.5, 1.5, 'F');
+  doc.setTextColor(185, 28, 28);
+  doc.text(label, 19, y + 4.2);
+}
 function _calcScenarioPDFBodyHeight(scenario) {
   const allEntries = window._allScenarioEntries || [];
   const included = new Set(scenario.subjects.map(scenarioSubjectKey));
   const excluded = allEntries.filter(s => !included.has(scenarioSubjectKey(s)));
-  const hasMajorTypes = !!(scenario.majorTypes && scenario.majorTypes.length);
+  const hasMajorTypes = !!(scenario.belowMinimum || (scenario.majorTypes && scenario.majorTypes.length));
   let h = 34; // scenario title rect + spacing
   h += (hasMajorTypes ? 10 : 0) + 12; // meta chips
   h += 9; // table header
@@ -3289,7 +3338,10 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
   doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(71, 85, 105);
   doc.text(`Combination: ${comboText}`, 15, yPos);
   doc.text(`Categories: ${scenario.categories.join(', ')}`, 15, yPos+6);
-  if(scenario.majorTypes && scenario.majorTypes.length) {
+  if(scenario.belowMinimum) {
+    drawNotEligiblePill(doc, yPos + 11);
+    yPos += 10;
+  } else if(scenario.majorTypes && scenario.majorTypes.length) {
     const majorBg  = {sci:[226,232,240], gen:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
     const pillH = 6, pillPad = 4, gap = 3;
     let pillX = 15;
@@ -3494,7 +3546,10 @@ function _doDownloadData(studentName='', studentId='', preferredIdx=null, employ
     doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(71, 85, 105);
     doc.text(`Combination: ${comboText}`, 15, yPos);
     doc.text(`Categories: ${scenario.categories.join(', ')}`, 15, yPos+6);
-    if(scenario.majorTypes && scenario.majorTypes.length) {
+    if(scenario.belowMinimum) {
+      drawNotEligiblePill(doc, yPos + 11);
+      yPos += 10;
+    } else if(scenario.majorTypes && scenario.majorTypes.length) {
       const majorBg  = {sci:[226,232,240], gen:[226,232,240], com:[226,232,240], lit:[226,232,240], med:[226,232,240], dent:[226,232,240], pharm:[226,232,240]};
       const pillH = 6, pillPad = 4, gap = 3;
       let pillX = 15;
@@ -3584,7 +3639,7 @@ function exportScenarioToExcel(idx, studentName='', studentId='', employeeName='
       ['Overall Percentage', formatPercentage(scenario.percentage)],
       ['Combination', scenarioComboText(scenario)],
       ['Categories', scenario.categories.join(', ')],
-      ['Eligible Majors', scenario.majorTypes.map(m => m.label).join(', ') || 'None'],
+      ['Eligible Majors', eligibleMajorsText(scenario)],
       [],
       ['Subject Details'],
       ['Subject', 'Level', 'Category', 'Grade', 'Result Type', 'Score (%)']
@@ -3651,7 +3706,7 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
         formatPercentage(scenario.percentage),
         scenarioComboText(scenario),
         scenario.categories.join(', '),
-        scenario.majorTypes.map(m => m.label).join(', ') || 'None'
+        eligibleMajorsText(scenario)
       ]);
     });
     
@@ -3681,7 +3736,7 @@ function exportAllScenariosToExcel(studentName='', studentId='', employeeName=''
         ['Overall Percentage', formatPercentage(scenario.percentage)],
         ['Combination', scenarioComboText(scenario)],
         ['Categories', scenario.categories.join(', ')],
-        ['Eligible Majors', scenario.majorTypes.map(m => m.label).join(', ') || 'None'],
+        ['Eligible Majors', eligibleMajorsText(scenario)],
         [],
         ['Subject', 'Level', 'Category', 'Grade', 'Result Type', 'Score (%)']
       );
