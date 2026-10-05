@@ -4405,9 +4405,48 @@ function sectionHeading(line) {
   const level = /\bA[\s-]?LEVELS?\b|\bGCE A\b|\bA2\b|ADVANCED\s+GCE/i.test(line) ? 'a-level'
     : /\bAS[\s-]?LEVELS?\b|ADVANCED SUBSIDIARY/i.test(line) ? 'as-level'
     : /\bI?GCSE\b|\bO[\s-]?LEVELS?\b/i.test(line) ? 'o-level' : '';
-  const predicted = /PREDICTED|FORECAST/i.test(line);
-  const attained = /ATTAINED|ACHIEVED|AWARDED/i.test(line);
-  return level || predicted || attained ? { level, predicted, attained } : null;
+  const predicted = /PREDICT|FORECAST/i.test(line);
+  const internal = /END OF YEAR|\bINTERNAL\b|\bMOCK\b/i.test(line);
+  const attained = /ATTAINED|ACHIEVED|AWARDED|OFFICIAL EXAM/i.test(line);
+  return level || predicted || internal || attained ? { level, predicted, internal, attained } : null;
+}
+
+// ── Final or Expected? ──
+// Decided from the evidence on each page and in each row, never from one word
+// anywhere in the file: a PDF often holds board certificates, a school's
+// predicted-grades letter and a provisional statement together.
+// A provisional board result counts as final (UOS rule); predicted and internal
+// school grades are expected; a results-website screenshot is left to staff.
+const BOARD_NAME = /CAMBRIDGE|PEARSON|EDEXCEL|\bAQA\b|\bOCR\b/i;
+const BOARD_PAGE = /CERTIFIES\s+THAT|STATEMENT\s+OF\s+(?:PROVISIONAL\s+)?RESULTS|SYLLABUS(?:ES)?\s+REPORTED|ACHIEVED\s+THE\s+FOLLOWING|AWARDED\s+THE\s+FOLLOWING|VICE[\s-]?CHANCELLOR|CANDIDATE\s+(?:STATEMENT|NUMBER)|CERTIFICATE\s+NUMBER/i;
+const SCHOOL_PAGE = /TO\s+WHOM\s+IT\s+MAY|BONA\s?FIDE|REPORT\s+CARD|INTERIM\s+REPORT|PROGRESS\s+REPORT|TRANSCRIPT|ACADEMIC\s+RECORD|PREDICTED\s+GRADES?\s+(?:REPORT|LETTER)/i;
+const PORTAL_PAGE = /RESULTSPLUS|MYRESULTS\.CIE|RESULTS\s+DIRECT|CANDIDATE\s*RESULTS|RESULTS\s+DISPLAYED\s+ARE|YOUR\s+EXAMINATION\s+RESULTS/i;
+const ROW_PREDICTED = /PREDICT|FORECAST/i;
+const ROW_INTERNAL = /\bINTERNAL\b|END\s+OF\s+YEAR|\bMOCK\b/i;
+const ROW_ACHIEVED = /\bPASSED\b|\bATTAINED\b|\bACHIEVED\b/i;
+
+function classifyPageStatus(text) {
+  const t = text || '';
+  if(PORTAL_PAGE.test(t)) return { status: 'unclear', why: 'Screenshot of a results website: confirm whether these results are final' };
+  const school = SCHOOL_PAGE.test(t);
+  // Statements carry "Candidate Name" and "Centre"; the board's logo may be an image OCR cannot read.
+  const boardLayout = BOARD_PAGE.test(t) && (BOARD_NAME.test(t) || (/CANDIDATE\s+NAME/i.test(t) && /CENTRE/i.test(t)));
+  if(!school && boardLayout) return { status: 'final', why: 'Official board result' };
+  const predicted = ROW_PREDICTED.test(t), achieved = ROW_ACHIEVED.test(t) || /OFFICIAL\s+EXAM/i.test(t);
+  if(predicted && !achieved) return { status: 'expected', why: 'Predicted by the school' };
+  if(achieved && !predicted) return { status: 'final', why: 'School document stating the results were achieved' };
+  if(/REPORT\s+CARD|INTERIM\s+REPORT|PROGRESS\s+REPORT/i.test(t) && !predicted && !achieved) return { status: 'expected', why: 'Internal school report, not a board result' };
+  return { status: 'unclear', why: predicted ? 'Predicted and achieved results appear together' : 'Document type not recognised' };
+}
+
+// The row's own wording beats its section, which beats the page.
+function rowResultStatus(r) {
+  const raw = r.raw || '';
+  if(ROW_PREDICTED.test(raw)) return { status: 'expected', why: 'Predicted by the school' };
+  if(ROW_INTERNAL.test(raw)) return { status: 'expected', why: 'Internal school grade, not a board result' };
+  if(ROW_ACHIEVED.test(raw)) return { status: 'final', why: 'Stated as achieved' };
+  if(r.sectionStatus) return r.sectionStatus;
+  return r.pageStatus || { status: 'unclear', why: 'Document type not recognised' };
 }
 
 function isSkippedLine(line) {
@@ -4620,10 +4659,6 @@ function parseDocument(pages, fileName, engine) {
   const found = [], nearMisses = [];
   const allText = pages.map(p => p.text).join('\n');
   const arabicText = pages.map(p => p.arabicText || '').join('\n');
-  const provisional = /PROVISIONAL/i.test(allText);
-  // School letters with predicted grades come before the board certificate. When a
-  // document mixes attained and predicted sections, each section decides for itself.
-  const docPredicted = !provisional && /PREDICTED|FORECAST/i.test(allText) && !/ATTAINED|ACHIEVED/i.test(allText);
   const pushRow = (row, extra) => {
     if(!row.grade2) { found.push({ ...row, ...extra }); return; }
     // A double award ("7-7") counts as two subjects; double science maps to the
@@ -4634,16 +4669,25 @@ function parseDocument(pages, fileName, engine) {
   };
   pages.forEach(pg => {
     const pgLevel = pageLevel(pg.text);
-    let section = { level: '', predicted: false };
+    const pageStatus = classifyPageStatus(pg.text);
+    let section = { level: '', status: null };
     pg.text.split('\n').forEach((raw, lineNo) => {
       const line = cleanOcrLine(raw);
       if(isSkippedLine(line)) return;
+      const rowInfo = { raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, sectionStatus: section.status, pageStatus };
       const row = parseResultLine(line, section.level || pgLevel, pg.text, !!section.level);
-      if(row) { pushRow(row, { raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, sectionPredicted: section.predicted }); return; }
+      if(row) { pushRow(row, rowInfo); return; }
       const h = sectionHeading(line);
-      if(h) { section = { level: h.level || section.level, predicted: h.predicted ? true : (h.attained || h.level ? false : section.predicted) }; return; }
+      if(h) {
+        section.level = h.level || section.level;
+        if(h.predicted) section.status = { status: 'expected', why: 'Predicted by the school' };
+        else if(h.internal) section.status = { status: 'expected', why: 'Internal school grade, not a board result' };
+        else if(h.attained) section.status = { status: 'final', why: 'Stated as achieved' };
+        else if(h.level) section.status = null;
+        return;
+      }
       const miss = nearMissLine(line, section.level || pgLevel);
-      if(miss) nearMisses.push({ ...miss, raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, sectionPredicted: section.predicted });
+      if(miss) nearMisses.push({ ...miss, ...rowInfo });
     });
   });
   // A known subject whose grade was misread ("Biology Cc") is shown for staff to
@@ -4655,8 +4699,7 @@ function parseDocument(pages, fileName, engine) {
     parseMoeRows(layerArabic, arabicText, allText).forEach(r => found.push({ ...r, raw: r.rawSubject, page: moePage?.page ?? 1, pageConfidence: moePage?.confidence ?? 0, source: moePage?.source }));
   }
   return found.map(r => {
-    const predicted = docPredicted || !!r.sectionPredicted;
-    const expected = provisional || predicted;
+    const verdict = r.level === 'moe' ? { status: 'final' } : rowResultStatus(r);
     const match = r.subject ? { subject: r.subject, how: 'exact' } : matchOcrSubject(r.rawSubject, r.level);
     const notes = [], reasons = new Set();
     if(r.uncertain) { notes.push(r.uncertain); reasons.add('format'); }
@@ -4682,8 +4725,10 @@ function parseDocument(pages, fileName, engine) {
       }
     }
     if(r.source === 'ocr' && r.pageConfidence < 70) { notes.push(`Low scan quality (${r.pageConfidence}%)`); reasons.add('quality'); }
-    if(provisional && r.level !== 'moe') notes.push('Provisional result, set to Expected');
-    if(predicted && r.level !== 'moe') notes.push('Predicted grade from the school, set to Expected');
+    if(r.level !== 'moe') {
+      if(verdict.status === 'unclear') { notes.push(`Final or Expected? ${verdict.why}. Choose in the Result column`); reasons.add('status'); }
+      else notes.push(`${verdict.status === 'final' ? 'Final' : 'Expected'}: ${verdict.why}`);
+    }
     if((gradeNotes[r.level] || {})[r.grade]) notes.push('Conditional grade (*)');
     return {
       include: !belowScale,
@@ -4691,7 +4736,8 @@ function parseDocument(pages, fileName, engine) {
       subject: match.subject,
       grade: r.grade || '',
       mark,
-      status: expected && r.level !== 'moe' ? 'expected' : 'final',
+      // An unclear status starts as Expected, the cautious choice, until staff decide.
+      status: r.level !== 'moe' && verdict.status !== 'final' ? 'expected' : 'final',
       raw: r.raw, file: fileName, page: r.page, box: r.box || null, engine, rawSubject: r.rawSubject, matchHow: match.how, revised: !!r.revised,
       notes, reasons
     };
@@ -5115,8 +5161,11 @@ document.getElementById('ocr-review').addEventListener('change', e => {
   } else {
     row[field] = el.value;
   }
-  // A change by staff counts as reviewed (the Result column alone does not).
-  if(field !== 'status') row.edited = true;
+  // A change by staff counts as reviewed (the Result column alone does not), except
+  // that choosing Final or Expected settles a status the reader could not decide.
+  if(field === 'status') {
+    if(row.reasons.delete('status')) row.notes = row.notes.filter(n => !n.startsWith('Final or Expected?'));
+  } else row.edited = true;
   renderOcrReview();
 });
 

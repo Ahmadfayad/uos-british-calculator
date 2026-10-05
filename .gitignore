@@ -13,3 +13,6 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
+
+# Sample student documents (never commit)
+samples/
