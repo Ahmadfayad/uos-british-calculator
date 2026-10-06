@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UOS local OCR test</title>
+<style>
+body{font:16px system-ui;max-width:760px;margin:40px auto;padding:0 20px;background:#f5f7fb;color:#172033}
+label{display:block;margin:20px 0 8px}input,select,button{font:inherit;max-width:100%;padding:10px}button{margin-top:20px;cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:white;padding:20px;border-radius:12px}#status{min-height:24px}
+</style>
+<h1>Local OCR speed test</h1>
+<p>Files stay on this computer. This test reads text; check every grade against the certificate. The online calculator is not connected yet.</p>
+<form id="form">
+<label for="level">Certificate type</label>
+<select id="level"><option value="o-level">O-Level / IGCSE</option><option value="as-level">AS-Level</option><option value="a-level">A-Level</option><option value="moe">MOE Grade 12</option></select>
+<label for="file">PDF or image (up to 50 MB; PDFs up to 60 pages)</label>
+<input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" required>
+<br><button id="read">Read certificate</button>
+</form>
+<p id="status" role="status" aria-live="polite"></p><pre id="output" hidden></pre>
+<script>
+document.getElementById('form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const file=document.getElementById('file').files[0],button=document.getElementById('read'),status=document.getElementById('status'),output=document.getElementById('output');
+  if(!file)return;
+  button.disabled=true;output.hidden=true;
+  const start=performance.now();
+  const timer=setInterval(()=>{status.textContent=`Reading… ${Math.round((performance.now()-start)/1000)} seconds elapsed`;},1000);
+  status.textContent='Reading…';
+  try{
+    const response=await fetch('/ocr?level='+encodeURIComponent(document.getElementById('level').value),{method:'POST',headers:{'Content-Type':file.name.toLowerCase().endsWith('.pdf')?'application/pdf':'application/octet-stream'},body:file});
+    const data=await response.json();
+    if(!response.ok)throw Error(data.error||'Could not read the file');
+    status.textContent=`Finished: ${data.pages.length} page(s) in ${((performance.now()-start)/1000).toFixed(1)} seconds. Compare the grades with the original.`;
+    output.textContent=data.pages.map(page=>`Page ${page.page} (${page.seconds}s)\n${page.text}${page.arabicText?'\nArabic reading:\n'+page.arabicText:''}`).join('\n\n');output.hidden=false;
+  }catch(error){status.textContent=error.message;}
+  finally{clearInterval(timer);button.disabled=false;}
+});
+</script>
+</html>

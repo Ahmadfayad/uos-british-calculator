@@ -1128,7 +1128,7 @@
       <input type="file" id="ocr-file-as" accept=".pdf,application/pdf,image/*" multiple hidden>
       <input type="file" id="ocr-file-a" accept=".pdf,application/pdf,image/*" multiple hidden>
       <input type="file" id="ocr-file-moe" accept=".pdf,application/pdf,image/*" multiple hidden>
-      <div class="ocr-privacy">🔒 Files are read on this computer only. Nothing is uploaded.</div>
+      <div class="ocr-privacy">🔒 Auto uses the connected work OCR computer when available; otherwise, files are read in this browser. Uploaded pages are processed in memory, not saved by the OCR service.</div>
     </div>
     <div class="bulk-add-section" id="bulk-add-section">
       <button class="bulk-toggle" type="button" onclick="toggleQuickEntry()" aria-expanded="false" aria-controls="bulk-add-content" id="bulk-toggle-btn">
@@ -3880,12 +3880,12 @@ const PADDLE_MODELS = {
 };
 
 const OCR_ENGINES = {
-  auto: 'Auto: PaddleOCR, with Tesseract as backup (recommended)',
+  auto: 'Auto: Work PC when connected, browser OCR as backup (recommended)',
   paddle: 'PaddleOCR only (most accurate)',
   tesseract: 'Tesseract only (lighter download)',
   both: 'Both engines combined (most thorough, slower)'
 };
-const ENGINE_NAMES = { paddle: 'PaddleOCR', tesseract: 'Tesseract' };
+const ENGINE_NAMES = { paddle: 'PaddleOCR', tesseract: 'Tesseract', openvino: 'Work PC OCR' };
 
 function getOcrEngine() {
   const value = document.getElementById('ocr-engine')?.value;
@@ -4220,7 +4220,38 @@ function looksLikeMoeDocument(text) {
   return /Ministry of Education/i.test(text) && !/\bGRADE\s+[1-9A-G]\b|\bAWARD\b/.test(text);
 }
 
-const PAGE_READERS = { paddle: paddleReadPage, tesseract: tesseractReadPage };
+async function workOcrAvailable() {
+  try {
+    const response = await fetch('/api/ocr', { signal: AbortSignal.timeout(2000), cache: 'no-store' });
+    return response.ok && (await response.json()).available === true;
+  } catch { return false; }
+}
+
+async function workOcrReadPage(canvas, opts = {}) {
+  if(opts.remoteState?.enabled && opts.allowRemotePNG !== false) {
+    try {
+      // Lossless, full-resolution pages preserve the tested certificate detail.
+      const image = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      if(!image || image.size > 4 * 1024 * 1024) throw new Error('Page exceeds gateway size');
+      const level = opts.forceArabic ? 'moe' : (opts.level || 'moe');
+      const response = await fetch('/api/ocr?level=' + encodeURIComponent(level), {
+        method: 'POST', headers: { 'Content-Type': 'image/png' }, body: image,
+        signal: AbortSignal.timeout(14000)
+      });
+      if(!response.ok) throw new Error('Work OCR unavailable');
+      const read = (await response.json()).pages?.[0];
+      if(typeof read.text !== 'string' || !Array.isArray(read.lineBoxes)) throw new Error('Invalid OCR result');
+      return read;
+    } catch {
+      opts.remoteState.enabled = false;
+      opts.remoteState.failed = true;
+    }
+  }
+  try { return { ...await paddleReadPage(canvas, opts), fallbackEngine: 'paddle' }; }
+  catch { return { ...await tesseractReadPage(canvas, opts), fallbackEngine: 'tesseract' }; }
+}
+
+const PAGE_READERS = { paddle: paddleReadPage, tesseract: tesseractReadPage, openvino: workOcrReadPage };
 
 // Reads every page of a file with each requested engine. Each page is
 // rendered once and shared by the engines; when two engines are used they
@@ -4984,6 +5015,40 @@ const _ocrPageCache = new Map();
 async function readFileWithEngine(file, fingerprint, engine, onStatus, opts = {}) {
   const key = `${fingerprint}|${engine}`;
   if(_ocrPageCache.has(key)) return _ocrPageCache.get(key);
+  if(engine === 'openvino' && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name))) {
+    // Send the original PDF: browser rasterisation changed one grade in the test.
+    if(file.size <= 4 * 1024 * 1024 && opts.remoteState?.enabled) {
+      const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+      let scanned = pdf.numPages <= 3;
+      const arabicLayers = [];
+      try {
+        for(let p = 1; scanned && p <= pdf.numPages; p++) {
+          const page = await pdf.getPage(p);
+          const layer = textLayerToLines((await page.getTextContent()).items, page.getViewport({ scale: 1 })).text;
+          arabicLayers[p - 1] = /[؀-ۿ]{3,}/.test(layer) ? layer : '';
+          scanned = !hasResultLines(layer) || !!arabicLayers[p - 1];
+          page.cleanup();
+        }
+      } finally { await pdf.destroy(); }
+      if(scanned) {
+        try {
+          onStatus('Reading certificate on the work OCR computer…');
+          const response = await fetch('/api/ocr?level=' + encodeURIComponent(arabicLayers.some(Boolean) ? 'moe' : (opts.level || 'moe')), {
+            method: 'POST', headers: { 'Content-Type': 'application/pdf' }, body: file,
+            signal: AbortSignal.timeout(14000)
+          });
+          if(!response.ok) throw new Error('Work OCR unavailable');
+          const pages = (await response.json()).pages;
+          if(!Array.isArray(pages) || pages.length !== pdf.numPages || pages.some(pg => typeof pg.text !== 'string')) throw new Error('Invalid OCR result');
+          pages.forEach((pg, index) => { if(arabicLayers[index]) pg.layerArabic = arabicLayers[index]; });
+          _ocrPageCache.set(key, pages);
+          return pages;
+        } catch { opts.remoteState.enabled = false; opts.remoteState.failed = true; }
+      }
+    }
+    // Larger/mixed PDFs retain the existing text-layer and browser OCR path.
+    opts = { ...opts, allowRemotePNG: false };
+  }
   const pages = (await extractPages(file, [engine], onStatus, opts))[engine];
   _ocrPageCache.set(key, pages);
   return pages;
@@ -5016,6 +5081,13 @@ async function readCertificateFile(file, fingerprint, mode, onStatus, opts = {})
   }
   // Auto: PaddleOCR first; Tesseract reads the file again if PaddleOCR is
   // unavailable, fails, or finds no subjects, so a file is never left unread.
+  if(opts.remoteState?.enabled) {
+    const pages = await readFileWithEngine(file, fingerprint, 'openvino', onStatus, opts);
+    const rows = parseDocument(pages, file.name, 'openvino');
+    if(rows.length) return { rows, used: rows.some(r => r.engine === 'openvino') ? (opts.remoteState.failed ? 'Work PC OCR with browser retries' : 'Work PC OCR') : 'Browser OCR' };
+    onStatus('Checking unrecognised results with Tesseract…');
+    return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus, opts), file.name, 'tesseract'), used: 'Tesseract', fallback: true };
+  }
   if(!_paddleUnavailable) {
     try {
       const rows = parseDocument(await readFileWithEngine(file, fingerprint, 'paddle', onStatus, { ...opts, fallback: true }), file.name, 'paddle');
@@ -5031,7 +5103,7 @@ async function readCertificateFile(file, fingerprint, mode, onStatus, opts = {})
 function warmUpOcr() {
   const mode = getOcrEngine();
   loadPdfLibrary().catch(() => {});
-  if(mode !== 'tesseract') ensurePaddleReady().catch(() => {});
+  if(mode === 'paddle' || mode === 'both') ensurePaddleReady().catch(() => {});
   if(mode === 'tesseract' || mode === 'both') getTessWorker('eng').catch(() => {});
 }
 
@@ -5068,11 +5140,13 @@ async function handleCertificateFiles(fileList, level = '') {
   const started = performance.now();
   const progress = files.map(f => ({ name: f.name, state: 'Waiting…' }));
   const warnings = [];
+  const remoteState = { enabled: false, failed: false };
   try {
     progress.forEach(p => p.state = 'Loading the reading engine (downloaded once, then cached)…');
     setOcrProgress(progress);
     await loadPdfLibrary();
-    if(mode !== 'tesseract') {
+    remoteState.enabled = mode === 'auto' && await workOcrAvailable();
+    if(mode !== 'tesseract' && !remoteState.enabled) {
       try {
         await ensurePaddleReady();
       } catch(e) {
@@ -5108,13 +5182,13 @@ async function handleCertificateFiles(fileList, level = '') {
       }
       seen.set(fp, file.name);
       batchFiles.set(fp, file);
-      const res = await readCertificateFile(file, fp, mode, msg => { p.state = msg; setOcrProgress(progress); }, { british: !!level && level !== 'moe' });
+      const res = await readCertificateFile(file, fp, mode, msg => { p.state = msg; setOcrProgress(progress); }, { british: !!level && level !== 'moe', level, remoteState });
       if(level && res.rows.some(r => r.level !== level)) warnings.push(`<strong>${escHtml(file.name)}</strong> contains results outside the selected certificate type. Check the detected levels below; all results have been kept.`);
       rows.push(...res.rows);
       const n = res.rows.length;
       p.state = n ? `${n} subject${n > 1 ? 's' : ''} found · ${res.used}` : `No subjects found · ${res.used}`;
       p.cls = n ? 'done' : 'error';
-      const readText = (_ocrPageCache.get(fp + '|paddle') || _ocrPageCache.get(fp + '|tesseract') || []).map(pg => pg.text).join(' ');
+      const readText = (_ocrPageCache.get(fp + '|openvino') || _ocrPageCache.get(fp + '|paddle') || _ocrPageCache.get(fp + '|tesseract') || []).map(pg => pg.text).join(' ');
       if(!n && /AICE\s+Diploma/i.test(readText)) warnings.push(`<strong>${escHtml(file.name)}</strong> is an AICE Diploma certificate: it shows the diploma award but no subjects. Upload the AS & A Level statement of results or certificate instead.`);
       else if(!n) warnings.push(`No subjects were recognised in <strong>${escHtml(file.name)}</strong>. Add them manually, teach the reader its layout below, or try another reading engine.`);
     } catch(e) {
@@ -5126,7 +5200,8 @@ async function handleCertificateFiles(fileList, level = '') {
 
   if(_ocrCancelled) { _ocrBusy = false; return; }
   // Keep what was read so staff can teach layouts from unrecognised lines.
-  window._ocrBatch = [...seen].map(([fp, name]) => ({ name, file: batchFiles.get(fp), pages: _ocrPageCache.get(`${fp}|paddle`) || _ocrPageCache.get(`${fp}|tesseract`) || [] }));
+  window._ocrBatch = [...seen].map(([fp, name]) => ({ name, file: batchFiles.get(fp), pages: _ocrPageCache.get(`${fp}|openvino`) || _ocrPageCache.get(`${fp}|paddle`) || _ocrPageCache.get(`${fp}|tesseract`) || [] }));
+  if(remoteState.failed) warnings.push('The work OCR computer was unavailable or busy. Remaining pages were read in this browser.');
   window._ocrRows = resolveRepeatedSubjects(rows);
   const secs = Math.round((performance.now() - started) / 1000);
   setOcrProgress(progress, `Finished in ${secs} s · ${OCR_ENGINES[mode]}`);

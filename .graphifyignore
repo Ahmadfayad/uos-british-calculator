@@ -5,3 +5,12 @@ tests/node_modules/
 .kilo/
 models/
 graphify-out/
+
+.venv-rapidocr/
+
+.rapidocr-cache/
+portable-ocr/.venv/
+portable-ocr/models/
+downloads/
+portable-ocr/connection-key.txt
+portable-ocr/cloudflared.exe

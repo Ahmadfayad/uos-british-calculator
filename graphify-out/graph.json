@@ -4,124 +4,102 @@
   "graph": {},
   "nodes": [
     {
-      "id": "graphify_inline_input_buildlayoutregex",
-      "label": "buildLayoutRegex()",
+      "id": "portable_ocr_service_reader",
+      "label": "Reader",
       "_callable": true,
+      "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "saveLearnedRule",
+      "community_name": "service.py",
       "file_type": "code",
-      "norm_label": "buildlayoutregex()",
-      "source_file": "index.html",
-      "source_location": "L5453"
+      "norm_label": "reader",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L57"
     },
     {
-      "id": "graphify_inline_input_compilelearnedrules",
-      "label": "compileLearnedRules()",
+      "id": "portable_ocr_service_handler",
+      "label": "Handler",
       "_callable": true,
+      "_callable_class": true,
       "_origin": "ast",
-      "community": 0,
-      "community_name": "saveLearnedRule",
+      "community": 3,
+      "community_name": "Handler",
       "file_type": "code",
-      "norm_label": "compilelearnedrules()",
-      "source_file": "index.html",
-      "source_location": "L5464"
+      "norm_label": "handler",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L130"
     },
     {
-      "id": "graphify_inline_input_escaperegex",
-      "label": "escapeRegex()",
+      "id": "portable_ocr_service_check",
+      "label": "check()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "saveLearnedRule",
+      "community_name": "service.py",
       "file_type": "code",
-      "norm_label": "escaperegex()",
-      "source_file": "index.html",
-      "source_location": "L5449"
+      "norm_label": "check()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L201"
     },
     {
-      "id": "graphify_inline_input_loadlearnedrules",
-      "label": "loadLearnedRules()",
+      "id": "portable_ocr_service_group_lines",
+      "label": "group_lines()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "saveLearnedRule",
+      "community_name": "service.py",
       "file_type": "code",
-      "norm_label": "loadlearnedrules()",
-      "source_file": "index.html",
-      "source_location": "L5478"
+      "norm_label": "group_lines()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L35"
     },
     {
-      "id": "graphify_inline_input_readlocalrules",
-      "label": "readLocalRules()",
+      "id": "portable_ocr_service_reader_init",
+      "label": ".__init__()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "saveLearnedRule",
+      "community_name": "service.py",
       "file_type": "code",
-      "norm_label": "readlocalrules()",
-      "source_file": "index.html",
-      "source_location": "L5441"
+      "norm_label": ".__init__()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L58"
     },
     {
-      "id": "graphify_inline_input_rulekey",
-      "label": "ruleKey()",
+      "id": "portable_ocr_service_reader_read",
+      "label": ".read()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "saveLearnedRule",
+      "community_name": "service.py",
       "file_type": "code",
-      "norm_label": "rulekey()",
-      "source_file": "index.html",
-      "source_location": "L5447"
+      "norm_label": ".read()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L103"
     },
     {
-      "id": "graphify_inline_input_savelearnedrule",
-      "label": "saveLearnedRule()",
+      "id": "portable_ocr_service_reader_read_image",
+      "label": ".read_image()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "saveLearnedRule",
+      "community_name": "service.py",
       "file_type": "code",
-      "norm_label": "savelearnedrule()",
-      "source_file": "index.html",
-      "source_location": "L5535"
+      "norm_label": ".read_image()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L81"
     },
     {
-      "id": "graphify_inline_input_supabaseready",
-      "label": "supabaseReady()",
+      "id": "tests_ocr_native_speed_make_reader",
+      "label": "make_reader()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "saveLearnedRule",
+      "community_name": "service.py",
       "file_type": "code",
-      "norm_label": "supabaseready()",
-      "source_file": "index.html",
-      "source_location": "L5430"
-    },
-    {
-      "id": "graphify_inline_input_uploadteachsample",
-      "label": "uploadTeachSample()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "saveLearnedRule",
-      "file_type": "code",
-      "norm_label": "uploadteachsample()",
-      "source_file": "index.html",
-      "source_location": "L5521"
-    },
-    {
-      "id": "graphify_inline_input_writelocalrules",
-      "label": "writeLocalRules()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "saveLearnedRule",
-      "file_type": "code",
-      "norm_label": "writelocalrules()",
-      "source_file": "index.html",
-      "source_location": "L5444"
+      "norm_label": "make_reader()",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L16"
     },
     {
       "id": "tests_below_minimum_test_aslevels",
@@ -160,6 +138,18 @@
       "source_location": "L6"
     },
     {
+      "id": "graphify_inline_input_buildlayoutregex",
+      "label": "buildLayoutRegex()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "index.html",
+      "file_type": "code",
+      "norm_label": "buildlayoutregex()",
+      "source_file": "index.html",
+      "source_location": "L5528"
+    },
+    {
       "id": "graphify_inline_input_cancelcondconfirm",
       "label": "cancelCondConfirm()",
       "_callable": true,
@@ -193,7 +183,7 @@
       "file_type": "code",
       "norm_label": "closeadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5798"
+      "source_location": "L5873"
     },
     {
       "id": "graphify_inline_input_closemodal",
@@ -256,6 +246,18 @@
       "source_location": "L3854"
     },
     {
+      "id": "graphify_inline_input_escaperegex",
+      "label": "escapeRegex()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "index.html",
+      "file_type": "code",
+      "norm_label": "escaperegex()",
+      "source_file": "index.html",
+      "source_location": "L5524"
+    },
+    {
       "id": "graphify_inline_input_openmobilebreakdown",
       "label": "openMobileBreakdown()",
       "_callable": true,
@@ -301,7 +303,7 @@
       "file_type": "code",
       "norm_label": "bigramsimilarity()",
       "source_file": "index.html",
-      "source_location": "L4755"
+      "source_location": "L4786"
     },
     {
       "id": "graphify_inline_input_classifypagestatus",
@@ -313,7 +315,7 @@
       "file_type": "code",
       "norm_label": "classifypagestatus()",
       "source_file": "index.html",
-      "source_location": "L4590"
+      "source_location": "L4621"
     },
     {
       "id": "graphify_inline_input_cleanboardsubject",
@@ -325,7 +327,7 @@
       "file_type": "code",
       "norm_label": "cleanboardsubject()",
       "source_file": "index.html",
-      "source_location": "L4309"
+      "source_location": "L4340"
     },
     {
       "id": "graphify_inline_input_cleanocrline",
@@ -337,7 +339,7 @@
       "file_type": "code",
       "norm_label": "cleanocrline()",
       "source_file": "index.html",
-      "source_location": "L4282"
+      "source_location": "L4313"
     },
     {
       "id": "graphify_inline_input_cleanschoolsubject",
@@ -349,7 +351,7 @@
       "file_type": "code",
       "norm_label": "cleanschoolsubject()",
       "source_file": "index.html",
-      "source_location": "L4412"
+      "source_location": "L4443"
     },
     {
       "id": "graphify_inline_input_derivelayouttemplate",
@@ -361,7 +363,7 @@
       "file_type": "code",
       "norm_label": "derivelayouttemplate()",
       "source_file": "index.html",
-      "source_location": "L5578"
+      "source_location": "L5653"
     },
     {
       "id": "graphify_inline_input_expandsubjectabbreviations",
@@ -373,7 +375,7 @@
       "file_type": "code",
       "norm_label": "expandsubjectabbreviations()",
       "source_file": "index.html",
-      "source_location": "L4773"
+      "source_location": "L4804"
     },
     {
       "id": "graphify_inline_input_guessteachvalues",
@@ -385,19 +387,7 @@
       "file_type": "code",
       "norm_label": "guessteachvalues()",
       "source_file": "index.html",
-      "source_location": "L5626"
-    },
-    {
-      "id": "graphify_inline_input_hasresultlines",
-      "label": "hasResultLines()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "hasresultlines()",
-      "source_file": "index.html",
-      "source_location": "L4619"
+      "source_location": "L5701"
     },
     {
       "id": "graphify_inline_input_isgcsepage",
@@ -409,7 +399,7 @@
       "file_type": "code",
       "norm_label": "isgcsepage()",
       "source_file": "index.html",
-      "source_location": "L4305"
+      "source_location": "L4336"
     },
     {
       "id": "graphify_inline_input_isknownsubject",
@@ -421,7 +411,7 @@
       "file_type": "code",
       "norm_label": "isknownsubject()",
       "source_file": "index.html",
-      "source_location": "L4418"
+      "source_location": "L4449"
     },
     {
       "id": "graphify_inline_input_isskippedline",
@@ -433,7 +423,7 @@
       "file_type": "code",
       "norm_label": "isskippedline()",
       "source_file": "index.html",
-      "source_location": "L4614"
+      "source_location": "L4645"
     },
     {
       "id": "graphify_inline_input_learncorrectedsubjects",
@@ -445,7 +435,7 @@
       "file_type": "code",
       "norm_label": "learncorrectedsubjects()",
       "source_file": "index.html",
-      "source_location": "L5769"
+      "source_location": "L5844"
     },
     {
       "id": "graphify_inline_input_learnedaliasfor",
@@ -457,7 +447,7 @@
       "file_type": "code",
       "norm_label": "learnedaliasfor()",
       "source_file": "index.html",
-      "source_location": "L5555"
+      "source_location": "L5630"
     },
     {
       "id": "graphify_inline_input_levelfromcode",
@@ -469,7 +459,7 @@
       "file_type": "code",
       "norm_label": "levelfromcode()",
       "source_file": "index.html",
-      "source_location": "L4407"
+      "source_location": "L4438"
     },
     {
       "id": "graphify_inline_input_levelfromtoken",
@@ -481,7 +471,7 @@
       "file_type": "code",
       "norm_label": "levelfromtoken()",
       "source_file": "index.html",
-      "source_location": "L4398"
+      "source_location": "L4429"
     },
     {
       "id": "graphify_inline_input_matchocrsubject",
@@ -493,7 +483,7 @@
       "file_type": "code",
       "norm_label": "matchocrsubject()",
       "source_file": "index.html",
-      "source_location": "L4777"
+      "source_location": "L4808"
     },
     {
       "id": "graphify_inline_input_nearmissline",
@@ -505,7 +495,7 @@
       "file_type": "code",
       "norm_label": "nearmissline()",
       "source_file": "index.html",
-      "source_location": "L4808"
+      "source_location": "L4839"
     },
     {
       "id": "graphify_inline_input_normalizegrade",
@@ -517,7 +507,7 @@
       "file_type": "code",
       "norm_label": "normalizegrade()",
       "source_file": "index.html",
-      "source_location": "L4296"
+      "source_location": "L4327"
     },
     {
       "id": "graphify_inline_input_normalizesearch",
@@ -541,7 +531,7 @@
       "file_type": "code",
       "norm_label": "pagelevel()",
       "source_file": "index.html",
-      "source_location": "L4288"
+      "source_location": "L4319"
     },
     {
       "id": "graphify_inline_input_parseawardline",
@@ -553,7 +543,7 @@
       "file_type": "code",
       "norm_label": "parseawardline()",
       "source_file": "index.html",
-      "source_location": "L4316"
+      "source_location": "L4347"
     },
     {
       "id": "graphify_inline_input_parseboardmarkline",
@@ -565,7 +555,7 @@
       "file_type": "code",
       "norm_label": "parseboardmarkline()",
       "source_file": "index.html",
-      "source_location": "L4477"
+      "source_location": "L4508"
     },
     {
       "id": "graphify_inline_input_parsecambridgecertline",
@@ -577,7 +567,7 @@
       "file_type": "code",
       "norm_label": "parsecambridgecertline()",
       "source_file": "index.html",
-      "source_location": "L4378"
+      "source_location": "L4409"
     },
     {
       "id": "graphify_inline_input_parsecambridgeelectronicline",
@@ -589,7 +579,7 @@
       "file_type": "code",
       "norm_label": "parsecambridgeelectronicline()",
       "source_file": "index.html",
-      "source_location": "L4467"
+      "source_location": "L4498"
     },
     {
       "id": "graphify_inline_input_parsedocument",
@@ -601,7 +591,7 @@
       "file_type": "code",
       "norm_label": "parsedocument()",
       "source_file": "index.html",
-      "source_location": "L4820"
+      "source_location": "L4851"
     },
     {
       "id": "graphify_inline_input_parsegradeline",
@@ -613,7 +603,7 @@
       "file_type": "code",
       "norm_label": "parsegradeline()",
       "source_file": "index.html",
-      "source_location": "L4344"
+      "source_location": "L4375"
     },
     {
       "id": "graphify_inline_input_parselearnedlayoutline",
@@ -625,7 +615,7 @@
       "file_type": "code",
       "norm_label": "parselearnedlayoutline()",
       "source_file": "index.html",
-      "source_location": "L5560"
+      "source_location": "L5635"
     },
     {
       "id": "graphify_inline_input_parselevelfirstline",
@@ -637,7 +627,7 @@
       "file_type": "code",
       "norm_label": "parselevelfirstline()",
       "source_file": "index.html",
-      "source_location": "L4498"
+      "source_location": "L4529"
     },
     {
       "id": "graphify_inline_input_parseresultline",
@@ -649,7 +639,7 @@
       "file_type": "code",
       "norm_label": "parseresultline()",
       "source_file": "index.html",
-      "source_location": "L4556"
+      "source_location": "L4587"
     },
     {
       "id": "graphify_inline_input_parsereviewoutcomeline",
@@ -661,7 +651,7 @@
       "file_type": "code",
       "norm_label": "parsereviewoutcomeline()",
       "source_file": "index.html",
-      "source_location": "L4488"
+      "source_location": "L4519"
     },
     {
       "id": "graphify_inline_input_parseschoolgradeonlyline",
@@ -673,7 +663,7 @@
       "file_type": "code",
       "norm_label": "parseschoolgradeonlyline()",
       "source_file": "index.html",
-      "source_location": "L4447"
+      "source_location": "L4478"
     },
     {
       "id": "graphify_inline_input_parseschooltableline",
@@ -685,7 +675,7 @@
       "file_type": "code",
       "norm_label": "parseschooltableline()",
       "source_file": "index.html",
-      "source_location": "L4424"
+      "source_location": "L4455"
     },
     {
       "id": "graphify_inline_input_parsestatustablebyrow",
@@ -697,7 +687,7 @@
       "file_type": "code",
       "norm_label": "parsestatustablebyrow()",
       "source_file": "index.html",
-      "source_location": "L4529"
+      "source_location": "L4560"
     },
     {
       "id": "graphify_inline_input_parsestatustablerows",
@@ -709,7 +699,7 @@
       "file_type": "code",
       "norm_label": "parsestatustablerows()",
       "source_file": "index.html",
-      "source_location": "L4513"
+      "source_location": "L4544"
     },
     {
       "id": "graphify_inline_input_parsesyllabusline",
@@ -721,7 +711,7 @@
       "file_type": "code",
       "norm_label": "parsesyllabusline()",
       "source_file": "index.html",
-      "source_location": "L4360"
+      "source_location": "L4391"
     },
     {
       "id": "graphify_inline_input_renderteachsection",
@@ -733,7 +723,7 @@
       "file_type": "code",
       "norm_label": "renderteachsection()",
       "source_file": "index.html",
-      "source_location": "L5612"
+      "source_location": "L5687"
     },
     {
       "id": "graphify_inline_input_rowresultstatus",
@@ -745,7 +735,7 @@
       "file_type": "code",
       "norm_label": "rowresultstatus()",
       "source_file": "index.html",
-      "source_location": "L4605"
+      "source_location": "L4636"
     },
     {
       "id": "graphify_inline_input_sectionheading",
@@ -757,7 +747,7 @@
       "file_type": "code",
       "norm_label": "sectionheading()",
       "source_file": "index.html",
-      "source_location": "L4565"
+      "source_location": "L4596"
     },
     {
       "id": "graphify_inline_input_stripschoolnoise",
@@ -769,7 +759,7 @@
       "file_type": "code",
       "norm_label": "stripschoolnoise()",
       "source_file": "index.html",
-      "source_location": "L4436"
+      "source_location": "L4467"
     },
     {
       "id": "graphify_inline_input_submitteach",
@@ -781,7 +771,7 @@
       "file_type": "code",
       "norm_label": "submitteach()",
       "source_file": "index.html",
-      "source_location": "L5710"
+      "source_location": "L5785"
     },
     {
       "id": "graphify_inline_input_unrecognisedlines",
@@ -793,7 +783,7 @@
       "file_type": "code",
       "norm_label": "unrecognisedlines()",
       "source_file": "index.html",
-      "source_location": "L5597"
+      "source_location": "L5672"
     },
     {
       "id": "graphify_inline_input_addsubjecttoscenario",
@@ -1237,7 +1227,7 @@
       "file_type": "code",
       "norm_label": "adminalertshtml()",
       "source_file": "index.html",
-      "source_location": "L6098"
+      "source_location": "L6173"
     },
     {
       "id": "graphify_inline_input_adminmsg",
@@ -1249,7 +1239,7 @@
       "file_type": "code",
       "norm_label": "adminmsg()",
       "source_file": "index.html",
-      "source_location": "L5800"
+      "source_location": "L5875"
     },
     {
       "id": "graphify_inline_input_adminpasswordprompt",
@@ -1261,7 +1251,7 @@
       "file_type": "code",
       "norm_label": "adminpasswordprompt()",
       "source_file": "index.html",
-      "source_location": "L5938"
+      "source_location": "L6013"
     },
     {
       "id": "graphify_inline_input_adminsavenewpassword",
@@ -1273,7 +1263,7 @@
       "file_type": "code",
       "norm_label": "adminsavenewpassword()",
       "source_file": "index.html",
-      "source_location": "L5912"
+      "source_location": "L5987"
     },
     {
       "id": "graphify_inline_input_adminsavewebhook",
@@ -1285,7 +1275,7 @@
       "file_type": "code",
       "norm_label": "adminsavewebhook()",
       "source_file": "index.html",
-      "source_location": "L6045"
+      "source_location": "L6120"
     },
     {
       "id": "graphify_inline_input_adminsendpasswordlink",
@@ -1297,7 +1287,7 @@
       "file_type": "code",
       "norm_label": "adminsendpasswordlink()",
       "source_file": "index.html",
-      "source_location": "L5901"
+      "source_location": "L5976"
     },
     {
       "id": "graphify_inline_input_adminsetstatus",
@@ -1309,7 +1299,7 @@
       "file_type": "code",
       "norm_label": "adminsetstatus()",
       "source_file": "index.html",
-      "source_location": "L5975"
+      "source_location": "L6050"
     },
     {
       "id": "graphify_inline_input_adminshowchangepassword",
@@ -1321,7 +1311,7 @@
       "file_type": "code",
       "norm_label": "adminshowchangepassword()",
       "source_file": "index.html",
-      "source_location": "L5950"
+      "source_location": "L6025"
     },
     {
       "id": "graphify_inline_input_adminsignin",
@@ -1333,7 +1323,7 @@
       "file_type": "code",
       "norm_label": "adminsignin()",
       "source_file": "index.html",
-      "source_location": "L5885"
+      "source_location": "L5960"
     },
     {
       "id": "graphify_inline_input_adminsignout",
@@ -1345,7 +1335,7 @@
       "file_type": "code",
       "norm_label": "adminsignout()",
       "source_file": "index.html",
-      "source_location": "L5956"
+      "source_location": "L6031"
     },
     {
       "id": "graphify_inline_input_adminstoragehtml",
@@ -1357,7 +1347,7 @@
       "file_type": "code",
       "norm_label": "adminstoragehtml()",
       "source_file": "index.html",
-      "source_location": "L6058"
+      "source_location": "L6133"
     },
     {
       "id": "graphify_inline_input_admintogglenotifications",
@@ -1369,7 +1359,43 @@
       "file_type": "code",
       "norm_label": "admintogglenotifications()",
       "source_file": "index.html",
-      "source_location": "L6033"
+      "source_location": "L6108"
+    },
+    {
+      "id": "graphify_inline_input_adminviewsample",
+      "label": "adminViewSample()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "adminviewsample()",
+      "source_file": "index.html",
+      "source_location": "L6066"
+    },
+    {
+      "id": "graphify_inline_input_compilelearnedrules",
+      "label": "compileLearnedRules()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "compilelearnedrules()",
+      "source_file": "index.html",
+      "source_location": "L5539"
+    },
+    {
+      "id": "graphify_inline_input_loadlearnedrules",
+      "label": "loadLearnedRules()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "loadlearnedrules()",
+      "source_file": "index.html",
+      "source_location": "L5553"
     },
     {
       "id": "graphify_inline_input_markpendingseen",
@@ -1381,7 +1407,7 @@
       "file_type": "code",
       "norm_label": "markpendingseen()",
       "source_file": "index.html",
-      "source_location": "L6029"
+      "source_location": "L6104"
     },
     {
       "id": "graphify_inline_input_newpasswordfields",
@@ -1393,7 +1419,7 @@
       "file_type": "code",
       "norm_label": "newpasswordfields()",
       "source_file": "index.html",
-      "source_location": "L5802"
+      "source_location": "L5877"
     },
     {
       "id": "graphify_inline_input_openadminpanel",
@@ -1405,7 +1431,19 @@
       "file_type": "code",
       "norm_label": "openadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5794"
+      "source_location": "L5869"
+    },
+    {
+      "id": "graphify_inline_input_readlocalrules",
+      "label": "readLocalRules()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "readlocalrules()",
+      "source_file": "index.html",
+      "source_location": "L5516"
     },
     {
       "id": "graphify_inline_input_readnewpassword",
@@ -1417,7 +1455,7 @@
       "file_type": "code",
       "norm_label": "readnewpassword()",
       "source_file": "index.html",
-      "source_location": "L5808"
+      "source_location": "L5883"
     },
     {
       "id": "graphify_inline_input_refreshpendingbadge",
@@ -1429,7 +1467,7 @@
       "file_type": "code",
       "norm_label": "refreshpendingbadge()",
       "source_file": "index.html",
-      "source_location": "L6007"
+      "source_location": "L6082"
     },
     {
       "id": "graphify_inline_input_renderadminpanel",
@@ -1441,7 +1479,31 @@
       "file_type": "code",
       "norm_label": "renderadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5816"
+      "source_location": "L5891"
+    },
+    {
+      "id": "graphify_inline_input_rulekey",
+      "label": "ruleKey()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "rulekey()",
+      "source_file": "index.html",
+      "source_location": "L5522"
+    },
+    {
+      "id": "graphify_inline_input_savelearnedrule",
+      "label": "saveLearnedRule()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "savelearnedrule()",
+      "source_file": "index.html",
+      "source_location": "L5610"
     },
     {
       "id": "graphify_inline_input_sbfetch",
@@ -1453,7 +1515,7 @@
       "file_type": "code",
       "norm_label": "sbfetch()",
       "source_file": "index.html",
-      "source_location": "L5432"
+      "source_location": "L5507"
     },
     {
       "id": "graphify_inline_input_setadminsession",
@@ -1465,7 +1527,43 @@
       "file_type": "code",
       "norm_label": "setadminsession()",
       "source_file": "index.html",
-      "source_location": "L5787"
+      "source_location": "L5862"
+    },
+    {
+      "id": "graphify_inline_input_supabaseready",
+      "label": "supabaseReady()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "supabaseready()",
+      "source_file": "index.html",
+      "source_location": "L5505"
+    },
+    {
+      "id": "graphify_inline_input_uploadteachsample",
+      "label": "uploadTeachSample()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "uploadteachsample()",
+      "source_file": "index.html",
+      "source_location": "L5596"
+    },
+    {
+      "id": "graphify_inline_input_writelocalrules",
+      "label": "writeLocalRules()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "renderAdminPanel",
+      "file_type": "code",
+      "norm_label": "writelocalrules()",
+      "source_file": "index.html",
+      "source_location": "L5519"
     },
     {
       "id": "graphify_inline_input_addfilledsubjectcard",
@@ -1489,7 +1587,7 @@
       "file_type": "code",
       "norm_label": "addocrrowstocalculator()",
       "source_file": "index.html",
-      "source_location": "L5336"
+      "source_location": "L5411"
     },
     {
       "id": "graphify_inline_input_addsubjectrow",
@@ -1502,6 +1600,30 @@
       "norm_label": "addsubjectrow()",
       "source_file": "index.html",
       "source_location": "L2393"
+    },
+    {
+      "id": "graphify_inline_input_admincleanuppages",
+      "label": "adminCleanupPages()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "addOcrRowsToCalculator",
+      "file_type": "code",
+      "norm_label": "admincleanuppages()",
+      "source_file": "index.html",
+      "source_location": "L6158"
+    },
+    {
+      "id": "graphify_inline_input_adminconfirmdeleteallpages",
+      "label": "adminConfirmDeleteAllPages()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "addOcrRowsToCalculator",
+      "file_type": "code",
+      "norm_label": "adminconfirmdeleteallpages()",
+      "source_file": "index.html",
+      "source_location": "L6150"
     },
     {
       "id": "graphify_inline_input_appconfirm",
@@ -1573,7 +1695,7 @@
       "file_type": "code",
       "norm_label": "closeocrmodal()",
       "source_file": "index.html",
-      "source_location": "L5386"
+      "source_location": "L5461"
     },
     {
       "id": "graphify_inline_input_deleterow",
@@ -1720,6 +1842,18 @@
       "source_location": "L3414"
     },
     {
+      "id": "graphify_inline_input_resolverepeatedsubjects",
+      "label": "resolveRepeatedSubjects()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "addOcrRowsToCalculator",
+      "file_type": "code",
+      "norm_label": "resolverepeatedsubjects()",
+      "source_file": "index.html",
+      "source_location": "L4978"
+    },
+    {
       "id": "graphify_inline_input_selectsubjectwithgrade",
       "label": "selectSubjectWithGrade()",
       "_callable": true,
@@ -1801,7 +1935,7 @@
       "file_type": "code",
       "norm_label": "cropsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5188"
+      "source_location": "L5263"
     },
     {
       "id": "graphify_inline_input_eschtml",
@@ -1814,30 +1948,6 @@
       "norm_label": "eschtml()",
       "source_file": "index.html",
       "source_location": "L1834"
-    },
-    {
-      "id": "graphify_inline_input_filefingerprint",
-      "label": "fileFingerprint()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "renderOcrReview",
-      "file_type": "code",
-      "norm_label": "filefingerprint()",
-      "source_file": "index.html",
-      "source_location": "L4274"
-    },
-    {
-      "id": "graphify_inline_input_handlecertificatefiles",
-      "label": "handleCertificateFiles()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "renderOcrReview",
-      "file_type": "code",
-      "norm_label": "handlecertificatefiles()",
-      "source_file": "index.html",
-      "source_location": "L5053"
     },
     {
       "id": "graphify_inline_input_highlightmatch",
@@ -1861,7 +1971,7 @@
       "file_type": "code",
       "norm_label": "makesnapshots()",
       "source_file": "index.html",
-      "source_location": "L5215"
+      "source_location": "L5290"
     },
     {
       "id": "graphify_inline_input_needsconfirmation",
@@ -1873,7 +1983,7 @@
       "file_type": "code",
       "norm_label": "needsconfirmation()",
       "source_file": "index.html",
-      "source_location": "L5156"
+      "source_location": "L5231"
     },
     {
       "id": "graphify_inline_input_ocrfilefor",
@@ -1885,7 +1995,7 @@
       "file_type": "code",
       "norm_label": "ocrfilefor()",
       "source_file": "index.html",
-      "source_location": "L5160"
+      "source_location": "L5235"
     },
     {
       "id": "graphify_inline_input_ocrflag",
@@ -1897,7 +2007,7 @@
       "file_type": "code",
       "norm_label": "ocrflag()",
       "source_file": "index.html",
-      "source_location": "L5243"
+      "source_location": "L5318"
     },
     {
       "id": "graphify_inline_input_ocrgradecell",
@@ -1909,7 +2019,7 @@
       "file_type": "code",
       "norm_label": "ocrgradecell()",
       "source_file": "index.html",
-      "source_location": "L5144"
+      "source_location": "L5219"
     },
     {
       "id": "graphify_inline_input_ocrsubjectoptions",
@@ -1921,7 +2031,7 @@
       "file_type": "code",
       "norm_label": "ocrsubjectoptions()",
       "source_file": "index.html",
-      "source_location": "L5138"
+      "source_location": "L5213"
     },
     {
       "id": "graphify_inline_input_openteachform",
@@ -1933,19 +2043,7 @@
       "file_type": "code",
       "norm_label": "openteachform()",
       "source_file": "index.html",
-      "source_location": "L5661"
-    },
-    {
-      "id": "graphify_inline_input_parseocrpages",
-      "label": "parseOcrPages()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "renderOcrReview",
-      "file_type": "code",
-      "norm_label": "parseocrpages()",
-      "source_file": "index.html",
-      "source_location": "L4227"
+      "source_location": "L5736"
     },
     {
       "id": "graphify_inline_input_rememberedteachername",
@@ -1957,7 +2055,7 @@
       "file_type": "code",
       "norm_label": "rememberedteachername()",
       "source_file": "index.html",
-      "source_location": "L5530"
+      "source_location": "L5605"
     },
     {
       "id": "graphify_inline_input_renderocrreview",
@@ -1969,7 +2067,7 @@
       "file_type": "code",
       "norm_label": "renderocrreview()",
       "source_file": "index.html",
-      "source_location": "L5250"
+      "source_location": "L5325"
     },
     {
       "id": "graphify_inline_input_renderpageforsnapshot",
@@ -1981,19 +2079,7 @@
       "file_type": "code",
       "norm_label": "renderpageforsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5164"
-    },
-    {
-      "id": "graphify_inline_input_resolverepeatedsubjects",
-      "label": "resolveRepeatedSubjects()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "renderOcrReview",
-      "file_type": "code",
-      "norm_label": "resolverepeatedsubjects()",
-      "source_file": "index.html",
-      "source_location": "L4947"
+      "source_location": "L5239"
     },
     {
       "id": "graphify_inline_input_setocrprogress",
@@ -2005,19 +2091,7 @@
       "file_type": "code",
       "norm_label": "setocrprogress()",
       "source_file": "index.html",
-      "source_location": "L5041"
-    },
-    {
-      "id": "graphify_inline_input_showocrwarnings",
-      "label": "showOcrWarnings()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "renderOcrReview",
-      "file_type": "code",
-      "norm_label": "showocrwarnings()",
-      "source_file": "index.html",
-      "source_location": "L5047"
+      "source_location": "L5113"
     },
     {
       "id": "graphify_inline_input_showteachsnapshot",
@@ -2029,7 +2103,7 @@
       "file_type": "code",
       "norm_label": "showteachsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5646"
+      "source_location": "L5721"
     },
     {
       "id": "graphify_inline_input_snapshotcell",
@@ -2041,7 +2115,7 @@
       "file_type": "code",
       "norm_label": "snapshotcell()",
       "source_file": "index.html",
-      "source_location": "L5234"
+      "source_location": "L5309"
     },
     {
       "id": "graphify_inline_input_updateocraddbutton",
@@ -2053,19 +2127,7 @@
       "file_type": "code",
       "norm_label": "updateocraddbutton()",
       "source_file": "index.html",
-      "source_location": "L5302"
-    },
-    {
-      "id": "graphify_inline_input_adminviewsample",
-      "label": "adminViewSample()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 16,
-      "community_name": "appAlert",
-      "file_type": "code",
-      "norm_label": "adminviewsample()",
-      "source_file": "index.html",
-      "source_location": "L5991"
+      "source_location": "L5377"
     },
     {
       "id": "graphify_inline_input_appalert",
@@ -2221,7 +2283,19 @@
       "file_type": "code",
       "norm_label": "extractpages()",
       "source_file": "index.html",
-      "source_location": "L4228"
+      "source_location": "L4259"
+    },
+    {
+      "id": "graphify_inline_input_hasresultlines",
+      "label": "hasResultLines()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "extractPages",
+      "file_type": "code",
+      "norm_label": "hasresultlines()",
+      "source_file": "index.html",
+      "source_location": "L4650"
     },
     {
       "id": "graphify_inline_input_imagefiletocanvas",
@@ -2245,7 +2319,7 @@
       "file_type": "code",
       "norm_label": "mergeenginerows()",
       "source_file": "index.html",
-      "source_location": "L4917"
+      "source_location": "L4948"
     },
     {
       "id": "graphify_inline_input_readcertificatefile",
@@ -2257,7 +2331,7 @@
       "file_type": "code",
       "norm_label": "readcertificatefile()",
       "source_file": "index.html",
-      "source_location": "L5003"
+      "source_location": "L5068"
     },
     {
       "id": "graphify_inline_input_readfilebothengines",
@@ -2269,7 +2343,7 @@
       "file_type": "code",
       "norm_label": "readfilebothengines()",
       "source_file": "index.html",
-      "source_location": "L4992"
+      "source_location": "L5057"
     },
     {
       "id": "graphify_inline_input_readfilewithengine",
@@ -2281,7 +2355,7 @@
       "file_type": "code",
       "norm_label": "readfilewithengine()",
       "source_file": "index.html",
-      "source_location": "L4984"
+      "source_location": "L5015"
     },
     {
       "id": "graphify_inline_input_renderpdfpage",
@@ -2305,7 +2379,7 @@
       "file_type": "code",
       "norm_label": "rowkey()",
       "source_file": "index.html",
-      "source_location": "L4910"
+      "source_location": "L4941"
     },
     {
       "id": "graphify_inline_input_textlayertolines",
@@ -2344,76 +2418,16 @@
       "source_location": "L5"
     },
     {
-      "id": "graphify_inline_input_arabicwordmarks",
-      "label": "arabicWordMarks()",
+      "id": "tests_ocr_gateway_test_request",
+      "label": "request()",
       "_callable": true,
       "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
       "file_type": "code",
-      "norm_label": "arabicwordmarks()",
-      "source_file": "index.html",
-      "source_location": "L4657"
-    },
-    {
-      "id": "graphify_inline_input_digitmark",
-      "label": "digitMark()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "digitmark()",
-      "source_file": "index.html",
-      "source_location": "L4680"
-    },
-    {
-      "id": "graphify_inline_input_ensurepaddleready",
-      "label": "ensurePaddleReady()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "ensurepaddleready()",
-      "source_file": "index.html",
-      "source_location": "L4016"
-    },
-    {
-      "id": "graphify_inline_input_findmoemark",
-      "label": "findMoeMark()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "findmoemark()",
-      "source_file": "index.html",
-      "source_location": "L4691"
-    },
-    {
-      "id": "graphify_inline_input_getocrengine",
-      "label": "getOcrEngine()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "getocrengine()",
-      "source_file": "index.html",
-      "source_location": "L3890"
-    },
-    {
-      "id": "graphify_inline_input_gettessworker",
-      "label": "getTessWorker()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "gettessworker()",
-      "source_file": "index.html",
-      "source_location": "L3916"
+      "norm_label": "request()",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L6"
     },
     {
       "id": "graphify_inline_input_grouppaddlelines",
@@ -2421,47 +2435,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "grouppaddlelines()",
       "source_file": "index.html",
       "source_location": "L4106"
-    },
-    {
-      "id": "graphify_inline_input_loadort",
-      "label": "loadOrt()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "loadort()",
-      "source_file": "index.html",
-      "source_location": "L3967"
-    },
-    {
-      "id": "graphify_inline_input_loadpdflibrary",
-      "label": "loadPdfLibrary()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "loadpdflibrary()",
-      "source_file": "index.html",
-      "source_location": "L3909"
-    },
-    {
-      "id": "graphify_inline_input_loadscriptonce",
-      "label": "loadScriptOnce()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "loadscriptonce()",
-      "source_file": "index.html",
-      "source_location": "L3896"
     },
     {
       "id": "graphify_inline_input_lookslikemoedocument",
@@ -2469,23 +2447,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "lookslikemoedocument()",
       "source_file": "index.html",
       "source_location": "L4217"
-    },
-    {
-      "id": "graphify_inline_input_normalizearabic",
-      "label": "normalizeArabic()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "normalizearabic()",
-      "source_file": "index.html",
-      "source_location": "L4647"
     },
     {
       "id": "graphify_inline_input_normalizeboxes",
@@ -2493,35 +2459,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "normalizeboxes()",
       "source_file": "index.html",
       "source_location": "L4122"
-    },
-    {
-      "id": "graphify_inline_input_paddledetect",
-      "label": "paddleDetect()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "paddledetect()",
-      "source_file": "index.html",
-      "source_location": "L4027"
-    },
-    {
-      "id": "graphify_inline_input_paddledict",
-      "label": "paddleDict()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "paddledict()",
-      "source_file": "index.html",
-      "source_location": "L4005"
     },
     {
       "id": "graphify_inline_input_paddlereadpage",
@@ -2529,7 +2471,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "paddlereadpage()",
       "source_file": "index.html",
@@ -2541,59 +2483,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "paddlereadwith()",
       "source_file": "index.html",
       "source_location": "L4126"
-    },
-    {
-      "id": "graphify_inline_input_paddlerecognize",
-      "label": "paddleRecognize()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "paddlerecognize()",
-      "source_file": "index.html",
-      "source_location": "L4081"
-    },
-    {
-      "id": "graphify_inline_input_paddlesession",
-      "label": "paddleSession()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "paddlesession()",
-      "source_file": "index.html",
-      "source_location": "L3975"
-    },
-    {
-      "id": "graphify_inline_input_parsemoerows",
-      "label": "parseMoeRows()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "parsemoerows()",
-      "source_file": "index.html",
-      "source_location": "L4714"
-    },
-    {
-      "id": "graphify_inline_input_renderpagejpeg",
-      "label": "renderPageJpeg()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "renderpagejpeg()",
-      "source_file": "index.html",
-      "source_location": "L5496"
     },
     {
       "id": "graphify_inline_input_resettessworker",
@@ -2601,35 +2495,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "resettessworker()",
       "source_file": "index.html",
       "source_location": "L3920"
-    },
-    {
-      "id": "graphify_inline_input_reversearabicprediction",
-      "label": "reverseArabicPrediction()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "reversearabicprediction()",
-      "source_file": "index.html",
-      "source_location": "L4069"
-    },
-    {
-      "id": "graphify_inline_input_runpaddle",
-      "label": "runPaddle()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
-      "file_type": "code",
-      "norm_label": "runpaddle()",
-      "source_file": "index.html",
-      "source_location": "L3991"
     },
     {
       "id": "graphify_inline_input_tesseractreadpage",
@@ -2637,7 +2507,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "tesseractreadpage()",
       "source_file": "index.html",
@@ -2649,47 +2519,383 @@
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community_name": "paddleReadWith",
       "file_type": "code",
       "norm_label": "tessrecognize()",
       "source_file": "index.html",
       "source_location": "L3928"
     },
     {
+      "id": "graphify_inline_input_workocrreadpage",
+      "label": "workOcrReadPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "paddleReadWith",
+      "file_type": "code",
+      "norm_label": "workocrreadpage()",
+      "source_file": "index.html",
+      "source_location": "L4230"
+    },
+    {
+      "id": "graphify_inline_input_paddledetect",
+      "label": "paddleDetect()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "paddleSession",
+      "file_type": "code",
+      "norm_label": "paddledetect()",
+      "source_file": "index.html",
+      "source_location": "L4027"
+    },
+    {
+      "id": "graphify_inline_input_paddlerecognize",
+      "label": "paddleRecognize()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "paddleSession",
+      "file_type": "code",
+      "norm_label": "paddlerecognize()",
+      "source_file": "index.html",
+      "source_location": "L4081"
+    },
+    {
+      "id": "graphify_inline_input_paddlesession",
+      "label": "paddleSession()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "paddleSession",
+      "file_type": "code",
+      "norm_label": "paddlesession()",
+      "source_file": "index.html",
+      "source_location": "L3975"
+    },
+    {
+      "id": "graphify_inline_input_reversearabicprediction",
+      "label": "reverseArabicPrediction()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "paddleSession",
+      "file_type": "code",
+      "norm_label": "reversearabicprediction()",
+      "source_file": "index.html",
+      "source_location": "L4069"
+    },
+    {
+      "id": "graphify_inline_input_runpaddle",
+      "label": "runPaddle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "paddleSession",
+      "file_type": "code",
+      "norm_label": "runpaddle()",
+      "source_file": "index.html",
+      "source_location": "L3991"
+    },
+    {
+      "id": "portable_ocr_service_handler_allowed",
+      "label": ".allowed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "Handler",
+      "file_type": "code",
+      "norm_label": ".allowed()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L145"
+    },
+    {
+      "id": "portable_ocr_service_handler_do_get",
+      "label": ".do_GET()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "Handler",
+      "file_type": "code",
+      "norm_label": ".do_get()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L155"
+    },
+    {
+      "id": "portable_ocr_service_handler_do_post",
+      "label": ".do_POST()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "Handler",
+      "file_type": "code",
+      "norm_label": ".do_post()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L166"
+    },
+    {
+      "id": "portable_ocr_service_handler_log_message",
+      "label": ".log_message()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "Handler",
+      "file_type": "code",
+      "norm_label": ".log_message()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L131"
+    },
+    {
+      "id": "portable_ocr_service_handler_remote_allowed",
+      "label": ".remote_allowed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "Handler",
+      "file_type": "code",
+      "norm_label": ".remote_allowed()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L151"
+    },
+    {
+      "id": "portable_ocr_service_handler_reply",
+      "label": ".reply()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "Handler",
+      "file_type": "code",
+      "norm_label": ".reply()",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L134"
+    },
+    {
+      "id": "graphify_inline_input_ensurepaddleready",
+      "label": "ensurePaddleReady()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "ensurepaddleready()",
+      "source_file": "index.html",
+      "source_location": "L4016"
+    },
+    {
+      "id": "graphify_inline_input_filefingerprint",
+      "label": "fileFingerprint()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "filefingerprint()",
+      "source_file": "index.html",
+      "source_location": "L4305"
+    },
+    {
+      "id": "graphify_inline_input_getocrengine",
+      "label": "getOcrEngine()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "getocrengine()",
+      "source_file": "index.html",
+      "source_location": "L3890"
+    },
+    {
+      "id": "graphify_inline_input_gettessworker",
+      "label": "getTessWorker()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "gettessworker()",
+      "source_file": "index.html",
+      "source_location": "L3916"
+    },
+    {
+      "id": "graphify_inline_input_handlecertificatefiles",
+      "label": "handleCertificateFiles()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "handlecertificatefiles()",
+      "source_file": "index.html",
+      "source_location": "L5125"
+    },
+    {
+      "id": "graphify_inline_input_loadort",
+      "label": "loadOrt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "loadort()",
+      "source_file": "index.html",
+      "source_location": "L3967"
+    },
+    {
+      "id": "graphify_inline_input_loadpdflibrary",
+      "label": "loadPdfLibrary()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "loadpdflibrary()",
+      "source_file": "index.html",
+      "source_location": "L3909"
+    },
+    {
+      "id": "graphify_inline_input_loadscriptonce",
+      "label": "loadScriptOnce()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "loadscriptonce()",
+      "source_file": "index.html",
+      "source_location": "L3896"
+    },
+    {
+      "id": "graphify_inline_input_paddledict",
+      "label": "paddleDict()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "paddledict()",
+      "source_file": "index.html",
+      "source_location": "L4005"
+    },
+    {
+      "id": "graphify_inline_input_parseocrpages",
+      "label": "parseOcrPages()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "parseocrpages()",
+      "source_file": "index.html",
+      "source_location": "L4227"
+    },
+    {
+      "id": "graphify_inline_input_renderpagejpeg",
+      "label": "renderPageJpeg()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "renderpagejpeg()",
+      "source_file": "index.html",
+      "source_location": "L5571"
+    },
+    {
+      "id": "graphify_inline_input_showocrwarnings",
+      "label": "showOcrWarnings()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "showocrwarnings()",
+      "source_file": "index.html",
+      "source_location": "L5119"
+    },
+    {
       "id": "graphify_inline_input_warmupocr",
       "label": "warmUpOcr()",
       "_callable": true,
       "_origin": "ast",
-      "community": 19,
-      "community_name": "loadPdfLibrary",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "warmupocr()",
       "source_file": "index.html",
-      "source_location": "L5031"
+      "source_location": "L5103"
     },
     {
-      "id": "graphify_inline_input_admincleanuppages",
-      "label": "adminCleanupPages()",
+      "id": "graphify_inline_input_workocravailable",
+      "label": "workOcrAvailable()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "adminCleanupPages",
+      "community": 4,
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
-      "norm_label": "admincleanuppages()",
+      "norm_label": "workocravailable()",
       "source_file": "index.html",
-      "source_location": "L6083"
+      "source_location": "L4223"
     },
     {
-      "id": "graphify_inline_input_adminconfirmdeleteallpages",
-      "label": "adminConfirmDeleteAllPages()",
+      "id": "graphify_inline_input_arabicwordmarks",
+      "label": "arabicWordMarks()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "adminCleanupPages",
+      "community": 5,
+      "community_name": "findMoeMark",
       "file_type": "code",
-      "norm_label": "adminconfirmdeleteallpages()",
+      "norm_label": "arabicwordmarks()",
       "source_file": "index.html",
-      "source_location": "L6075"
+      "source_location": "L4688"
+    },
+    {
+      "id": "graphify_inline_input_digitmark",
+      "label": "digitMark()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "findMoeMark",
+      "file_type": "code",
+      "norm_label": "digitmark()",
+      "source_file": "index.html",
+      "source_location": "L4711"
+    },
+    {
+      "id": "graphify_inline_input_findmoemark",
+      "label": "findMoeMark()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "findMoeMark",
+      "file_type": "code",
+      "norm_label": "findmoemark()",
+      "source_file": "index.html",
+      "source_location": "L4722"
+    },
+    {
+      "id": "graphify_inline_input_normalizearabic",
+      "label": "normalizeArabic()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "findMoeMark",
+      "file_type": "code",
+      "norm_label": "normalizearabic()",
+      "source_file": "index.html",
+      "source_location": "L4678"
+    },
+    {
+      "id": "graphify_inline_input_parsemoerows",
+      "label": "parseMoeRows()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "findMoeMark",
+      "file_type": "code",
+      "norm_label": "parsemoerows()",
+      "source_file": "index.html",
+      "source_location": "L4745"
     },
     {
       "id": "supabase_functions_cleanup_teach_samples_index_json",
@@ -2702,6 +2908,61 @@
       "norm_label": "json()",
       "source_file": "supabase/functions/cleanup-teach-samples/index.ts",
       "source_location": "L15"
+    },
+    {
+      "id": "portable_ocr_service",
+      "label": "service.py",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "service.py",
+      "file_type": "code",
+      "norm_label": "service.py",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_ocr_native_speed",
+      "label": "ocr-native-speed.py",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "service.py",
+      "file_type": "code",
+      "norm_label": "ocr-native-speed.py",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "portable_ocr_service_rationale_1",
+      "label": "Loopback OCR service with optional keyed tunnel endpoints; no document logs.",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "service.py",
+      "file_type": "rationale",
+      "norm_label": "loopback ocr service with optional keyed tunnel endpoints; no document logs.",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "portable_ocr_service_rationale_36",
+      "label": "Match the calculator's groupPaddleLines so table columns stay together.",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "service.py",
+      "file_type": "rationale",
+      "norm_label": "match the calculator's grouppaddlelines so table columns stay together.",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L36"
+    },
+    {
+      "id": "tests_ocr_native_speed_rationale_1",
+      "label": "Serial native OCR comparison. Documents/results stay in the supplied output\u2026",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "service.py",
+      "file_type": "rationale",
+      "norm_label": "serial native ocr comparison. documents/results stay in the supplied output...",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L1"
     },
     {
       "id": "tests_below_minimum_test",
@@ -3064,7 +3325,7 @@
       "file_type": "code",
       "norm_label": "ar_number_words",
       "source_file": "index.html",
-      "source_location": "L4639"
+      "source_location": "L4670"
     },
     {
       "id": "graphify_inline_input_engine_names",
@@ -3086,7 +3347,7 @@
       "file_type": "code",
       "norm_label": "grade_words",
       "source_file": "index.html",
-      "source_location": "L4280"
+      "source_location": "L4311"
     },
     {
       "id": "graphify_inline_input_gradenotes",
@@ -3141,7 +3402,7 @@
       "file_type": "code",
       "norm_label": "learned",
       "source_file": "index.html",
-      "source_location": "L5428"
+      "source_location": "L5503"
     },
     {
       "id": "graphify_inline_input_levellabels",
@@ -3174,7 +3435,7 @@
       "file_type": "code",
       "norm_label": "moe_subjects",
       "source_file": "index.html",
-      "source_location": "L4631"
+      "source_location": "L4662"
     },
     {
       "id": "graphify_inline_input_ocr_engines",
@@ -3196,7 +3457,7 @@
       "file_type": "code",
       "norm_label": "ocr_subject_aliases",
       "source_file": "index.html",
-      "source_location": "L4734"
+      "source_location": "L4765"
     },
     {
       "id": "graphify_inline_input_ocrpagecache",
@@ -3207,7 +3468,7 @@
       "file_type": "code",
       "norm_label": "_ocrpagecache",
       "source_file": "index.html",
-      "source_location": "L4982"
+      "source_location": "L5013"
     },
     {
       "id": "graphify_inline_input_paddle_models",
@@ -3262,7 +3523,7 @@
       "file_type": "code",
       "norm_label": "page_readers",
       "source_file": "index.html",
-      "source_location": "L4223"
+      "source_location": "L4254"
     },
     {
       "id": "graphify_inline_input_savedtheme",
@@ -3306,7 +3567,7 @@
       "file_type": "code",
       "norm_label": "status_table_row",
       "source_file": "index.html",
-      "source_location": "L4512"
+      "source_location": "L4543"
     },
     {
       "id": "graphify_inline_input_subject_abbreviations",
@@ -3317,7 +3578,7 @@
       "file_type": "code",
       "norm_label": "subject_abbreviations",
       "source_file": "index.html",
-      "source_location": "L4766"
+      "source_location": "L4797"
     },
     {
       "id": "graphify_inline_input_subjectlists",
@@ -3362,6 +3623,17 @@
       "norm_label": "_xlsxqueue",
       "source_file": "index.html",
       "source_location": "L1402"
+    },
+    {
+      "id": "api_ocr",
+      "label": "ocr.js",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "ocr.js",
+      "source_file": "api/ocr.js",
+      "source_location": "L1"
     },
     {
       "id": "tests_ocr_categories_test",
@@ -3417,6 +3689,72 @@
       "norm_label": "vm",
       "source_file": "tests/ocr-categories.test.js",
       "source_location": "L3"
+    },
+    {
+      "id": "tests_ocr_gateway_test",
+      "label": "ocr-gateway.test.js",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "ocr-gateway.test.js",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_ocr_gateway_test_assert",
+      "label": "assert",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "assert",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_ocr_gateway_test_fs",
+      "label": "fs",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "fs",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "tests_ocr_gateway_test_handler",
+      "label": "handler",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "handler",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "tests_ocr_gateway_test_readable",
+      "label": "{ Readable }",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "{ readable }",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "tests_ocr_gateway_test_vm",
+      "label": "vm",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "vm",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L4"
     },
     {
       "id": "tests_ocr_speed_test",
@@ -3657,6 +3995,54 @@
       "source_location": "L1"
     },
     {
+      "id": "portable_ocr_connect_readme",
+      "label": "CONNECT-README.md",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "Connect the work PC to the online calculator",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "connect-readme.md",
+      "source_file": "portable-ocr/CONNECT-README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "portable_ocr_connect_readme_connect_the_work_pc_to_the_online_calculator",
+      "label": "Connect the work PC to the online calculator",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "Connect the work PC to the online calculator",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "connect the work pc to the online calculator",
+      "source_file": "portable-ocr/CONNECT-README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "portable_ocr_connect_readme_in_the_existing_vercel_project",
+      "label": "In the existing Vercel project",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "Connect the work PC to the online calculator",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "in the existing vercel project",
+      "source_file": "portable-ocr/CONNECT-README.md",
+      "source_location": "L24"
+    },
+    {
+      "id": "portable_ocr_connect_readme_on_the_work_pc_only",
+      "label": "On the work PC only",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "Connect the work PC to the online calculator",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "on the work pc only",
+      "source_file": "portable-ocr/CONNECT-README.md",
+      "source_location": "L7"
+    },
+    {
       "id": "agents",
       "label": "AGENTS.md",
       "_origin": "ast",
@@ -3765,6 +4151,65 @@
       "source_location": "L1"
     },
     {
+      "id": "basehttprequesthandler",
+      "label": "BaseHTTPRequestHandler",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "Handler",
+      "file_type": "code",
+      "norm_label": "basehttprequesthandler",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "portable_ocr_readme",
+      "label": "portable-ocr/README.md",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Set up OCR on the other Windows PC",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "portable-ocr/readme.md",
+      "source_file": "portable-ocr/README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "portable_ocr_readme_next_step",
+      "label": "Next step",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Set up OCR on the other Windows PC",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "next step",
+      "source_file": "portable-ocr/README.md",
+      "source_location": "L46"
+    },
+    {
+      "id": "portable_ocr_readme_set_up_ocr_on_the_other_windows_pc",
+      "label": "Set up OCR on the other Windows PC",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Set up OCR on the other Windows PC",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "set up ocr on the other windows pc",
+      "source_file": "portable-ocr/README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "portable_ocr_readme_what_is_ready",
+      "label": "What is ready",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Set up OCR on the other Windows PC",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "what is ready",
+      "source_file": "portable-ocr/README.md",
+      "source_location": "L17"
+    },
+    {
       "id": "supabase_functions_cleanup_teach_samples_index",
       "label": "index.ts",
       "_origin": "ast",
@@ -3798,6 +4243,39 @@
       "source_location": "L1"
     },
     {
+      "id": "vercel_api_ocr_js_maxduration",
+      "label": "maxDuration",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "vercel.json",
+      "file_type": "code",
+      "norm_label": "maxduration",
+      "source_file": "vercel.json",
+      "source_location": "L2"
+    },
+    {
+      "id": "vercel_functions",
+      "label": "functions",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "vercel.json",
+      "file_type": "code",
+      "norm_label": "functions",
+      "source_file": "vercel.json",
+      "source_location": "L2"
+    },
+    {
+      "id": "vercel_functions_api_ocr_js",
+      "label": "api/ocr.js",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "vercel.json",
+      "file_type": "code",
+      "norm_label": "api/ocr.js",
+      "source_file": "vercel.json",
+      "source_location": "L2"
+    },
+    {
       "id": "vercel_headers",
       "label": "headers",
       "_origin": "ast",
@@ -3806,7 +4284,7 @@
       "file_type": "code",
       "norm_label": "headers",
       "source_file": "vercel.json",
-      "source_location": "L2"
+      "source_location": "L3"
     },
     {
       "id": "tests_readme",
@@ -3819,6 +4297,306 @@
       "norm_label": "tests/readme.md",
       "source_file": "tests/README.md",
       "source_location": "L1"
+    },
+    {
+      "id": "argparse",
+      "label": "argparse",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "argparse",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "hmac",
+      "label": "hmac",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "hmac",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "http_client",
+      "label": "http_client",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "http_client",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "http_server",
+      "label": "http_server",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "http_server",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "io",
+      "label": "io",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "io",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "json",
+      "label": "json",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "json",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "math",
+      "label": "math",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "math",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "numpy",
+      "label": "numpy",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "numpy",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "os",
+      "label": "os",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "os",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "pathlib",
+      "label": "pathlib",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "pathlib",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "pil",
+      "label": "pil",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "pil",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "platform",
+      "label": "platform",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "platform",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "pypdfium2",
+      "label": "pypdfium2",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "pypdfium2",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "rapidocr",
+      "label": "rapidocr",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "rapidocr",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "rapidocr_ch_ppocr_rec_typings",
+      "label": "rapidocr_ch_ppocr_rec_typings",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "rapidocr_ch_ppocr_rec_typings",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "rapidocr_utils_process_img",
+      "label": "rapidocr_utils_process_img",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "rapidocr_utils_process_img",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "rapidocr_utils_typings",
+      "label": "rapidocr_utils_typings",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "rapidocr_utils_typings",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "re",
+      "label": "re",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "re",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "secrets",
+      "label": "secrets",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "secrets",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "statistics",
+      "label": "statistics",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "statistics",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "sys",
+      "label": "sys",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "sys",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "threading",
+      "label": "threading",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "threading",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "time",
+      "label": "time",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "time",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "urllib_parse",
+      "label": "urllib_parse",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "urllib_parse",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "webbrowser",
+      "label": "webbrowser",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "service.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "webbrowser",
+      "source_file": "",
+      "type": "external"
     },
     {
       "id": "ref_fs",
@@ -3905,6 +4683,18 @@
       "type": "external"
     },
     {
+      "id": "ref_node_stream",
+      "label": "ref_node_stream",
+      "_origin": "semantic",
+      "community": 18,
+      "community_name": "ocr-speed.test.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_node_stream",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_node_vm",
       "label": "ref_node_vm",
       "_origin": "semantic",
@@ -3987,7 +4777,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5345",
+      "source_location": "L5420",
       "weight": 1.0
     },
     {
@@ -4719,7 +5509,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5392",
+      "source_location": "L5467",
       "weight": 1.0
     },
     {
@@ -5752,6 +6542,18 @@
       "context": "call",
       "source_file": "index.html",
       "source_location": "L5099",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input_handlecertificatefiles",
+      "target": "graphify_inline_input_workocravailable",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L5114",
       "weight": 1.0
     },
     {
@@ -7484,6 +8286,30 @@
     },
     {
       "source": "graphify_inline_input_readfilewithengine",
+      "target": "graphify_inline_input_textlayertolines",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L5027",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input_readfilewithengine",
+      "target": "graphify_inline_input_hasresultlines",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L5029",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input_readfilewithengine",
       "target": "graphify_inline_input_extractpages",
       "relation": "calls",
       "_origin": "ast",
@@ -7635,7 +8461,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5880",
+      "source_location": "L5955",
       "weight": 1.0
     },
     {
@@ -7827,7 +8653,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5281",
+      "source_location": "L5356",
       "weight": 1.0
     },
     {
@@ -8851,6 +9677,198 @@
       "weight": 1.0
     },
     {
+      "source": "graphify_inline_input_workocrreadpage",
+      "target": "graphify_inline_input_paddlereadpage",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L4250",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input_workocrreadpage",
+      "target": "graphify_inline_input_tesseractreadpage",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L4251",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_check",
+      "target": "numpy",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L202",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_check",
+      "target": "portable_ocr_service_group_lines",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L203",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_check",
+      "target": "io",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L208",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_check",
+      "target": "threading",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L227",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_check",
+      "target": "json",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L234",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler_do_get",
+      "target": "portable_ocr_service_handler_remote_allowed",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L157",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler_do_get",
+      "target": "portable_ocr_service_handler_reply",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L157",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler_do_get",
+      "target": "portable_ocr_service_handler_allowed",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L158",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler_do_post",
+      "target": "portable_ocr_service_handler_allowed",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler_do_post",
+      "target": "portable_ocr_service_handler_remote_allowed",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L169",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler_do_post",
+      "target": "portable_ocr_service_handler_reply",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L170",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_reader_read",
+      "target": "portable_ocr_service_reader_read_image",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_reader_read_image",
+      "target": "portable_ocr_service_group_lines",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L91",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test_request",
+      "target": "tests_ocr_gateway_test_handler",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
       "source": "graphify_inline_input",
       "target": "graphify_inline_input_markresultsstale",
       "relation": "contains",
@@ -9007,6 +10025,198 @@
       "weight": 1.0
     },
     {
+      "source": "tests_ocr_gateway_test",
+      "target": "tests_ocr_gateway_test_assert",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "tests_ocr_gateway_test_request",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "secrets",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "threading",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "time",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "webbrowser",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "numpy",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "pypdfium2",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "argparse",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "io",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "hmac",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "http_client",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "json",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "math",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "os",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "re",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "tests_below_minimum_test",
       "target": "tests_server_serve",
       "relation": "imports",
@@ -9016,6 +10226,78 @@
       "context": "import",
       "source_file": "tests/below-minimum.test.js",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "argparse",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "json",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "platform",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "statistics",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "sys",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "time",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -9064,6 +10346,102 @@
       "context": "import",
       "source_file": "tests/school-pages.test.js",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "http_server",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "urllib_parse",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "pil",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "rapidocr",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "rapidocr_ch_ppocr_rec_typings",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "rapidocr_utils_process_img",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "rapidocr_utils_typings",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -9136,6 +10514,114 @@
       "context": "import",
       "source_file": "tests/ocr-categories.test.js",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "ref_node_stream",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "ref_node_vm",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "api_ocr",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "portable_ocr_service",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "rapidocr",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "rapidocr_utils_typings",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -10786,6 +12272,17 @@
     },
     {
       "source": "graphify_inline_input",
+      "target": "graphify_inline_input_workocravailable",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "source_location": "L4223",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input",
       "target": "graphify_inline_input_parseocrpages",
       "relation": "contains",
       "_origin": "ast",
@@ -11973,6 +13470,116 @@
       "weight": 1.0
     },
     {
+      "source": "portable_ocr_connect_readme",
+      "target": "portable_ocr_connect_readme_connect_the_work_pc_to_the_online_calculator",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/CONNECT-README.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_connect_readme_connect_the_work_pc_to_the_online_calculator",
+      "target": "portable_ocr_connect_readme_in_the_existing_vercel_project",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/CONNECT-README.md",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_connect_readme_connect_the_work_pc_to_the_online_calculator",
+      "target": "portable_ocr_connect_readme_on_the_work_pc_only",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/CONNECT-README.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_readme",
+      "target": "portable_ocr_readme_set_up_ocr_on_the_other_windows_pc",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/README.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_readme_set_up_ocr_on_the_other_windows_pc",
+      "target": "portable_ocr_readme_what_is_ready",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/README.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_readme_set_up_ocr_on_the_other_windows_pc",
+      "target": "portable_ocr_readme_next_step",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/README.md",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "portable_ocr_service_handler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "portable_ocr_service_check",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L201",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "portable_ocr_service_group_lines",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service",
+      "target": "portable_ocr_service_reader",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
       "source": "readme",
       "target": "readme_uos_british_calculator",
       "relation": "contains",
@@ -12102,6 +13709,61 @@
       "confidence_score": 1.0,
       "source_file": "tests/ocr-categories.test.js",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "tests_ocr_gateway_test_readable",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "tests_ocr_gateway_test_fs",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "tests_ocr_gateway_test_vm",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_gateway_test",
+      "target": "tests_ocr_gateway_test_handler",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-gateway.test.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed",
+      "target": "tests_ocr_native_speed_make_reader",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -12491,13 +14153,189 @@
     },
     {
       "source": "vercel",
-      "target": "vercel_headers",
+      "target": "vercel_functions",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "vercel.json",
       "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "vercel",
+      "target": "vercel_headers",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "vercel.json",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "vercel_functions",
+      "target": "vercel_functions_api_ocr_js",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "vercel.json",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "vercel_functions_api_ocr_js",
+      "target": "vercel_api_ocr_js_maxduration",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "vercel.json",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler",
+      "target": "basehttprequesthandler",
+      "relation": "inherits",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler",
+      "target": "portable_ocr_service_handler_log_message",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler",
+      "target": "portable_ocr_service_handler_reply",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L134",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler",
+      "target": "portable_ocr_service_handler_allowed",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L145",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler",
+      "target": "portable_ocr_service_handler_remote_allowed",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L151",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler",
+      "target": "portable_ocr_service_handler_do_get",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L155",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_handler",
+      "target": "portable_ocr_service_handler_do_post",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L166",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_reader",
+      "target": "portable_ocr_service_reader_read",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L103",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_reader",
+      "target": "portable_ocr_service_reader_init",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_reader",
+      "target": "portable_ocr_service_reader_read_image",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_rationale_1",
+      "target": "portable_ocr_service",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "portable_ocr_service_rationale_36",
+      "target": "portable_ocr_service_group_lines",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "portable-ocr/service.py",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed_rationale_1",
+      "target": "tests_ocr_native_speed",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -12717,6 +14555,18 @@
       "weight": 1.0
     },
     {
+      "source": "graphify_inline_input",
+      "target": "graphify_inline_input_workocrreadpage",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "index.html",
+      "source_location": "L4254",
+      "weight": 1.0
+    },
+    {
       "source": "graphify_inline_input_loaddemodata",
       "target": "graphify_inline_input_filldemodata",
       "relation": "indirect_call",
@@ -12739,8 +14589,19 @@
       "source_file": "tests/server.js",
       "source_location": "L16",
       "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_native_speed_make_reader",
+      "target": "portable_ocr_service_reader",
+      "relation": "uses",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "tests/ocr-native-speed.py",
+      "source_location": "L17",
+      "weight": 0.8
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "eb68903caf981a32d036a81e89a4a68543a90007"
+  "built_at_commit": "76ba6e14f6eebcbdd76942cf66abfad102706021"
 }

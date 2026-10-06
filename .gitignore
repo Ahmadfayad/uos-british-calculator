@@ -24,3 +24,15 @@ graphify-out/backups/
 graphify-out/*.html
 graphify-out/.*
 graphify-out/manifest.json
+
+.venv-rapidocr/
+
+.rapidocr-cache/
+
+# Local OCR environments and generated transfer bundle
+portable-ocr/.venv/
+portable-ocr/models/
+**/__pycache__/
+downloads/
+portable-ocr/connection-key.txt
+portable-ocr/cloudflared.exe

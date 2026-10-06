@@ -1,4 +1,5 @@
 {
+  "functions": { "api/ocr.js": { "maxDuration": 20 } },
   "headers": [
     {
       "source": "/(.*)",

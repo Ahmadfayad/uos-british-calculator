@@ -1,0 +1,49 @@
+const assert = require('node:assert/strict');
+const { Readable } = require('node:stream');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const handler = require('../api/ocr');
+async function request(method, body = Buffer.alloc(0), headers = {}) {
+  const req = Readable.from([body]);
+  Object.assign(req, { method, url:'/api/ocr?level=o-level', headers: {host:'uos-british-calculator.vercel.app', 'content-type':'image/png', ...headers} });
+  const res = {setHeader(){},status(code){this.code=code;return this;},json(data){this.data=data;}};
+  await handler(req,res);
+  return res;
+}
+(async () => {
+  delete process.env.OCR_SERVER_URL;
+  assert.equal((await request('GET')).code,503);
+  process.env.OCR_SERVER_URL='https://example.trycloudflare.com';
+  process.env.OCR_SERVER_TOKEN='a'.repeat(64);
+  let upstreamCalls=0;
+  global.fetch=async (url,opts) => {
+    upstreamCalls++;
+    assert.equal(opts.headers.Authorization,'Bearer '+'a'.repeat(64));
+    assert.equal(url.hostname,'example.trycloudflare.com');
+    return {ok:true,json:async()=>url.pathname==='/remote-health'?{ready:true}:{pages:[{page:1,text:'Biology A*',lineBoxes:[],confidence:98}]}};
+  };
+  assert.equal((await request('GET')).data.available,true);
+  assert.equal((await request('POST',Buffer.from('bad'))).code,400);
+  assert.equal((await request('POST',Buffer.alloc(4*1024*1024+1))).code,413);
+  assert.equal((await request('POST',Buffer.alloc(0),{origin:'https://untrusted.example'})).code,403);
+  const png=Buffer.from([137,80,78,71,13,10,26,10]);
+  const result=await request('POST',png);
+  assert.equal(result.data.pages[0].text,'Biology A*');
+  assert(!JSON.stringify(result.data).includes(process.env.OCR_SERVER_TOKEN));
+  assert.equal(upstreamCalls,2);
+  global.fetch=async()=>{throw Error('offline');};
+  assert.equal((await request('GET')).data.available,false);
+  const html=fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8');
+  const source=html.slice(html.indexOf('async function workOcrAvailable('),html.indexOf('const PAGE_READERS'));
+  let browserReads=0, remoteReads=0;
+  const context=vm.createContext({AbortSignal, fetch:async()=>{remoteReads++;throw Error('offline');}, paddleReadPage:async()=>{browserReads++;return {text:'Biology A*'};},tesseractReadPage:async()=>{throw Error('unneeded retry');}});
+  vm.runInContext(source,context);
+  context.canvas={toBlob:fn=>fn({size:10})};
+  context.opts={level:'o-level',remoteState:{enabled:true}};
+  assert.equal((await vm.runInContext('workOcrReadPage(canvas,opts)',context)).fallbackEngine,'paddle');
+  await vm.runInContext('workOcrReadPage(canvas,opts)',context);
+  assert.equal(remoteReads,1,'Offline server is tried only once per upload batch');
+  assert.equal(browserReads,2);
+  assert.equal(context.opts.remoteState.failed,true);
+  console.log('PASS gateway limits, secret protection, origin checks and browser fallback');
+})().catch(error=>{console.error(error);process.exitCode=1;});

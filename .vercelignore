@@ -1,0 +1,15 @@
+samples/
+tests/
+portable-ocr/
+downloads/
+*.zip
+.venv-rapidocr/
+.rapidocr-cache/
+graphify-out/
+.claude/
+.kilo/
+.agents/
+.codex/
+.env*
+tools/
+__pycache__/
