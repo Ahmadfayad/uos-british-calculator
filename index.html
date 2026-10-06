@@ -860,6 +860,8 @@
     }
     .ocr-section .bulk-add-icon { background: rgba(16,185,129,0.16); }
     .ocr-section .bulk-add-icon svg { color: var(--success); }
+    .ocr-upload-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
+    .ocr-upload-grid .ocr-drop { flex-direction: column; align-items: flex-start; margin: 0; }
     .ocr-drop {
       display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
       border: 2px dashed rgba(129,140,248,0.55); border-radius: var(--r); padding: 12px; text-align: center;
@@ -870,7 +872,7 @@
     body:not(.light-theme) .ocr-privacy { color: #c3d3ea; }
     .ocr-engine-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.78rem; }
     .ocr-engine-row label { font-weight: 600; color: var(--text-2); }
-    .ocr-engine-row select {
+    .ocr-engine-row select, .ocr-engine-row input {
       flex: 1; min-width: 220px; background: var(--surface); color: var(--text); border: 1px solid var(--border);
       border-radius: var(--r); padding: 6px 8px; font: inherit; font-size: 0.78rem;
     }
@@ -1108,18 +1110,24 @@
         </span>
         <div class="bulk-add-text">
           <div class="bulk-add-title">Read subjects from certificates <span class="extra-pill">Beta</span></div>
-          <div class="bulk-add-desc">Add PDF or image scans of O-Level, AS / A-Level and Grade 12 documents. Subjects, levels and grades are detected for you to review.</div>
+          <div class="bulk-add-desc">Choose the certificate type below. Subjects, levels and grades are detected for you to review.</div>
         </div>
       </div>
-      <label class="ocr-drop" id="ocr-drop" for="ocr-file-input">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <span><strong>Choose files</strong> or drop them here (PDF, JPG, PNG)</span>
-      </label>
+      <div class="ocr-upload-grid">
+        <label class="ocr-drop" data-level="o-level" tabindex="0" role="button" for="ocr-file-o"><strong>O-Level / IGCSE certificates</strong><span>Choose files or drop them here</span></label>
+        <label class="ocr-drop" data-level="as-level" tabindex="0" role="button" for="ocr-file-as"><strong>AS-Level certificates</strong><span>Choose files or drop them here</span></label>
+        <label class="ocr-drop" data-level="a-level" tabindex="0" role="button" for="ocr-file-a"><strong>A-Level certificates</strong><span>Choose files or drop them here</span></label>
+        <label class="ocr-drop" data-level="moe" tabindex="0" role="button" for="ocr-file-moe"><strong>MOE Grade 12 school grades</strong><span>Choose files or drop them here</span></label>
+      </div>
+      <p class="ocr-privacy">For faster reading, include only pages showing subjects and grades. PDF, JPG and PNG accepted.</p>
       <div class="ocr-engine-row">
         <label for="ocr-engine">Reading engine</label>
         <select id="ocr-engine"></select>
       </div>
-      <input type="file" id="ocr-file-input" accept=".pdf,application/pdf,image/*" multiple hidden>
+      <input type="file" id="ocr-file-o" accept=".pdf,application/pdf,image/*" multiple hidden>
+      <input type="file" id="ocr-file-as" accept=".pdf,application/pdf,image/*" multiple hidden>
+      <input type="file" id="ocr-file-a" accept=".pdf,application/pdf,image/*" multiple hidden>
+      <input type="file" id="ocr-file-moe" accept=".pdf,application/pdf,image/*" multiple hidden>
       <div class="ocr-privacy">🔒 Files are read on this computer only. Nothing is uploaded.</div>
     </div>
     <div class="bulk-add-section" id="bulk-add-section">
@@ -3862,7 +3870,7 @@ function cancelCondConfirm() {
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
 const PDFJS_WORKER_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const TESSERACT_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
-const ORT_CDN = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js';
+const ORT_CDN = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.webgpu.min.js';
 const ORT_WASM_PATH = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/';
 // PaddleOCR models are served with the site (see models/paddleocr/README.md).
 const PADDLE_MODELS = {
@@ -3942,7 +3950,7 @@ async function tesseractReadPage(canvas, opts = {}) {
   // Mostly-Arabic pages (Grade 12 letters) read poorly in English: read them
   // again with the Arabic model. The Arabic text is kept separate and only
   // used to find Grade 12 subjects and marks, never British grades.
-  if(!opts.forceArabic && !looksLikeMoeDocument(eng.text) && eng.confidence >= 55) return eng;
+  if(!opts.forceArabic && !looksLikeMoeDocument(eng.text) && (opts.british || eng.confidence >= 55)) return eng;
   try {
     const ara = await tessRecognize(canvas, 'ara+eng');
     return { ...eng, arabicText: ara.text };
@@ -3954,21 +3962,44 @@ async function tesseractReadPage(canvas, opts = {}) {
 // ── PaddleOCR engine ──
 const _paddleSessions = {}, _paddleDicts = {};
 let _paddleUnavailable = null;
+const _paddleCpuPaths = new Set();
 
 async function loadOrt() {
   await loadScriptOnce(ORT_CDN);
   ort.env.wasm.wasmPaths = ORT_WASM_PATH;
-  // A single thread keeps memory use predictable on office PCs.
-  ort.env.wasm.numThreads = 1;
+  // More threads need a cross-origin isolated page (see vercel.json); otherwise a
+  // single thread keeps memory use predictable on office PCs.
+  ort.env.wasm.numThreads = self.crossOriginIsolated ? Math.max(1, Math.min(4, (navigator.hardwareConcurrency || 2) - 1)) : 1;
 }
 
 function paddleSession(path) {
   if(!_paddleSessions[path]) {
     _paddleSessions[path] = loadOrt()
-      .then(() => ort.InferenceSession.create(path, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' }))
+      .then(async () => {
+        const options = { executionProviders: ['wasm'], graphOptimizationLevel: 'all' };
+        if(navigator.gpu && !_paddleCpuPaths.has(path)) {
+          try { return await ort.InferenceSession.create(path, { ...options, executionProviders: ['webgpu'] }); }
+          catch(e) { _paddleCpuPaths.add(path); }
+        }
+        return ort.InferenceSession.create(path, options);
+      })
       .catch(e => { delete _paddleSessions[path]; throw e; });
   }
   return _paddleSessions[path];
+}
+
+async function runPaddle(path, tensor) {
+  let session = await paddleSession(path);
+  try { return (await session.run({ [session.inputNames[0]]: tensor }))[session.outputNames[0]]; }
+  catch(e) {
+    if(!navigator.gpu || _paddleCpuPaths.has(path)) throw e;
+    // A model may load on GPU but fail on a particular page shape. Retry it once on CPU.
+    _paddleCpuPaths.add(path);
+    delete _paddleSessions[path];
+    try { await session.release(); } catch(ignore) {}
+    session = await paddleSession(path);
+    return (await session.run({ [session.inputNames[0]]: tensor }))[session.outputNames[0]];
+  }
 }
 
 function paddleDict(path) {
@@ -4007,9 +4038,7 @@ async function paddleDetect(canvas) {
   const input = new Float32Array(3 * w * h);
   for(let i = 0; i < w * h; i++) for(let ch = 0; ch < 3; ch++) input[ch * w * h + i] = (px[i * 4 + ch] / 255 - mean[ch]) / std[ch];
   c.width = c.height = 0;
-  const sess = await paddleSession(PADDLE_MODELS.det);
-  const out = await sess.run({ [sess.inputNames[0]]: new ort.Tensor('float32', input, [1, 3, h, w]) });
-  const prob = out[sess.outputNames[0]].data;
+  const prob = (await runPaddle(PADDLE_MODELS.det, new ort.Tensor('float32', input, [1, 3, h, w]))).data;
 
   const seen = new Uint8Array(w * h), stack = new Int32Array(w * h), boxes = [];
   for(let i = 0; i < w * h; i++) {
@@ -4059,8 +4088,7 @@ async function paddleRecognize(canvas, box, model, classes, rtl) {
   const input = new Float32Array(3 * w * H);
   for(let i = 0; i < w * H; i++) for(let ch = 0; ch < 3; ch++) input[ch * w * H + i] = (px[i * 4 + ch] / 255 - 0.5) / 0.5;
   c.width = c.height = 0;
-  const sess = await paddleSession(model);
-  const out = (await sess.run({ [sess.inputNames[0]]: new ort.Tensor('float32', input, [1, 3, H, w]) }))[sess.outputNames[0]];
+  const out = await runPaddle(model, new ort.Tensor('float32', input, [1, 3, H, w]));
   const [, T, C] = out.dims, d = out.data;
   let text = '', last = -1, conf = 0, count = 0;
   for(let t = 0; t < T; t++) {
@@ -4121,7 +4149,7 @@ async function paddleReadPage(canvas, opts = {}) {
   // A page where many lines read poorly in English is likely Arabic (e.g. a
   // Grade 12 letter). The Arabic text is kept separate and only used to find
   // Grade 12 subjects and marks, never British grades.
-  if(!opts.forceArabic && !looksLikeMoeDocument(en.text) && en.weakShare <= 0.3) return result;
+  if(!opts.forceArabic && !looksLikeMoeDocument(en.text) && (opts.british || en.weakShare <= 0.3)) return result;
   try {
     result.arabicText = (await paddleReadWith(canvas, boxes, 'ar')).text;
   } catch(e) { /* keep the English reading */ }
@@ -4141,9 +4169,10 @@ function toGrayscale(canvas) {
   return canvas;
 }
 
-// Renders a PDF page at ~300 dpi, the resolution OCR reads best.
+const PDF_RENDER_DPI = 300;
+// Keep recognition detail: 200 dpi changed extracted results in the sample comparison.
 async function renderPdfPage(page) {
-  const viewport = page.getViewport({ scale: 300 / 72 });
+  const viewport = page.getViewport({ scale: PDF_RENDER_DPI / 72 });
   const canvas = document.createElement('canvas');
   canvas.width = Math.round(viewport.width);
   canvas.height = Math.round(viewport.height);
@@ -4196,10 +4225,17 @@ const PAGE_READERS = { paddle: paddleReadPage, tesseract: tesseractReadPage };
 // Reads every page of a file with each requested engine. Each page is
 // rendered once and shared by the engines; when two engines are used they
 // run at the same time (Tesseract works in its own background worker).
-async function extractPages(file, engines, onStatus) {
+async function extractPages(file, engines, onStatus, opts = {}) {
   const result = Object.fromEntries(engines.map(e => [e, []]));
   const readCanvas = async (canvas, pageNo, layerArabic = '') => {
-    const reads = await Promise.all(engines.map(e => PAGE_READERS[e](canvas, { forceArabic: !!layerArabic })));
+    const reads = await Promise.all(engines.map(async e => {
+      try { return await PAGE_READERS[e](canvas, { ...opts, forceArabic: !!layerArabic }); }
+      catch(error) {
+        if(e !== 'paddle' || !opts.fallback) throw error;
+        onStatus('Retrying page ' + pageNo + ' with Tesseract…');
+        return { ...await tesseractReadPage(canvas, { ...opts, forceArabic: !!layerArabic }), fallbackEngine: 'tesseract' };
+      }
+    }));
     engines.forEach((e, i) => {
       const read = reads[i];
       // A scrambled Arabic text layer still holds exact digits, so keep it too.
@@ -4800,7 +4836,7 @@ function parseDocument(pages, fileName, engine) {
     pg.text.split('\n').forEach((raw, lineNo) => {
       const line = cleanOcrLine(raw);
       if(isSkippedLine(line)) return;
-      const rowInfo = { raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, sectionStatus: section.status, pageStatus };
+      const rowInfo = { raw: raw.trim(), page: pg.page, box: pg.lineBoxes?.[lineNo] || null, pageConfidence: pg.confidence, source: pg.source, fallbackEngine: pg.fallbackEngine, sectionStatus: section.status, pageStatus };
       const row = parseResultLine(line, section.level || pgLevel, pg.text, !!section.level);
       if(row) { pushRow(row, rowInfo); return; }
       const h = sectionHeading(line);
@@ -4815,7 +4851,7 @@ function parseDocument(pages, fileName, engine) {
       const miss = nearMissLine(line, section.level || pgLevel);
       if(miss) nearMisses.push({ ...miss, ...rowInfo });
     });
-    parseStatusTableRows(pg.text).forEach(r => pushRow(r, { page: pg.page, box: null, pageConfidence: pg.confidence, source: pg.source, sectionStatus: null, pageStatus }));
+    parseStatusTableRows(pg.text).forEach(r => pushRow(r, { page: pg.page, box: null, pageConfidence: pg.confidence, source: pg.source, fallbackEngine: pg.fallbackEngine, sectionStatus: null, pageStatus }));
   });
   // A known subject whose grade was misread ("Biology Cc") is shown for staff to
   // confirm instead of being dropped, but only on pages where other results were read.
@@ -4823,7 +4859,7 @@ function parseDocument(pages, fileName, engine) {
   const layerArabic = pages.map(p => p.layerArabic || '').join('\n');
   if(!found.length && looksLikeMoeDocument([allText, arabicText, layerArabic].join('\n'))) {
     const moePage = pages.find(p => p.arabicText || p.layerArabic) || pages[0];
-    parseMoeRows(layerArabic, arabicText, allText).forEach(r => found.push({ ...r, raw: r.rawSubject, page: moePage?.page ?? 1, pageConfidence: moePage?.confidence ?? 0, source: moePage?.source }));
+    parseMoeRows(layerArabic, arabicText, allText).forEach(r => found.push({ ...r, raw: r.rawSubject, page: moePage?.page ?? 1, pageConfidence: moePage?.confidence ?? 0, source: moePage?.source, fallbackEngine: moePage?.fallbackEngine }));
   }
   return found.map(r => {
     const verdict = r.level === 'moe' ? { status: 'final' } : rowResultStatus(r);
@@ -4865,7 +4901,7 @@ function parseDocument(pages, fileName, engine) {
       mark,
       // An unclear status starts as Expected, the cautious choice, until staff decide.
       status: r.level !== 'moe' && verdict.status !== 'final' ? 'expected' : 'final',
-      raw: r.raw, file: fileName, page: r.page, box: r.box || null, engine, rawSubject: r.rawSubject, matchHow: match.how, revised: !!r.revised,
+      raw: r.raw, file: fileName, page: r.page, box: r.box || null, engine: r.fallbackEngine || engine, rawSubject: r.rawSubject, matchHow: match.how, revised: !!r.revised,
       notes, reasons
     };
   });
@@ -4945,49 +4981,49 @@ function resolveRepeatedSubjects(rows) {
 // re-adding the same file is instant. Nothing is stored after the page closes.
 const _ocrPageCache = new Map();
 
-async function readFileWithEngine(file, fingerprint, engine, onStatus) {
+async function readFileWithEngine(file, fingerprint, engine, onStatus, opts = {}) {
   const key = `${fingerprint}|${engine}`;
   if(_ocrPageCache.has(key)) return _ocrPageCache.get(key);
-  const pages = (await extractPages(file, [engine], onStatus))[engine];
+  const pages = (await extractPages(file, [engine], onStatus, opts))[engine];
   _ocrPageCache.set(key, pages);
   return pages;
 }
 
-async function readFileBothEngines(file, fingerprint, onStatus) {
+async function readFileBothEngines(file, fingerprint, onStatus, opts = {}) {
   const pk = `${fingerprint}|paddle`, tk = `${fingerprint}|tesseract`;
   const need = ['paddle', 'tesseract'].filter(e => !_ocrPageCache.has(`${fingerprint}|${e}`));
   if(need.length) {
-    const read = await extractPages(file, need, onStatus);
+    const read = await extractPages(file, need, onStatus, opts);
     need.forEach(e => _ocrPageCache.set(`${fingerprint}|${e}`, read[e]));
   }
   return { paddle: _ocrPageCache.get(pk), tesseract: _ocrPageCache.get(tk) };
 }
 
 // Reads one file according to the chosen mode; returns { rows, used, fallback }.
-async function readCertificateFile(file, fingerprint, mode, onStatus) {
+async function readCertificateFile(file, fingerprint, mode, onStatus, opts = {}) {
   if(mode === 'tesseract') {
-    return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus), file.name, 'tesseract'), used: 'Tesseract' };
+    return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus, opts), file.name, 'tesseract'), used: 'Tesseract' };
   }
   if(mode === 'paddle') {
-    return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'paddle', onStatus), file.name, 'paddle'), used: 'PaddleOCR' };
+    return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'paddle', onStatus, opts), file.name, 'paddle'), used: 'PaddleOCR' };
   }
   if(mode === 'both') {
     if(_paddleUnavailable) {
-      return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus), file.name, 'tesseract'), used: 'Tesseract', fallback: true };
+      return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus, opts), file.name, 'tesseract'), used: 'Tesseract', fallback: true };
     }
-    const pages = await readFileBothEngines(file, fingerprint, onStatus);
+    const pages = await readFileBothEngines(file, fingerprint, onStatus, opts);
     return { rows: mergeEngineRows(parseDocument(pages.paddle, file.name, 'paddle'), parseDocument(pages.tesseract, file.name, 'tesseract')), used: 'both engines' };
   }
   // Auto: PaddleOCR first; Tesseract reads the file again if PaddleOCR is
   // unavailable, fails, or finds no subjects, so a file is never left unread.
   if(!_paddleUnavailable) {
     try {
-      const rows = parseDocument(await readFileWithEngine(file, fingerprint, 'paddle', onStatus), file.name, 'paddle');
-      if(rows.length) return { rows, used: 'PaddleOCR' };
+      const rows = parseDocument(await readFileWithEngine(file, fingerprint, 'paddle', onStatus, { ...opts, fallback: true }), file.name, 'paddle');
+      if(rows.length) return { rows, used: rows.some(r => r.engine === 'tesseract') ? 'PaddleOCR with page retries' : 'PaddleOCR' };
     } catch(e) { /* fall through to Tesseract */ }
   }
   onStatus('Trying Tesseract…');
-  const rows = parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus), file.name, 'tesseract');
+  const rows = parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus, opts), file.name, 'tesseract');
   return { rows, used: 'Tesseract', fallback: true };
 }
 
@@ -5014,7 +5050,7 @@ function showOcrWarnings(warnings) {
 }
 
 let _ocrBusy = false, _ocrCancelled = false;
-async function handleCertificateFiles(fileList) {
+async function handleCertificateFiles(fileList, level = '') {
   const files = Array.from(fileList || []).filter(f => /pdf$|^image\//i.test(f.type) || /\.(pdf|png|jpe?g|webp|bmp|tiff?)$/i.test(f.name));
   if(!files.length) return;
   if(_ocrBusy) { appAlert('The previous certificates are still being read. Please try again in a moment.'); return; }
@@ -5063,7 +5099,7 @@ async function handleCertificateFiles(fileList) {
     const file = files[i];
     const p = progress[i];
     try {
-      const fp = await fileFingerprint(file);
+      const fp = (await fileFingerprint(file)) + '|' + level;
       if(seen.has(fp)) {
         p.state = 'Skipped (identical file)'; p.cls = 'done';
         warnings.push(`<strong>${escHtml(file.name)}</strong> is identical to <strong>${escHtml(seen.get(fp))}</strong>, so it was read only once. Check that the right document was scanned.`);
@@ -5072,7 +5108,8 @@ async function handleCertificateFiles(fileList) {
       }
       seen.set(fp, file.name);
       batchFiles.set(fp, file);
-      const res = await readCertificateFile(file, fp, mode, msg => { p.state = msg; setOcrProgress(progress); });
+      const res = await readCertificateFile(file, fp, mode, msg => { p.state = msg; setOcrProgress(progress); }, { british: !!level && level !== 'moe' });
+      if(level && res.rows.some(r => r.level !== level)) warnings.push(`<strong>${escHtml(file.name)}</strong> contains results outside the selected certificate type. Check the detected levels below; all results have been kept.`);
       rows.push(...res.rows);
       const n = res.rows.length;
       p.state = n ? `${n} subject${n > 1 ? 's' : ''} found · ${res.used}` : `No subjects found · ${res.used}`;
@@ -5360,17 +5397,20 @@ function closeOcrModal(force = false) {
 }
 
 (function initCertificateUpload() {
-  const input = document.getElementById('ocr-file-input');
-  const drop = document.getElementById('ocr-drop');
   const engineSelect = document.getElementById('ocr-engine');
   engineSelect.innerHTML = Object.entries(OCR_ENGINES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
   try { const saved = localStorage.getItem('ocrEngine'); if(OCR_ENGINES[saved]) engineSelect.value = saved; } catch(e) {}
   engineSelect.addEventListener('change', () => { try { localStorage.setItem('ocrEngine', engineSelect.value); } catch(e) {} });
-  input.addEventListener('change', () => { handleCertificateFiles(input.files); input.value = ''; });
-  drop.addEventListener('click', warmUpOcr);
-  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
-  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
-  drop.addEventListener('drop', e => handleCertificateFiles(e.dataTransfer.files));
+  document.querySelectorAll('.ocr-drop[data-level]').forEach(drop => {
+    const input = document.getElementById(drop.htmlFor);
+    const level = drop.dataset.level;
+    input.addEventListener('change', () => { handleCertificateFiles(input.files, level); input.value = ''; });
+    drop.addEventListener('click', warmUpOcr);
+    drop.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); warmUpOcr(); input.click(); } });
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+    drop.addEventListener('drop', e => handleCertificateFiles(e.dataTransfer.files, level));
+  });
 })();
 </script>
 <script>

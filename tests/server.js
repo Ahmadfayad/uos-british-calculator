@@ -8,7 +8,7 @@ function serve() {
     const server = http.createServer((req, res) => {
       const file = path.join(root, decodeURIComponent(req.url.split('?')[0]).replace(/^\/$/, '/index.html'));
       if (!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end(); }
-      res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream' });
+      res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream', 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'credentialless' });
       fs.createReadStream(file).pipe(res);
     }).listen(0, () => resolve({ url: `http://localhost:${server.address().port}/index.html`, close: () => server.close() }));
   });

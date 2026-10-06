@@ -1,0 +1,5 @@
+#!/bin/sh
+# graphify-hook-start
+# Project adapter also indexes index.html's inline scripts.
+node "$(git rev-parse --show-toplevel)/tools/update-graph.cjs" || echo "Graphify rebuild failed; graph may be stale." >&2
+# graphify-hook-end

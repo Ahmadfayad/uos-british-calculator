@@ -17,3 +17,10 @@ npm-debug.log*
 # Sample student documents (never commit)
 samples/
 node_modules/
+
+# Generated graph previews, caches and machine-specific state
+graphify-out/cache/
+graphify-out/backups/
+graphify-out/*.html
+graphify-out/.*
+graphify-out/manifest.json
