@@ -102,42 +102,6 @@
       "source_location": "L16"
     },
     {
-      "id": "tests_below_minimum_test_aslevels",
-      "label": "asLevels()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "aslevels()",
-      "source_file": "tests/below-minimum.test.js",
-      "source_location": "L6"
-    },
-    {
-      "id": "tests_below_minimum_test_olevels",
-      "label": "oLevels()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "olevels()",
-      "source_file": "tests/below-minimum.test.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "tests_server_serve",
-      "label": "serve()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "serve()",
-      "source_file": "tests/server.js",
-      "source_location": "L6"
-    },
-    {
       "id": "graphify_inline_input_buildlayoutregex",
       "label": "buildLayoutRegex()",
       "_callable": true,
@@ -147,7 +111,7 @@
       "file_type": "code",
       "norm_label": "buildlayoutregex()",
       "source_file": "index.html",
-      "source_location": "L5528"
+      "source_location": "L5564"
     },
     {
       "id": "graphify_inline_input_cancelcondconfirm",
@@ -159,7 +123,7 @@
       "file_type": "code",
       "norm_label": "cancelcondconfirm()",
       "source_file": "index.html",
-      "source_location": "L3858"
+      "source_location": "L3894"
     },
     {
       "id": "graphify_inline_input_cancelstudentmodal",
@@ -171,7 +135,7 @@
       "file_type": "code",
       "norm_label": "cancelstudentmodal()",
       "source_file": "index.html",
-      "source_location": "L1664"
+      "source_location": "L1700"
     },
     {
       "id": "graphify_inline_input_closeadminpanel",
@@ -183,7 +147,7 @@
       "file_type": "code",
       "norm_label": "closeadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5873"
+      "source_location": "L5909"
     },
     {
       "id": "graphify_inline_input_closemodal",
@@ -195,7 +159,7 @@
       "file_type": "code",
       "norm_label": "closemodal()",
       "source_file": "index.html",
-      "source_location": "L3782"
+      "source_location": "L3818"
     },
     {
       "id": "graphify_inline_input_closescenariopickmodal",
@@ -207,7 +171,7 @@
       "file_type": "code",
       "norm_label": "closescenariopickmodal()",
       "source_file": "index.html",
-      "source_location": "L1660"
+      "source_location": "L1696"
     },
     {
       "id": "graphify_inline_input_closesuccessmodal",
@@ -219,7 +183,7 @@
       "file_type": "code",
       "norm_label": "closesuccessmodal()",
       "source_file": "index.html",
-      "source_location": "L3784"
+      "source_location": "L3820"
     },
     {
       "id": "graphify_inline_input_closesuccessmodalandscrolltoscenarios",
@@ -231,7 +195,7 @@
       "file_type": "code",
       "norm_label": "closesuccessmodalandscrolltoscenarios()",
       "source_file": "index.html",
-      "source_location": "L3788"
+      "source_location": "L3824"
     },
     {
       "id": "graphify_inline_input_confirmcondconfirm",
@@ -243,7 +207,7 @@
       "file_type": "code",
       "norm_label": "confirmcondconfirm()",
       "source_file": "index.html",
-      "source_location": "L3854"
+      "source_location": "L3890"
     },
     {
       "id": "graphify_inline_input_escaperegex",
@@ -255,7 +219,7 @@
       "file_type": "code",
       "norm_label": "escaperegex()",
       "source_file": "index.html",
-      "source_location": "L5524"
+      "source_location": "L5560"
     },
     {
       "id": "graphify_inline_input_openmobilebreakdown",
@@ -267,7 +231,7 @@
       "file_type": "code",
       "norm_label": "openmobilebreakdown()",
       "source_file": "index.html",
-      "source_location": "L3461"
+      "source_location": "L3497"
     },
     {
       "id": "graphify_inline_input_pickscenario",
@@ -279,7 +243,7 @@
       "file_type": "code",
       "norm_label": "pickscenario()",
       "source_file": "index.html",
-      "source_location": "L1654"
+      "source_location": "L1690"
     },
     {
       "id": "graphify_inline_input_toggletheme",
@@ -291,7 +255,7 @@
       "file_type": "code",
       "norm_label": "toggletheme()",
       "source_file": "index.html",
-      "source_location": "L3433"
+      "source_location": "L3469"
     },
     {
       "id": "graphify_inline_input_bigramsimilarity",
@@ -303,7 +267,7 @@
       "file_type": "code",
       "norm_label": "bigramsimilarity()",
       "source_file": "index.html",
-      "source_location": "L4786"
+      "source_location": "L4822"
     },
     {
       "id": "graphify_inline_input_classifypagestatus",
@@ -315,7 +279,7 @@
       "file_type": "code",
       "norm_label": "classifypagestatus()",
       "source_file": "index.html",
-      "source_location": "L4621"
+      "source_location": "L4657"
     },
     {
       "id": "graphify_inline_input_cleanboardsubject",
@@ -327,7 +291,7 @@
       "file_type": "code",
       "norm_label": "cleanboardsubject()",
       "source_file": "index.html",
-      "source_location": "L4340"
+      "source_location": "L4376"
     },
     {
       "id": "graphify_inline_input_cleanocrline",
@@ -339,7 +303,7 @@
       "file_type": "code",
       "norm_label": "cleanocrline()",
       "source_file": "index.html",
-      "source_location": "L4313"
+      "source_location": "L4349"
     },
     {
       "id": "graphify_inline_input_cleanschoolsubject",
@@ -351,7 +315,7 @@
       "file_type": "code",
       "norm_label": "cleanschoolsubject()",
       "source_file": "index.html",
-      "source_location": "L4443"
+      "source_location": "L4479"
     },
     {
       "id": "graphify_inline_input_derivelayouttemplate",
@@ -363,7 +327,7 @@
       "file_type": "code",
       "norm_label": "derivelayouttemplate()",
       "source_file": "index.html",
-      "source_location": "L5653"
+      "source_location": "L5689"
     },
     {
       "id": "graphify_inline_input_expandsubjectabbreviations",
@@ -375,7 +339,7 @@
       "file_type": "code",
       "norm_label": "expandsubjectabbreviations()",
       "source_file": "index.html",
-      "source_location": "L4804"
+      "source_location": "L4840"
     },
     {
       "id": "graphify_inline_input_guessteachvalues",
@@ -387,7 +351,7 @@
       "file_type": "code",
       "norm_label": "guessteachvalues()",
       "source_file": "index.html",
-      "source_location": "L5701"
+      "source_location": "L5737"
     },
     {
       "id": "graphify_inline_input_isgcsepage",
@@ -399,7 +363,7 @@
       "file_type": "code",
       "norm_label": "isgcsepage()",
       "source_file": "index.html",
-      "source_location": "L4336"
+      "source_location": "L4372"
     },
     {
       "id": "graphify_inline_input_isknownsubject",
@@ -411,7 +375,7 @@
       "file_type": "code",
       "norm_label": "isknownsubject()",
       "source_file": "index.html",
-      "source_location": "L4449"
+      "source_location": "L4485"
     },
     {
       "id": "graphify_inline_input_isskippedline",
@@ -423,7 +387,7 @@
       "file_type": "code",
       "norm_label": "isskippedline()",
       "source_file": "index.html",
-      "source_location": "L4645"
+      "source_location": "L4681"
     },
     {
       "id": "graphify_inline_input_learncorrectedsubjects",
@@ -435,7 +399,7 @@
       "file_type": "code",
       "norm_label": "learncorrectedsubjects()",
       "source_file": "index.html",
-      "source_location": "L5844"
+      "source_location": "L5880"
     },
     {
       "id": "graphify_inline_input_learnedaliasfor",
@@ -447,7 +411,7 @@
       "file_type": "code",
       "norm_label": "learnedaliasfor()",
       "source_file": "index.html",
-      "source_location": "L5630"
+      "source_location": "L5666"
     },
     {
       "id": "graphify_inline_input_levelfromcode",
@@ -459,7 +423,7 @@
       "file_type": "code",
       "norm_label": "levelfromcode()",
       "source_file": "index.html",
-      "source_location": "L4438"
+      "source_location": "L4474"
     },
     {
       "id": "graphify_inline_input_levelfromtoken",
@@ -471,7 +435,7 @@
       "file_type": "code",
       "norm_label": "levelfromtoken()",
       "source_file": "index.html",
-      "source_location": "L4429"
+      "source_location": "L4465"
     },
     {
       "id": "graphify_inline_input_matchocrsubject",
@@ -483,7 +447,7 @@
       "file_type": "code",
       "norm_label": "matchocrsubject()",
       "source_file": "index.html",
-      "source_location": "L4808"
+      "source_location": "L4844"
     },
     {
       "id": "graphify_inline_input_nearmissline",
@@ -495,7 +459,7 @@
       "file_type": "code",
       "norm_label": "nearmissline()",
       "source_file": "index.html",
-      "source_location": "L4839"
+      "source_location": "L4875"
     },
     {
       "id": "graphify_inline_input_normalizegrade",
@@ -507,7 +471,7 @@
       "file_type": "code",
       "norm_label": "normalizegrade()",
       "source_file": "index.html",
-      "source_location": "L4327"
+      "source_location": "L4363"
     },
     {
       "id": "graphify_inline_input_normalizesearch",
@@ -519,7 +483,7 @@
       "file_type": "code",
       "norm_label": "normalizesearch()",
       "source_file": "index.html",
-      "source_location": "L1876"
+      "source_location": "L1912"
     },
     {
       "id": "graphify_inline_input_pagelevel",
@@ -531,7 +495,7 @@
       "file_type": "code",
       "norm_label": "pagelevel()",
       "source_file": "index.html",
-      "source_location": "L4319"
+      "source_location": "L4355"
     },
     {
       "id": "graphify_inline_input_parseawardline",
@@ -543,7 +507,7 @@
       "file_type": "code",
       "norm_label": "parseawardline()",
       "source_file": "index.html",
-      "source_location": "L4347"
+      "source_location": "L4383"
     },
     {
       "id": "graphify_inline_input_parseboardmarkline",
@@ -555,7 +519,7 @@
       "file_type": "code",
       "norm_label": "parseboardmarkline()",
       "source_file": "index.html",
-      "source_location": "L4508"
+      "source_location": "L4544"
     },
     {
       "id": "graphify_inline_input_parsecambridgecertline",
@@ -567,7 +531,7 @@
       "file_type": "code",
       "norm_label": "parsecambridgecertline()",
       "source_file": "index.html",
-      "source_location": "L4409"
+      "source_location": "L4445"
     },
     {
       "id": "graphify_inline_input_parsecambridgeelectronicline",
@@ -579,7 +543,7 @@
       "file_type": "code",
       "norm_label": "parsecambridgeelectronicline()",
       "source_file": "index.html",
-      "source_location": "L4498"
+      "source_location": "L4534"
     },
     {
       "id": "graphify_inline_input_parsedocument",
@@ -591,7 +555,7 @@
       "file_type": "code",
       "norm_label": "parsedocument()",
       "source_file": "index.html",
-      "source_location": "L4851"
+      "source_location": "L4887"
     },
     {
       "id": "graphify_inline_input_parsegradeline",
@@ -603,7 +567,7 @@
       "file_type": "code",
       "norm_label": "parsegradeline()",
       "source_file": "index.html",
-      "source_location": "L4375"
+      "source_location": "L4411"
     },
     {
       "id": "graphify_inline_input_parselearnedlayoutline",
@@ -615,7 +579,7 @@
       "file_type": "code",
       "norm_label": "parselearnedlayoutline()",
       "source_file": "index.html",
-      "source_location": "L5635"
+      "source_location": "L5671"
     },
     {
       "id": "graphify_inline_input_parselevelfirstline",
@@ -627,7 +591,7 @@
       "file_type": "code",
       "norm_label": "parselevelfirstline()",
       "source_file": "index.html",
-      "source_location": "L4529"
+      "source_location": "L4565"
     },
     {
       "id": "graphify_inline_input_parseresultline",
@@ -639,7 +603,7 @@
       "file_type": "code",
       "norm_label": "parseresultline()",
       "source_file": "index.html",
-      "source_location": "L4587"
+      "source_location": "L4623"
     },
     {
       "id": "graphify_inline_input_parsereviewoutcomeline",
@@ -651,7 +615,7 @@
       "file_type": "code",
       "norm_label": "parsereviewoutcomeline()",
       "source_file": "index.html",
-      "source_location": "L4519"
+      "source_location": "L4555"
     },
     {
       "id": "graphify_inline_input_parseschoolgradeonlyline",
@@ -663,7 +627,7 @@
       "file_type": "code",
       "norm_label": "parseschoolgradeonlyline()",
       "source_file": "index.html",
-      "source_location": "L4478"
+      "source_location": "L4514"
     },
     {
       "id": "graphify_inline_input_parseschooltableline",
@@ -675,7 +639,7 @@
       "file_type": "code",
       "norm_label": "parseschooltableline()",
       "source_file": "index.html",
-      "source_location": "L4455"
+      "source_location": "L4491"
     },
     {
       "id": "graphify_inline_input_parsestatustablebyrow",
@@ -687,7 +651,7 @@
       "file_type": "code",
       "norm_label": "parsestatustablebyrow()",
       "source_file": "index.html",
-      "source_location": "L4560"
+      "source_location": "L4596"
     },
     {
       "id": "graphify_inline_input_parsestatustablerows",
@@ -699,7 +663,7 @@
       "file_type": "code",
       "norm_label": "parsestatustablerows()",
       "source_file": "index.html",
-      "source_location": "L4544"
+      "source_location": "L4580"
     },
     {
       "id": "graphify_inline_input_parsesyllabusline",
@@ -711,7 +675,7 @@
       "file_type": "code",
       "norm_label": "parsesyllabusline()",
       "source_file": "index.html",
-      "source_location": "L4391"
+      "source_location": "L4427"
     },
     {
       "id": "graphify_inline_input_renderteachsection",
@@ -723,7 +687,7 @@
       "file_type": "code",
       "norm_label": "renderteachsection()",
       "source_file": "index.html",
-      "source_location": "L5687"
+      "source_location": "L5723"
     },
     {
       "id": "graphify_inline_input_rowresultstatus",
@@ -735,7 +699,7 @@
       "file_type": "code",
       "norm_label": "rowresultstatus()",
       "source_file": "index.html",
-      "source_location": "L4636"
+      "source_location": "L4672"
     },
     {
       "id": "graphify_inline_input_sectionheading",
@@ -747,7 +711,7 @@
       "file_type": "code",
       "norm_label": "sectionheading()",
       "source_file": "index.html",
-      "source_location": "L4596"
+      "source_location": "L4632"
     },
     {
       "id": "graphify_inline_input_stripschoolnoise",
@@ -759,7 +723,7 @@
       "file_type": "code",
       "norm_label": "stripschoolnoise()",
       "source_file": "index.html",
-      "source_location": "L4467"
+      "source_location": "L4503"
     },
     {
       "id": "graphify_inline_input_submitteach",
@@ -771,7 +735,7 @@
       "file_type": "code",
       "norm_label": "submitteach()",
       "source_file": "index.html",
-      "source_location": "L5785"
+      "source_location": "L5821"
     },
     {
       "id": "graphify_inline_input_unrecognisedlines",
@@ -783,7 +747,7 @@
       "file_type": "code",
       "norm_label": "unrecognisedlines()",
       "source_file": "index.html",
-      "source_location": "L5672"
+      "source_location": "L5708"
     },
     {
       "id": "graphify_inline_input_addsubjecttoscenario",
@@ -795,7 +759,7 @@
       "file_type": "code",
       "norm_label": "addsubjecttoscenario()",
       "source_file": "index.html",
-      "source_location": "L2566"
+      "source_location": "L2602"
     },
     {
       "id": "graphify_inline_input_appendexcludedsubjectstopdf",
@@ -807,7 +771,7 @@
       "file_type": "code",
       "norm_label": "appendexcludedsubjectstopdf()",
       "source_file": "index.html",
-      "source_location": "L3196"
+      "source_location": "L3232"
     },
     {
       "id": "graphify_inline_input_buildpdfheader",
@@ -819,7 +783,7 @@
       "file_type": "code",
       "norm_label": "buildpdfheader()",
       "source_file": "index.html",
-      "source_location": "L1669"
+      "source_location": "L1705"
     },
     {
       "id": "graphify_inline_input_buildscenariopresentation",
@@ -831,7 +795,7 @@
       "file_type": "code",
       "norm_label": "buildscenariopresentation()",
       "source_file": "index.html",
-      "source_location": "L1443"
+      "source_location": "L1479"
     },
     {
       "id": "graphify_inline_input_buildstablepresentation",
@@ -843,7 +807,7 @@
       "file_type": "code",
       "norm_label": "buildstablepresentation()",
       "source_file": "index.html",
-      "source_location": "L1495"
+      "source_location": "L1531"
     },
     {
       "id": "graphify_inline_input_calcscenariopdfbodyheight",
@@ -855,7 +819,7 @@
       "file_type": "code",
       "norm_label": "_calcscenariopdfbodyheight()",
       "source_file": "index.html",
-      "source_location": "L3291"
+      "source_location": "L3327"
     },
     {
       "id": "graphify_inline_input_calculateoverallpercentage",
@@ -867,7 +831,7 @@
       "file_type": "code",
       "norm_label": "calculateoverallpercentage()",
       "source_file": "index.html",
-      "source_location": "L2834"
+      "source_location": "L2870"
     },
     {
       "id": "graphify_inline_input_coresciencetype",
@@ -879,7 +843,7 @@
       "file_type": "code",
       "norm_label": "coresciencetype()",
       "source_file": "index.html",
-      "source_location": "L3112"
+      "source_location": "L3148"
     },
     {
       "id": "graphify_inline_input_countlevels",
@@ -891,7 +855,7 @@
       "file_type": "code",
       "norm_label": "countlevels()",
       "source_file": "index.html",
-      "source_location": "L1776"
+      "source_location": "L1812"
     },
     {
       "id": "graphify_inline_input_describesubject",
@@ -903,7 +867,7 @@
       "file_type": "code",
       "norm_label": "describesubject()",
       "source_file": "index.html",
-      "source_location": "L3108"
+      "source_location": "L3144"
     },
     {
       "id": "graphify_inline_input_detectmajortypes",
@@ -915,7 +879,7 @@
       "file_type": "code",
       "norm_label": "detectmajortypes()",
       "source_file": "index.html",
-      "source_location": "L3177"
+      "source_location": "L3213"
     },
     {
       "id": "graphify_inline_input_dodownloaddata",
@@ -927,7 +891,7 @@
       "file_type": "code",
       "norm_label": "_dodownloaddata()",
       "source_file": "index.html",
-      "source_location": "L3499"
+      "source_location": "L3535"
     },
     {
       "id": "graphify_inline_input_dodownloadscenariopdf",
@@ -939,7 +903,7 @@
       "file_type": "code",
       "norm_label": "_dodownloadscenariopdf()",
       "source_file": "index.html",
-      "source_location": "L3308"
+      "source_location": "L3344"
     },
     {
       "id": "graphify_inline_input_drawnoteligiblepill",
@@ -951,7 +915,7 @@
       "file_type": "code",
       "norm_label": "drawnoteligiblepill()",
       "source_file": "index.html",
-      "source_location": "L3284"
+      "source_location": "L3320"
     },
     {
       "id": "graphify_inline_input_eligibilitypool",
@@ -963,7 +927,7 @@
       "file_type": "code",
       "norm_label": "eligibilitypool()",
       "source_file": "index.html",
-      "source_location": "L2519"
+      "source_location": "L2555"
     },
     {
       "id": "graphify_inline_input_eligiblemajorstext",
@@ -975,7 +939,7 @@
       "file_type": "code",
       "norm_label": "eligiblemajorstext()",
       "source_file": "index.html",
-      "source_location": "L1717"
+      "source_location": "L1753"
     },
     {
       "id": "graphify_inline_input_evaluatemajorrequirements",
@@ -987,7 +951,7 @@
       "file_type": "code",
       "norm_label": "evaluatemajorrequirements()",
       "source_file": "index.html",
-      "source_location": "L3121"
+      "source_location": "L3157"
     },
     {
       "id": "graphify_inline_input_exclusionreason",
@@ -999,7 +963,7 @@
       "file_type": "code",
       "norm_label": "exclusionreason()",
       "source_file": "index.html",
-      "source_location": "L2601"
+      "source_location": "L2637"
     },
     {
       "id": "graphify_inline_input_exportallscenariostoexcel",
@@ -1011,7 +975,7 @@
       "file_type": "code",
       "norm_label": "exportallscenariostoexcel()",
       "source_file": "index.html",
-      "source_location": "L3688"
+      "source_location": "L3724"
     },
     {
       "id": "graphify_inline_input_exportscenariotoexcel",
@@ -1023,7 +987,7 @@
       "file_type": "code",
       "norm_label": "exportscenariotoexcel()",
       "source_file": "index.html",
-      "source_location": "L3627"
+      "source_location": "L3663"
     },
     {
       "id": "graphify_inline_input_formatpercentage",
@@ -1035,7 +999,7 @@
       "file_type": "code",
       "norm_label": "formatpercentage()",
       "source_file": "index.html",
-      "source_location": "L1721"
+      "source_location": "L1757"
     },
     {
       "id": "graphify_inline_input_generatescenarios",
@@ -1047,7 +1011,7 @@
       "file_type": "code",
       "norm_label": "generatescenarios()",
       "source_file": "index.html",
-      "source_location": "L2967"
+      "source_location": "L3003"
     },
     {
       "id": "graphify_inline_input_getcombinations",
@@ -1059,7 +1023,7 @@
       "file_type": "code",
       "norm_label": "getcombinations()",
       "source_file": "index.html",
-      "source_location": "L3080"
+      "source_location": "L3116"
     },
     {
       "id": "graphify_inline_input_getpdfmajorpriority",
@@ -1071,7 +1035,7 @@
       "file_type": "code",
       "norm_label": "getpdfmajorpriority()",
       "source_file": "index.html",
-      "source_location": "L1706"
+      "source_location": "L1742"
     },
     {
       "id": "graphify_inline_input_isbelowminimum",
@@ -1083,7 +1047,7 @@
       "file_type": "code",
       "norm_label": "isbelowminimum()",
       "source_file": "index.html",
-      "source_location": "L1713"
+      "source_location": "L1749"
     },
     {
       "id": "graphify_inline_input_loadxlsx",
@@ -1095,7 +1059,7 @@
       "file_type": "code",
       "norm_label": "loadxlsx()",
       "source_file": "index.html",
-      "source_location": "L1403"
+      "source_location": "L1439"
     },
     {
       "id": "graphify_inline_input_meetsbasecombination",
@@ -1107,7 +1071,7 @@
       "file_type": "code",
       "norm_label": "meetsbasecombination()",
       "source_file": "index.html",
-      "source_location": "L1789"
+      "source_location": "L1825"
     },
     {
       "id": "graphify_inline_input_openscenariopickmodal",
@@ -1119,7 +1083,7 @@
       "file_type": "code",
       "norm_label": "openscenariopickmodal()",
       "source_file": "index.html",
-      "source_location": "L1627"
+      "source_location": "L1663"
     },
     {
       "id": "graphify_inline_input_recalculatescenario",
@@ -1131,7 +1095,7 @@
       "file_type": "code",
       "norm_label": "recalculatescenario()",
       "source_file": "index.html",
-      "source_location": "L2499"
+      "source_location": "L2535"
     },
     {
       "id": "graphify_inline_input_removesubjectfromscenario",
@@ -1143,7 +1107,7 @@
       "file_type": "code",
       "norm_label": "removesubjectfromscenario()",
       "source_file": "index.html",
-      "source_location": "L2585"
+      "source_location": "L2621"
     },
     {
       "id": "graphify_inline_input_renderscenariocards",
@@ -1155,7 +1119,7 @@
       "file_type": "code",
       "norm_label": "renderscenariocards()",
       "source_file": "index.html",
-      "source_location": "L2680"
+      "source_location": "L2716"
     },
     {
       "id": "graphify_inline_input_scenariocombotext",
@@ -1167,7 +1131,7 @@
       "file_type": "code",
       "norm_label": "scenariocombotext()",
       "source_file": "index.html",
-      "source_location": "L1794"
+      "source_location": "L1830"
     },
     {
       "id": "graphify_inline_input_scenariohasexpectedgrades",
@@ -1179,7 +1143,7 @@
       "file_type": "code",
       "norm_label": "scenariohasexpectedgrades()",
       "source_file": "index.html",
-      "source_location": "L2524"
+      "source_location": "L2560"
     },
     {
       "id": "graphify_inline_input_scenarioreasoninghtml",
@@ -1191,7 +1155,7 @@
       "file_type": "code",
       "norm_label": "scenarioreasoninghtml()",
       "source_file": "index.html",
-      "source_location": "L2612"
+      "source_location": "L2648"
     },
     {
       "id": "graphify_inline_input_scenariosubjectkey",
@@ -1203,7 +1167,7 @@
       "file_type": "code",
       "norm_label": "scenariosubjectkey()",
       "source_file": "index.html",
-      "source_location": "L2495"
+      "source_location": "L2531"
     },
     {
       "id": "graphify_inline_input_selectdisplayscenarios",
@@ -1215,7 +1179,7 @@
       "file_type": "code",
       "norm_label": "selectdisplayscenarios()",
       "source_file": "index.html",
-      "source_location": "L2528"
+      "source_location": "L2564"
     },
     {
       "id": "graphify_inline_input_adminalertshtml",
@@ -1227,7 +1191,7 @@
       "file_type": "code",
       "norm_label": "adminalertshtml()",
       "source_file": "index.html",
-      "source_location": "L6173"
+      "source_location": "L6209"
     },
     {
       "id": "graphify_inline_input_adminmsg",
@@ -1239,7 +1203,7 @@
       "file_type": "code",
       "norm_label": "adminmsg()",
       "source_file": "index.html",
-      "source_location": "L5875"
+      "source_location": "L5911"
     },
     {
       "id": "graphify_inline_input_adminpasswordprompt",
@@ -1251,7 +1215,7 @@
       "file_type": "code",
       "norm_label": "adminpasswordprompt()",
       "source_file": "index.html",
-      "source_location": "L6013"
+      "source_location": "L6049"
     },
     {
       "id": "graphify_inline_input_adminsavenewpassword",
@@ -1263,7 +1227,7 @@
       "file_type": "code",
       "norm_label": "adminsavenewpassword()",
       "source_file": "index.html",
-      "source_location": "L5987"
+      "source_location": "L6023"
     },
     {
       "id": "graphify_inline_input_adminsavewebhook",
@@ -1275,7 +1239,7 @@
       "file_type": "code",
       "norm_label": "adminsavewebhook()",
       "source_file": "index.html",
-      "source_location": "L6120"
+      "source_location": "L6156"
     },
     {
       "id": "graphify_inline_input_adminsendpasswordlink",
@@ -1287,7 +1251,7 @@
       "file_type": "code",
       "norm_label": "adminsendpasswordlink()",
       "source_file": "index.html",
-      "source_location": "L5976"
+      "source_location": "L6012"
     },
     {
       "id": "graphify_inline_input_adminsetstatus",
@@ -1299,7 +1263,7 @@
       "file_type": "code",
       "norm_label": "adminsetstatus()",
       "source_file": "index.html",
-      "source_location": "L6050"
+      "source_location": "L6086"
     },
     {
       "id": "graphify_inline_input_adminshowchangepassword",
@@ -1311,7 +1275,7 @@
       "file_type": "code",
       "norm_label": "adminshowchangepassword()",
       "source_file": "index.html",
-      "source_location": "L6025"
+      "source_location": "L6061"
     },
     {
       "id": "graphify_inline_input_adminsignin",
@@ -1323,7 +1287,7 @@
       "file_type": "code",
       "norm_label": "adminsignin()",
       "source_file": "index.html",
-      "source_location": "L5960"
+      "source_location": "L5996"
     },
     {
       "id": "graphify_inline_input_adminsignout",
@@ -1335,7 +1299,7 @@
       "file_type": "code",
       "norm_label": "adminsignout()",
       "source_file": "index.html",
-      "source_location": "L6031"
+      "source_location": "L6067"
     },
     {
       "id": "graphify_inline_input_adminstoragehtml",
@@ -1347,7 +1311,7 @@
       "file_type": "code",
       "norm_label": "adminstoragehtml()",
       "source_file": "index.html",
-      "source_location": "L6133"
+      "source_location": "L6169"
     },
     {
       "id": "graphify_inline_input_admintogglenotifications",
@@ -1359,19 +1323,7 @@
       "file_type": "code",
       "norm_label": "admintogglenotifications()",
       "source_file": "index.html",
-      "source_location": "L6108"
-    },
-    {
-      "id": "graphify_inline_input_adminviewsample",
-      "label": "adminViewSample()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "renderAdminPanel",
-      "file_type": "code",
-      "norm_label": "adminviewsample()",
-      "source_file": "index.html",
-      "source_location": "L6066"
+      "source_location": "L6144"
     },
     {
       "id": "graphify_inline_input_compilelearnedrules",
@@ -1383,7 +1335,7 @@
       "file_type": "code",
       "norm_label": "compilelearnedrules()",
       "source_file": "index.html",
-      "source_location": "L5539"
+      "source_location": "L5575"
     },
     {
       "id": "graphify_inline_input_loadlearnedrules",
@@ -1395,7 +1347,7 @@
       "file_type": "code",
       "norm_label": "loadlearnedrules()",
       "source_file": "index.html",
-      "source_location": "L5553"
+      "source_location": "L5589"
     },
     {
       "id": "graphify_inline_input_markpendingseen",
@@ -1407,7 +1359,7 @@
       "file_type": "code",
       "norm_label": "markpendingseen()",
       "source_file": "index.html",
-      "source_location": "L6104"
+      "source_location": "L6140"
     },
     {
       "id": "graphify_inline_input_newpasswordfields",
@@ -1419,7 +1371,7 @@
       "file_type": "code",
       "norm_label": "newpasswordfields()",
       "source_file": "index.html",
-      "source_location": "L5877"
+      "source_location": "L5913"
     },
     {
       "id": "graphify_inline_input_openadminpanel",
@@ -1431,7 +1383,7 @@
       "file_type": "code",
       "norm_label": "openadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5869"
+      "source_location": "L5905"
     },
     {
       "id": "graphify_inline_input_readlocalrules",
@@ -1443,7 +1395,7 @@
       "file_type": "code",
       "norm_label": "readlocalrules()",
       "source_file": "index.html",
-      "source_location": "L5516"
+      "source_location": "L5552"
     },
     {
       "id": "graphify_inline_input_readnewpassword",
@@ -1455,7 +1407,7 @@
       "file_type": "code",
       "norm_label": "readnewpassword()",
       "source_file": "index.html",
-      "source_location": "L5883"
+      "source_location": "L5919"
     },
     {
       "id": "graphify_inline_input_refreshpendingbadge",
@@ -1467,7 +1419,7 @@
       "file_type": "code",
       "norm_label": "refreshpendingbadge()",
       "source_file": "index.html",
-      "source_location": "L6082"
+      "source_location": "L6118"
     },
     {
       "id": "graphify_inline_input_renderadminpanel",
@@ -1479,7 +1431,7 @@
       "file_type": "code",
       "norm_label": "renderadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5891"
+      "source_location": "L5927"
     },
     {
       "id": "graphify_inline_input_rulekey",
@@ -1491,7 +1443,7 @@
       "file_type": "code",
       "norm_label": "rulekey()",
       "source_file": "index.html",
-      "source_location": "L5522"
+      "source_location": "L5558"
     },
     {
       "id": "graphify_inline_input_savelearnedrule",
@@ -1503,7 +1455,7 @@
       "file_type": "code",
       "norm_label": "savelearnedrule()",
       "source_file": "index.html",
-      "source_location": "L5610"
+      "source_location": "L5646"
     },
     {
       "id": "graphify_inline_input_sbfetch",
@@ -1515,7 +1467,7 @@
       "file_type": "code",
       "norm_label": "sbfetch()",
       "source_file": "index.html",
-      "source_location": "L5507"
+      "source_location": "L5543"
     },
     {
       "id": "graphify_inline_input_setadminsession",
@@ -1527,7 +1479,7 @@
       "file_type": "code",
       "norm_label": "setadminsession()",
       "source_file": "index.html",
-      "source_location": "L5862"
+      "source_location": "L5898"
     },
     {
       "id": "graphify_inline_input_supabaseready",
@@ -1539,7 +1491,7 @@
       "file_type": "code",
       "norm_label": "supabaseready()",
       "source_file": "index.html",
-      "source_location": "L5505"
+      "source_location": "L5541"
     },
     {
       "id": "graphify_inline_input_uploadteachsample",
@@ -1551,7 +1503,7 @@
       "file_type": "code",
       "norm_label": "uploadteachsample()",
       "source_file": "index.html",
-      "source_location": "L5596"
+      "source_location": "L5632"
     },
     {
       "id": "graphify_inline_input_writelocalrules",
@@ -1563,7 +1515,7 @@
       "file_type": "code",
       "norm_label": "writelocalrules()",
       "source_file": "index.html",
-      "source_location": "L5519"
+      "source_location": "L5555"
     },
     {
       "id": "graphify_inline_input_addfilledsubjectcard",
@@ -1575,7 +1527,7 @@
       "file_type": "code",
       "norm_label": "addfilledsubjectcard()",
       "source_file": "index.html",
-      "source_location": "L2358"
+      "source_location": "L2394"
     },
     {
       "id": "graphify_inline_input_addocrrowstocalculator",
@@ -1587,7 +1539,7 @@
       "file_type": "code",
       "norm_label": "addocrrowstocalculator()",
       "source_file": "index.html",
-      "source_location": "L5411"
+      "source_location": "L5447"
     },
     {
       "id": "graphify_inline_input_addsubjectrow",
@@ -1599,7 +1551,7 @@
       "file_type": "code",
       "norm_label": "addsubjectrow()",
       "source_file": "index.html",
-      "source_location": "L2393"
+      "source_location": "L2429"
     },
     {
       "id": "graphify_inline_input_admincleanuppages",
@@ -1611,7 +1563,7 @@
       "file_type": "code",
       "norm_label": "admincleanuppages()",
       "source_file": "index.html",
-      "source_location": "L6158"
+      "source_location": "L6194"
     },
     {
       "id": "graphify_inline_input_adminconfirmdeleteallpages",
@@ -1623,7 +1575,7 @@
       "file_type": "code",
       "norm_label": "adminconfirmdeleteallpages()",
       "source_file": "index.html",
-      "source_location": "L6150"
+      "source_location": "L6186"
     },
     {
       "id": "graphify_inline_input_appconfirm",
@@ -1635,7 +1587,7 @@
       "file_type": "code",
       "norm_label": "appconfirm()",
       "source_file": "index.html",
-      "source_location": "L3830"
+      "source_location": "L3866"
     },
     {
       "id": "graphify_inline_input_autoaddnextrow",
@@ -1647,7 +1599,7 @@
       "file_type": "code",
       "norm_label": "autoaddnextrow()",
       "source_file": "index.html",
-      "source_location": "L2100"
+      "source_location": "L2136"
     },
     {
       "id": "graphify_inline_input_categoryof",
@@ -1659,7 +1611,7 @@
       "file_type": "code",
       "norm_label": "categoryof()",
       "source_file": "index.html",
-      "source_location": "L1767"
+      "source_location": "L1803"
     },
     {
       "id": "graphify_inline_input_clearstalestate",
@@ -1671,7 +1623,7 @@
       "file_type": "code",
       "norm_label": "clearstalestate()",
       "source_file": "index.html",
-      "source_location": "L2084"
+      "source_location": "L2120"
     },
     {
       "id": "graphify_inline_input_closemobilebreakdown",
@@ -1683,7 +1635,7 @@
       "file_type": "code",
       "norm_label": "closemobilebreakdown()",
       "source_file": "index.html",
-      "source_location": "L3467"
+      "source_location": "L3503"
     },
     {
       "id": "graphify_inline_input_closeocrmodal",
@@ -1695,7 +1647,7 @@
       "file_type": "code",
       "norm_label": "closeocrmodal()",
       "source_file": "index.html",
-      "source_location": "L5461"
+      "source_location": "L5497"
     },
     {
       "id": "graphify_inline_input_deleterow",
@@ -1707,7 +1659,7 @@
       "file_type": "code",
       "norm_label": "deleterow()",
       "source_file": "index.html",
-      "source_location": "L2412"
+      "source_location": "L2448"
     },
     {
       "id": "graphify_inline_input_filldemodata",
@@ -1719,7 +1671,7 @@
       "file_type": "code",
       "norm_label": "filldemodata()",
       "source_file": "index.html",
-      "source_location": "L2123"
+      "source_location": "L2159"
     },
     {
       "id": "graphify_inline_input_getmatches",
@@ -1731,7 +1683,7 @@
       "file_type": "code",
       "norm_label": "getmatches()",
       "source_file": "index.html",
-      "source_location": "L1880"
+      "source_location": "L1916"
     },
     {
       "id": "graphify_inline_input_getusedsubjectcounts",
@@ -1743,7 +1695,7 @@
       "file_type": "code",
       "norm_label": "getusedsubjectcounts()",
       "source_file": "index.html",
-      "source_location": "L1932"
+      "source_location": "L1968"
     },
     {
       "id": "graphify_inline_input_handlekey",
@@ -1755,7 +1707,7 @@
       "file_type": "code",
       "norm_label": "handlekey()",
       "source_file": "index.html",
-      "source_location": "L2037"
+      "source_location": "L2073"
     },
     {
       "id": "graphify_inline_input_handlemobilebreakdownbackdrop",
@@ -1767,7 +1719,7 @@
       "file_type": "code",
       "norm_label": "handlemobilebreakdownbackdrop()",
       "source_file": "index.html",
-      "source_location": "L3473"
+      "source_location": "L3509"
     },
     {
       "id": "graphify_inline_input_initsearchcard",
@@ -1779,7 +1731,7 @@
       "file_type": "code",
       "norm_label": "initsearchcard()",
       "source_file": "index.html",
-      "source_location": "L1841"
+      "source_location": "L1877"
     },
     {
       "id": "graphify_inline_input_loaddemodata",
@@ -1791,7 +1743,7 @@
       "file_type": "code",
       "norm_label": "loaddemodata()",
       "source_file": "index.html",
-      "source_location": "L2112"
+      "source_location": "L2148"
     },
     {
       "id": "graphify_inline_input_markresultsstale",
@@ -1803,7 +1755,7 @@
       "file_type": "code",
       "norm_label": "markresultsstale()",
       "source_file": "index.html",
-      "source_location": "L2077"
+      "source_location": "L2113"
     },
     {
       "id": "graphify_inline_input_maxalloweduses",
@@ -1815,7 +1767,7 @@
       "file_type": "code",
       "norm_label": "maxalloweduses()",
       "source_file": "index.html",
-      "source_location": "L1927"
+      "source_location": "L1963"
     },
     {
       "id": "graphify_inline_input_renderdropdown",
@@ -1827,7 +1779,7 @@
       "file_type": "code",
       "norm_label": "renderdropdown()",
       "source_file": "index.html",
-      "source_location": "L1945"
+      "source_location": "L1981"
     },
     {
       "id": "graphify_inline_input_resetform",
@@ -1839,7 +1791,7 @@
       "file_type": "code",
       "norm_label": "resetform()",
       "source_file": "index.html",
-      "source_location": "L3414"
+      "source_location": "L3450"
     },
     {
       "id": "graphify_inline_input_resolverepeatedsubjects",
@@ -1851,7 +1803,7 @@
       "file_type": "code",
       "norm_label": "resolverepeatedsubjects()",
       "source_file": "index.html",
-      "source_location": "L4978"
+      "source_location": "L5014"
     },
     {
       "id": "graphify_inline_input_selectsubjectwithgrade",
@@ -1863,7 +1815,7 @@
       "file_type": "code",
       "norm_label": "selectsubjectwithgrade()",
       "source_file": "index.html",
-      "source_location": "L2051"
+      "source_location": "L2087"
     },
     {
       "id": "graphify_inline_input_setgradeoptionsforlevel",
@@ -1875,7 +1827,7 @@
       "file_type": "code",
       "norm_label": "setgradeoptionsforlevel()",
       "source_file": "index.html",
-      "source_location": "L2043"
+      "source_location": "L2079"
     },
     {
       "id": "graphify_inline_input_showcondconfirm",
@@ -1887,7 +1839,19 @@
       "file_type": "code",
       "norm_label": "showcondconfirm()",
       "source_file": "index.html",
-      "source_location": "L3846"
+      "source_location": "L3882"
+    },
+    {
+      "id": "graphify_inline_input_showocrwarnings",
+      "label": "showOcrWarnings()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "addOcrRowsToCalculator",
+      "file_type": "code",
+      "norm_label": "showocrwarnings()",
+      "source_file": "index.html",
+      "source_location": "L5155"
     },
     {
       "id": "graphify_inline_input_subjectcardhtml",
@@ -1899,7 +1863,7 @@
       "file_type": "code",
       "norm_label": "subjectcardhtml()",
       "source_file": "index.html",
-      "source_location": "L1798"
+      "source_location": "L1834"
     },
     {
       "id": "graphify_inline_input_subjectusagekey",
@@ -1911,7 +1875,7 @@
       "file_type": "code",
       "norm_label": "subjectusagekey()",
       "source_file": "index.html",
-      "source_location": "L1923"
+      "source_location": "L1959"
     },
     {
       "id": "graphify_inline_input_updatelevelcounter",
@@ -1923,7 +1887,7 @@
       "file_type": "code",
       "norm_label": "updatelevelcounter()",
       "source_file": "index.html",
-      "source_location": "L2432"
+      "source_location": "L2468"
     },
     {
       "id": "graphify_inline_input_cropsnapshot",
@@ -1935,7 +1899,7 @@
       "file_type": "code",
       "norm_label": "cropsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5263"
+      "source_location": "L5299"
     },
     {
       "id": "graphify_inline_input_eschtml",
@@ -1947,7 +1911,7 @@
       "file_type": "code",
       "norm_label": "eschtml()",
       "source_file": "index.html",
-      "source_location": "L1834"
+      "source_location": "L1870"
     },
     {
       "id": "graphify_inline_input_highlightmatch",
@@ -1959,7 +1923,7 @@
       "file_type": "code",
       "norm_label": "highlightmatch()",
       "source_file": "index.html",
-      "source_location": "L1835"
+      "source_location": "L1871"
     },
     {
       "id": "graphify_inline_input_makesnapshots",
@@ -1971,7 +1935,7 @@
       "file_type": "code",
       "norm_label": "makesnapshots()",
       "source_file": "index.html",
-      "source_location": "L5290"
+      "source_location": "L5326"
     },
     {
       "id": "graphify_inline_input_needsconfirmation",
@@ -1983,7 +1947,7 @@
       "file_type": "code",
       "norm_label": "needsconfirmation()",
       "source_file": "index.html",
-      "source_location": "L5231"
+      "source_location": "L5267"
     },
     {
       "id": "graphify_inline_input_ocrfilefor",
@@ -1995,7 +1959,7 @@
       "file_type": "code",
       "norm_label": "ocrfilefor()",
       "source_file": "index.html",
-      "source_location": "L5235"
+      "source_location": "L5271"
     },
     {
       "id": "graphify_inline_input_ocrflag",
@@ -2007,7 +1971,7 @@
       "file_type": "code",
       "norm_label": "ocrflag()",
       "source_file": "index.html",
-      "source_location": "L5318"
+      "source_location": "L5354"
     },
     {
       "id": "graphify_inline_input_ocrgradecell",
@@ -2019,7 +1983,7 @@
       "file_type": "code",
       "norm_label": "ocrgradecell()",
       "source_file": "index.html",
-      "source_location": "L5219"
+      "source_location": "L5255"
     },
     {
       "id": "graphify_inline_input_ocrsubjectoptions",
@@ -2031,7 +1995,7 @@
       "file_type": "code",
       "norm_label": "ocrsubjectoptions()",
       "source_file": "index.html",
-      "source_location": "L5213"
+      "source_location": "L5249"
     },
     {
       "id": "graphify_inline_input_openteachform",
@@ -2043,7 +2007,7 @@
       "file_type": "code",
       "norm_label": "openteachform()",
       "source_file": "index.html",
-      "source_location": "L5736"
+      "source_location": "L5772"
     },
     {
       "id": "graphify_inline_input_rememberedteachername",
@@ -2055,7 +2019,7 @@
       "file_type": "code",
       "norm_label": "rememberedteachername()",
       "source_file": "index.html",
-      "source_location": "L5605"
+      "source_location": "L5641"
     },
     {
       "id": "graphify_inline_input_renderocrreview",
@@ -2067,7 +2031,7 @@
       "file_type": "code",
       "norm_label": "renderocrreview()",
       "source_file": "index.html",
-      "source_location": "L5325"
+      "source_location": "L5361"
     },
     {
       "id": "graphify_inline_input_renderpageforsnapshot",
@@ -2079,19 +2043,7 @@
       "file_type": "code",
       "norm_label": "renderpageforsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5239"
-    },
-    {
-      "id": "graphify_inline_input_setocrprogress",
-      "label": "setOcrProgress()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "renderOcrReview",
-      "file_type": "code",
-      "norm_label": "setocrprogress()",
-      "source_file": "index.html",
-      "source_location": "L5113"
+      "source_location": "L5275"
     },
     {
       "id": "graphify_inline_input_showteachsnapshot",
@@ -2103,7 +2055,7 @@
       "file_type": "code",
       "norm_label": "showteachsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5721"
+      "source_location": "L5757"
     },
     {
       "id": "graphify_inline_input_snapshotcell",
@@ -2115,7 +2067,7 @@
       "file_type": "code",
       "norm_label": "snapshotcell()",
       "source_file": "index.html",
-      "source_location": "L5309"
+      "source_location": "L5345"
     },
     {
       "id": "graphify_inline_input_updateocraddbutton",
@@ -2127,7 +2079,19 @@
       "file_type": "code",
       "norm_label": "updateocraddbutton()",
       "source_file": "index.html",
-      "source_location": "L5377"
+      "source_location": "L5413"
+    },
+    {
+      "id": "graphify_inline_input_adminviewsample",
+      "label": "adminViewSample()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "appAlert",
+      "file_type": "code",
+      "norm_label": "adminviewsample()",
+      "source_file": "index.html",
+      "source_location": "L6102"
     },
     {
       "id": "graphify_inline_input_appalert",
@@ -2139,7 +2103,7 @@
       "file_type": "code",
       "norm_label": "appalert()",
       "source_file": "index.html",
-      "source_location": "L3843"
+      "source_location": "L3879"
     },
     {
       "id": "graphify_inline_input_bulkaddrows",
@@ -2151,7 +2115,7 @@
       "file_type": "code",
       "norm_label": "bulkaddrows()",
       "source_file": "index.html",
-      "source_location": "L3477"
+      "source_location": "L3513"
     },
     {
       "id": "graphify_inline_input_downloaddata",
@@ -2163,7 +2127,7 @@
       "file_type": "code",
       "norm_label": "downloaddata()",
       "source_file": "index.html",
-      "source_location": "L3491"
+      "source_location": "L3527"
     },
     {
       "id": "graphify_inline_input_downloadscenariopdf",
@@ -2175,7 +2139,7 @@
       "file_type": "code",
       "norm_label": "downloadscenariopdf()",
       "source_file": "index.html",
-      "source_location": "L3279"
+      "source_location": "L3315"
     },
     {
       "id": "graphify_inline_input_getrequiredemployeename",
@@ -2187,7 +2151,7 @@
       "file_type": "code",
       "norm_label": "getrequiredemployeename()",
       "source_file": "index.html",
-      "source_location": "L1558"
+      "source_location": "L1594"
     },
     {
       "id": "graphify_inline_input_getrequiredstudentid",
@@ -2199,7 +2163,7 @@
       "file_type": "code",
       "norm_label": "getrequiredstudentid()",
       "source_file": "index.html",
-      "source_location": "L1549"
+      "source_location": "L1585"
     },
     {
       "id": "graphify_inline_input_loadjspdf",
@@ -2211,7 +2175,7 @@
       "file_type": "code",
       "norm_label": "loadjspdf()",
       "source_file": "index.html",
-      "source_location": "L1388"
+      "source_location": "L1424"
     },
     {
       "id": "graphify_inline_input_preloadlogo",
@@ -2223,7 +2187,7 @@
       "file_type": "code",
       "norm_label": "_preloadlogo()",
       "source_file": "index.html",
-      "source_location": "L1418"
+      "source_location": "L1454"
     },
     {
       "id": "graphify_inline_input_promptstudentinfo",
@@ -2235,7 +2199,7 @@
       "file_type": "code",
       "norm_label": "promptstudentinfo()",
       "source_file": "index.html",
-      "source_location": "L1526"
+      "source_location": "L1562"
     },
     {
       "id": "graphify_inline_input_promptstudentinfothenpick",
@@ -2247,7 +2211,7 @@
       "file_type": "code",
       "norm_label": "promptstudentinfothenpick()",
       "source_file": "index.html",
-      "source_location": "L1567"
+      "source_location": "L1603"
     },
     {
       "id": "graphify_inline_input_togglequickentry",
@@ -2259,7 +2223,7 @@
       "file_type": "code",
       "norm_label": "togglequickentry()",
       "source_file": "index.html",
-      "source_location": "L3451"
+      "source_location": "L3487"
     },
     {
       "id": "graphify_inline_input_withfreshresults",
@@ -2271,7 +2235,7 @@
       "file_type": "code",
       "norm_label": "withfreshresults()",
       "source_file": "index.html",
-      "source_location": "L2090"
+      "source_location": "L2126"
     },
     {
       "id": "graphify_inline_input_extractpages",
@@ -2283,7 +2247,7 @@
       "file_type": "code",
       "norm_label": "extractpages()",
       "source_file": "index.html",
-      "source_location": "L4259"
+      "source_location": "L4295"
     },
     {
       "id": "graphify_inline_input_hasresultlines",
@@ -2295,7 +2259,7 @@
       "file_type": "code",
       "norm_label": "hasresultlines()",
       "source_file": "index.html",
-      "source_location": "L4650"
+      "source_location": "L4686"
     },
     {
       "id": "graphify_inline_input_imagefiletocanvas",
@@ -2307,7 +2271,7 @@
       "file_type": "code",
       "norm_label": "imagefiletocanvas()",
       "source_file": "index.html",
-      "source_location": "L4185"
+      "source_location": "L4221"
     },
     {
       "id": "graphify_inline_input_mergeenginerows",
@@ -2319,7 +2283,7 @@
       "file_type": "code",
       "norm_label": "mergeenginerows()",
       "source_file": "index.html",
-      "source_location": "L4948"
+      "source_location": "L4984"
     },
     {
       "id": "graphify_inline_input_readcertificatefile",
@@ -2331,7 +2295,7 @@
       "file_type": "code",
       "norm_label": "readcertificatefile()",
       "source_file": "index.html",
-      "source_location": "L5068"
+      "source_location": "L5104"
     },
     {
       "id": "graphify_inline_input_readfilebothengines",
@@ -2343,7 +2307,7 @@
       "file_type": "code",
       "norm_label": "readfilebothengines()",
       "source_file": "index.html",
-      "source_location": "L5057"
+      "source_location": "L5093"
     },
     {
       "id": "graphify_inline_input_readfilewithengine",
@@ -2355,7 +2319,7 @@
       "file_type": "code",
       "norm_label": "readfilewithengine()",
       "source_file": "index.html",
-      "source_location": "L5015"
+      "source_location": "L5051"
     },
     {
       "id": "graphify_inline_input_renderpdfpage",
@@ -2367,7 +2331,7 @@
       "file_type": "code",
       "norm_label": "renderpdfpage()",
       "source_file": "index.html",
-      "source_location": "L4174"
+      "source_location": "L4210"
     },
     {
       "id": "graphify_inline_input_rowkey",
@@ -2379,7 +2343,7 @@
       "file_type": "code",
       "norm_label": "rowkey()",
       "source_file": "index.html",
-      "source_location": "L4941"
+      "source_location": "L4977"
     },
     {
       "id": "graphify_inline_input_textlayertolines",
@@ -2391,7 +2355,7 @@
       "file_type": "code",
       "norm_label": "textlayertolines()",
       "source_file": "index.html",
-      "source_location": "L4199"
+      "source_location": "L4235"
     },
     {
       "id": "graphify_inline_input_tograyscale",
@@ -2403,19 +2367,7 @@
       "file_type": "code",
       "norm_label": "tograyscale()",
       "source_file": "index.html",
-      "source_location": "L4160"
-    },
-    {
-      "id": "tests_ocr_categories_test_functionsource",
-      "label": "functionSource()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "functionsource()",
-      "source_file": "tests/ocr-categories.test.js",
-      "source_location": "L5"
+      "source_location": "L4196"
     },
     {
       "id": "tests_ocr_gateway_test_request",
@@ -2423,7 +2375,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "request()",
       "source_file": "tests/ocr-gateway.test.js",
@@ -2439,7 +2391,7 @@
       "file_type": "code",
       "norm_label": "grouppaddlelines()",
       "source_file": "index.html",
-      "source_location": "L4106"
+      "source_location": "L4142"
     },
     {
       "id": "graphify_inline_input_lookslikemoedocument",
@@ -2451,7 +2403,7 @@
       "file_type": "code",
       "norm_label": "lookslikemoedocument()",
       "source_file": "index.html",
-      "source_location": "L4217"
+      "source_location": "L4253"
     },
     {
       "id": "graphify_inline_input_normalizeboxes",
@@ -2463,7 +2415,7 @@
       "file_type": "code",
       "norm_label": "normalizeboxes()",
       "source_file": "index.html",
-      "source_location": "L4122"
+      "source_location": "L4158"
     },
     {
       "id": "graphify_inline_input_paddlereadpage",
@@ -2475,7 +2427,7 @@
       "file_type": "code",
       "norm_label": "paddlereadpage()",
       "source_file": "index.html",
-      "source_location": "L4144"
+      "source_location": "L4180"
     },
     {
       "id": "graphify_inline_input_paddlereadwith",
@@ -2487,7 +2439,7 @@
       "file_type": "code",
       "norm_label": "paddlereadwith()",
       "source_file": "index.html",
-      "source_location": "L4126"
+      "source_location": "L4162"
     },
     {
       "id": "graphify_inline_input_resettessworker",
@@ -2499,7 +2451,7 @@
       "file_type": "code",
       "norm_label": "resettessworker()",
       "source_file": "index.html",
-      "source_location": "L3920"
+      "source_location": "L3956"
     },
     {
       "id": "graphify_inline_input_tesseractreadpage",
@@ -2511,7 +2463,7 @@
       "file_type": "code",
       "norm_label": "tesseractreadpage()",
       "source_file": "index.html",
-      "source_location": "L3948"
+      "source_location": "L3984"
     },
     {
       "id": "graphify_inline_input_tessrecognize",
@@ -2523,7 +2475,7 @@
       "file_type": "code",
       "norm_label": "tessrecognize()",
       "source_file": "index.html",
-      "source_location": "L3928"
+      "source_location": "L3964"
     },
     {
       "id": "graphify_inline_input_workocrreadpage",
@@ -2535,7 +2487,7 @@
       "file_type": "code",
       "norm_label": "workocrreadpage()",
       "source_file": "index.html",
-      "source_location": "L4230"
+      "source_location": "L4266"
     },
     {
       "id": "graphify_inline_input_paddledetect",
@@ -2547,7 +2499,7 @@
       "file_type": "code",
       "norm_label": "paddledetect()",
       "source_file": "index.html",
-      "source_location": "L4027"
+      "source_location": "L4063"
     },
     {
       "id": "graphify_inline_input_paddlerecognize",
@@ -2559,7 +2511,7 @@
       "file_type": "code",
       "norm_label": "paddlerecognize()",
       "source_file": "index.html",
-      "source_location": "L4081"
+      "source_location": "L4117"
     },
     {
       "id": "graphify_inline_input_paddlesession",
@@ -2571,7 +2523,7 @@
       "file_type": "code",
       "norm_label": "paddlesession()",
       "source_file": "index.html",
-      "source_location": "L3975"
+      "source_location": "L4011"
     },
     {
       "id": "graphify_inline_input_reversearabicprediction",
@@ -2583,7 +2535,7 @@
       "file_type": "code",
       "norm_label": "reversearabicprediction()",
       "source_file": "index.html",
-      "source_location": "L4069"
+      "source_location": "L4105"
     },
     {
       "id": "graphify_inline_input_runpaddle",
@@ -2595,7 +2547,55 @@
       "file_type": "code",
       "norm_label": "runpaddle()",
       "source_file": "index.html",
-      "source_location": "L3991"
+      "source_location": "L4027"
+    },
+    {
+      "id": "tests_below_minimum_test_aslevels",
+      "label": "asLevels()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "aslevels()",
+      "source_file": "tests/below-minimum.test.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "tests_below_minimum_test_olevels",
+      "label": "oLevels()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "olevels()",
+      "source_file": "tests/below-minimum.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "tests_server_serve",
+      "label": "serve()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "serve()",
+      "source_file": "tests/server.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "tests_ocr_categories_test_functionsource",
+      "label": "functionSource()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
+      "file_type": "code",
+      "norm_label": "functionsource()",
+      "source_file": "tests/ocr-categories.test.js",
+      "source_location": "L5"
     },
     {
       "id": "portable_ocr_service_handler_allowed",
@@ -2679,7 +2679,7 @@
       "file_type": "code",
       "norm_label": "ensurepaddleready()",
       "source_file": "index.html",
-      "source_location": "L4016"
+      "source_location": "L4052"
     },
     {
       "id": "graphify_inline_input_filefingerprint",
@@ -2691,7 +2691,7 @@
       "file_type": "code",
       "norm_label": "filefingerprint()",
       "source_file": "index.html",
-      "source_location": "L4305"
+      "source_location": "L4341"
     },
     {
       "id": "graphify_inline_input_getocrengine",
@@ -2703,7 +2703,7 @@
       "file_type": "code",
       "norm_label": "getocrengine()",
       "source_file": "index.html",
-      "source_location": "L3890"
+      "source_location": "L3926"
     },
     {
       "id": "graphify_inline_input_gettessworker",
@@ -2715,7 +2715,7 @@
       "file_type": "code",
       "norm_label": "gettessworker()",
       "source_file": "index.html",
-      "source_location": "L3916"
+      "source_location": "L3952"
     },
     {
       "id": "graphify_inline_input_handlecertificatefiles",
@@ -2727,7 +2727,7 @@
       "file_type": "code",
       "norm_label": "handlecertificatefiles()",
       "source_file": "index.html",
-      "source_location": "L5125"
+      "source_location": "L5161"
     },
     {
       "id": "graphify_inline_input_loadort",
@@ -2739,7 +2739,7 @@
       "file_type": "code",
       "norm_label": "loadort()",
       "source_file": "index.html",
-      "source_location": "L3967"
+      "source_location": "L4003"
     },
     {
       "id": "graphify_inline_input_loadpdflibrary",
@@ -2751,7 +2751,7 @@
       "file_type": "code",
       "norm_label": "loadpdflibrary()",
       "source_file": "index.html",
-      "source_location": "L3909"
+      "source_location": "L3945"
     },
     {
       "id": "graphify_inline_input_loadscriptonce",
@@ -2763,7 +2763,7 @@
       "file_type": "code",
       "norm_label": "loadscriptonce()",
       "source_file": "index.html",
-      "source_location": "L3896"
+      "source_location": "L3932"
     },
     {
       "id": "graphify_inline_input_paddledict",
@@ -2775,7 +2775,7 @@
       "file_type": "code",
       "norm_label": "paddledict()",
       "source_file": "index.html",
-      "source_location": "L4005"
+      "source_location": "L4041"
     },
     {
       "id": "graphify_inline_input_parseocrpages",
@@ -2799,19 +2799,19 @@
       "file_type": "code",
       "norm_label": "renderpagejpeg()",
       "source_file": "index.html",
-      "source_location": "L5571"
+      "source_location": "L5607"
     },
     {
-      "id": "graphify_inline_input_showocrwarnings",
-      "label": "showOcrWarnings()",
+      "id": "graphify_inline_input_setocrprogress",
+      "label": "setOcrProgress()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
       "community_name": "handleCertificateFiles",
       "file_type": "code",
-      "norm_label": "showocrwarnings()",
+      "norm_label": "setocrprogress()",
       "source_file": "index.html",
-      "source_location": "L5119"
+      "source_location": "L5149"
     },
     {
       "id": "graphify_inline_input_warmupocr",
@@ -2823,7 +2823,7 @@
       "file_type": "code",
       "norm_label": "warmupocr()",
       "source_file": "index.html",
-      "source_location": "L5103"
+      "source_location": "L5139"
     },
     {
       "id": "graphify_inline_input_workocravailable",
@@ -2835,7 +2835,7 @@
       "file_type": "code",
       "norm_label": "workocravailable()",
       "source_file": "index.html",
-      "source_location": "L4223"
+      "source_location": "L4259"
     },
     {
       "id": "graphify_inline_input_arabicwordmarks",
@@ -2847,7 +2847,7 @@
       "file_type": "code",
       "norm_label": "arabicwordmarks()",
       "source_file": "index.html",
-      "source_location": "L4688"
+      "source_location": "L4724"
     },
     {
       "id": "graphify_inline_input_digitmark",
@@ -2859,7 +2859,7 @@
       "file_type": "code",
       "norm_label": "digitmark()",
       "source_file": "index.html",
-      "source_location": "L4711"
+      "source_location": "L4747"
     },
     {
       "id": "graphify_inline_input_findmoemark",
@@ -2871,7 +2871,7 @@
       "file_type": "code",
       "norm_label": "findmoemark()",
       "source_file": "index.html",
-      "source_location": "L4722"
+      "source_location": "L4758"
     },
     {
       "id": "graphify_inline_input_normalizearabic",
@@ -2883,7 +2883,7 @@
       "file_type": "code",
       "norm_label": "normalizearabic()",
       "source_file": "index.html",
-      "source_location": "L4678"
+      "source_location": "L4714"
     },
     {
       "id": "graphify_inline_input_parsemoerows",
@@ -2895,7 +2895,7 @@
       "file_type": "code",
       "norm_label": "parsemoerows()",
       "source_file": "index.html",
-      "source_location": "L4745"
+      "source_location": "L4781"
     },
     {
       "id": "supabase_functions_cleanup_teach_samples_index_json",
@@ -2963,39 +2963,6 @@
       "norm_label": "serial native ocr comparison. documents/results stay in the supplied output...",
       "source_file": "tests/ocr-native-speed.py",
       "source_location": "L1"
-    },
-    {
-      "id": "tests_below_minimum_test",
-      "label": "below-minimum.test.js",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "below-minimum.test.js",
-      "source_file": "tests/below-minimum.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_below_minimum_test_chromium",
-      "label": "{ chromium }",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "{ chromium }",
-      "source_file": "tests/below-minimum.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "tests_below_minimum_test_serve",
-      "label": "{ serve }",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "{ serve }",
-      "source_file": "tests/below-minimum.test.js",
-      "source_location": "L3"
     },
     {
       "id": "tests_ocr_status_test",
@@ -3075,149 +3042,6 @@
       "source_location": "L5"
     },
     {
-      "id": "tests_package",
-      "label": "package.json",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "package.json",
-      "source_file": "tests/package.json",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_package_devdependencies",
-      "label": "devDependencies",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "devdependencies",
-      "source_file": "tests/package.json",
-      "source_location": "L9"
-    },
-    {
-      "id": "tests_package_devdependencies_playwright",
-      "label": "playwright",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "playwright",
-      "source_file": "tests/package.json",
-      "source_location": "L10"
-    },
-    {
-      "id": "tests_package_name",
-      "label": "name",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "name",
-      "source_file": "tests/package.json",
-      "source_location": "L2"
-    },
-    {
-      "id": "tests_package_private",
-      "label": "private",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "private",
-      "source_file": "tests/package.json",
-      "source_location": "L3"
-    },
-    {
-      "id": "tests_package_scripts",
-      "label": "scripts",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "scripts",
-      "source_file": "tests/package.json",
-      "source_location": "L4"
-    },
-    {
-      "id": "tests_package_scripts_test",
-      "label": "test",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "test",
-      "source_file": "tests/package.json",
-      "source_location": "L5"
-    },
-    {
-      "id": "tests_package_scripts_test_ocr",
-      "label": "test:ocr",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "test:ocr",
-      "source_file": "tests/package.json",
-      "source_location": "L6"
-    },
-    {
-      "id": "tests_package_scripts_test_speed",
-      "label": "test:speed",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "test:speed",
-      "source_file": "tests/package.json",
-      "source_location": "L7"
-    },
-    {
-      "id": "tests_school_pages_test",
-      "label": "school-pages.test.js",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "school-pages.test.js",
-      "source_file": "tests/school-pages.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_school_pages_test_chromium",
-      "label": "{ chromium }",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "{ chromium }",
-      "source_file": "tests/school-pages.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "tests_school_pages_test_pages",
-      "label": "pages",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "pages",
-      "source_file": "tests/school-pages.test.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "tests_school_pages_test_serve",
-      "label": "{ serve }",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "code",
-      "norm_label": "{ serve }",
-      "source_file": "tests/school-pages.test.js",
-      "source_location": "L3"
-    },
-    {
       "id": "tests_server",
       "label": "server.js",
       "_origin": "ast",
@@ -3284,17 +3108,6 @@
       "source_location": "L3"
     },
     {
-      "id": "ref_playwright",
-      "label": "playwright",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "server.js",
-      "file_type": "concept",
-      "norm_label": "playwright",
-      "source_file": "tests/package.json",
-      "source_location": "L10"
-    },
-    {
       "id": "graphify_inline_input",
       "label": "index.html",
       "_origin": "ast",
@@ -3314,7 +3127,7 @@
       "file_type": "code",
       "norm_label": "allsubjects",
       "source_file": "index.html",
-      "source_location": "L1758"
+      "source_location": "L1794"
     },
     {
       "id": "graphify_inline_input_ar_number_words",
@@ -3325,7 +3138,7 @@
       "file_type": "code",
       "norm_label": "ar_number_words",
       "source_file": "index.html",
-      "source_location": "L4670"
+      "source_location": "L4706"
     },
     {
       "id": "graphify_inline_input_engine_names",
@@ -3336,7 +3149,7 @@
       "file_type": "code",
       "norm_label": "engine_names",
       "source_file": "index.html",
-      "source_location": "L3888"
+      "source_location": "L3924"
     },
     {
       "id": "graphify_inline_input_grade_words",
@@ -3347,7 +3160,7 @@
       "file_type": "code",
       "norm_label": "grade_words",
       "source_file": "index.html",
-      "source_location": "L4311"
+      "source_location": "L4347"
     },
     {
       "id": "graphify_inline_input_gradenotes",
@@ -3358,7 +3171,7 @@
       "file_type": "code",
       "norm_label": "gradenotes",
       "source_file": "index.html",
-      "source_location": "L1730"
+      "source_location": "L1766"
     },
     {
       "id": "graphify_inline_input_gradestatuslabels",
@@ -3369,7 +3182,7 @@
       "file_type": "code",
       "norm_label": "gradestatuslabels",
       "source_file": "index.html",
-      "source_location": "L1765"
+      "source_location": "L1801"
     },
     {
       "id": "graphify_inline_input_gradingscheme",
@@ -3380,7 +3193,7 @@
       "file_type": "code",
       "norm_label": "gradingscheme",
       "source_file": "index.html",
-      "source_location": "L1725"
+      "source_location": "L1761"
     },
     {
       "id": "graphify_inline_input_jspdfqueue",
@@ -3391,7 +3204,7 @@
       "file_type": "code",
       "norm_label": "_jspdfqueue",
       "source_file": "index.html",
-      "source_location": "L1387"
+      "source_location": "L1423"
     },
     {
       "id": "graphify_inline_input_learned",
@@ -3402,7 +3215,7 @@
       "file_type": "code",
       "norm_label": "learned",
       "source_file": "index.html",
-      "source_location": "L5503"
+      "source_location": "L5539"
     },
     {
       "id": "graphify_inline_input_levellabels",
@@ -3413,7 +3226,7 @@
       "file_type": "code",
       "norm_label": "levellabels",
       "source_file": "index.html",
-      "source_location": "L1764"
+      "source_location": "L1800"
     },
     {
       "id": "graphify_inline_input_major_rules",
@@ -3424,7 +3237,7 @@
       "file_type": "code",
       "norm_label": "major_rules",
       "source_file": "index.html",
-      "source_location": "L3098"
+      "source_location": "L3134"
     },
     {
       "id": "graphify_inline_input_moe_subjects",
@@ -3435,7 +3248,7 @@
       "file_type": "code",
       "norm_label": "moe_subjects",
       "source_file": "index.html",
-      "source_location": "L4662"
+      "source_location": "L4698"
     },
     {
       "id": "graphify_inline_input_ocr_engines",
@@ -3446,7 +3259,7 @@
       "file_type": "code",
       "norm_label": "ocr_engines",
       "source_file": "index.html",
-      "source_location": "L3882"
+      "source_location": "L3918"
     },
     {
       "id": "graphify_inline_input_ocr_subject_aliases",
@@ -3457,7 +3270,7 @@
       "file_type": "code",
       "norm_label": "ocr_subject_aliases",
       "source_file": "index.html",
-      "source_location": "L4765"
+      "source_location": "L4801"
     },
     {
       "id": "graphify_inline_input_ocrpagecache",
@@ -3468,7 +3281,7 @@
       "file_type": "code",
       "norm_label": "_ocrpagecache",
       "source_file": "index.html",
-      "source_location": "L5013"
+      "source_location": "L5049"
     },
     {
       "id": "graphify_inline_input_paddle_models",
@@ -3479,7 +3292,7 @@
       "file_type": "code",
       "norm_label": "paddle_models",
       "source_file": "index.html",
-      "source_location": "L3876"
+      "source_location": "L3912"
     },
     {
       "id": "graphify_inline_input_paddlecpupaths",
@@ -3490,7 +3303,7 @@
       "file_type": "code",
       "norm_label": "_paddlecpupaths",
       "source_file": "index.html",
-      "source_location": "L3965"
+      "source_location": "L4001"
     },
     {
       "id": "graphify_inline_input_paddledicts",
@@ -3501,7 +3314,7 @@
       "file_type": "code",
       "norm_label": "_paddledicts",
       "source_file": "index.html",
-      "source_location": "L3963"
+      "source_location": "L3999"
     },
     {
       "id": "graphify_inline_input_paddlesessions",
@@ -3512,7 +3325,7 @@
       "file_type": "code",
       "norm_label": "_paddlesessions",
       "source_file": "index.html",
-      "source_location": "L3963"
+      "source_location": "L3999"
     },
     {
       "id": "graphify_inline_input_page_readers",
@@ -3523,7 +3336,7 @@
       "file_type": "code",
       "norm_label": "page_readers",
       "source_file": "index.html",
-      "source_location": "L4254"
+      "source_location": "L4290"
     },
     {
       "id": "graphify_inline_input_savedtheme",
@@ -3534,7 +3347,7 @@
       "file_type": "code",
       "norm_label": "savedtheme",
       "source_file": "index.html",
-      "source_location": "L3807"
+      "source_location": "L3843"
     },
     {
       "id": "graphify_inline_input_scriptpromises",
@@ -3545,7 +3358,7 @@
       "file_type": "code",
       "norm_label": "_scriptpromises",
       "source_file": "index.html",
-      "source_location": "L3895"
+      "source_location": "L3931"
     },
     {
       "id": "graphify_inline_input_shortlevellabels",
@@ -3556,7 +3369,7 @@
       "file_type": "code",
       "norm_label": "shortlevellabels",
       "source_file": "index.html",
-      "source_location": "L3106"
+      "source_location": "L3142"
     },
     {
       "id": "graphify_inline_input_status_table_row",
@@ -3567,7 +3380,7 @@
       "file_type": "code",
       "norm_label": "status_table_row",
       "source_file": "index.html",
-      "source_location": "L4543"
+      "source_location": "L4579"
     },
     {
       "id": "graphify_inline_input_subject_abbreviations",
@@ -3578,7 +3391,7 @@
       "file_type": "code",
       "norm_label": "subject_abbreviations",
       "source_file": "index.html",
-      "source_location": "L4797"
+      "source_location": "L4833"
     },
     {
       "id": "graphify_inline_input_subjectlists",
@@ -3589,7 +3402,7 @@
       "file_type": "code",
       "norm_label": "subjectlists",
       "source_file": "index.html",
-      "source_location": "L1734"
+      "source_location": "L1770"
     },
     {
       "id": "graphify_inline_input_tessworkers",
@@ -3600,7 +3413,7 @@
       "file_type": "code",
       "norm_label": "_tessworkers",
       "source_file": "index.html",
-      "source_location": "L3915"
+      "source_location": "L3951"
     },
     {
       "id": "graphify_inline_input_valid_combos",
@@ -3611,7 +3424,7 @@
       "file_type": "code",
       "norm_label": "valid_combos",
       "source_file": "index.html",
-      "source_location": "L1772"
+      "source_location": "L1808"
     },
     {
       "id": "graphify_inline_input_xlsxqueue",
@@ -3622,80 +3435,25 @@
       "file_type": "code",
       "norm_label": "_xlsxqueue",
       "source_file": "index.html",
-      "source_location": "L1402"
+      "source_location": "L1438"
     },
     {
       "id": "api_ocr",
       "label": "ocr.js",
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "ocr.js",
       "source_file": "api/ocr.js",
       "source_location": "L1"
     },
     {
-      "id": "tests_ocr_categories_test",
-      "label": "ocr-categories.test.js",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "ocr-categories.test.js",
-      "source_file": "tests/ocr-categories.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_ocr_categories_test_assert",
-      "label": "assert",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "assert",
-      "source_file": "tests/ocr-categories.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_ocr_categories_test_fs",
-      "label": "fs",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "fs",
-      "source_file": "tests/ocr-categories.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "tests_ocr_categories_test_html",
-      "label": "html",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "html",
-      "source_file": "tests/ocr-categories.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "tests_ocr_categories_test_vm",
-      "label": "vm",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "vm",
-      "source_file": "tests/ocr-categories.test.js",
-      "source_location": "L3"
-    },
-    {
       "id": "tests_ocr_gateway_test",
       "label": "ocr-gateway.test.js",
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "ocr-gateway.test.js",
       "source_file": "tests/ocr-gateway.test.js",
@@ -3706,7 +3464,7 @@
       "label": "assert",
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "assert",
       "source_file": "tests/ocr-gateway.test.js",
@@ -3717,7 +3475,7 @@
       "label": "fs",
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "fs",
       "source_file": "tests/ocr-gateway.test.js",
@@ -3728,7 +3486,7 @@
       "label": "handler",
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "handler",
       "source_file": "tests/ocr-gateway.test.js",
@@ -3739,7 +3497,7 @@
       "label": "{ Readable }",
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "{ readable }",
       "source_file": "tests/ocr-gateway.test.js",
@@ -3750,165 +3508,11 @@
       "label": "vm",
       "_origin": "ast",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "file_type": "code",
       "norm_label": "vm",
       "source_file": "tests/ocr-gateway.test.js",
       "source_location": "L4"
-    },
-    {
-      "id": "tests_ocr_speed_test",
-      "label": "ocr-speed.test.js",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "ocr-speed.test.js",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_ocr_speed_test_assert",
-      "label": "assert",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "assert",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "tests_ocr_speed_test_chromium",
-      "label": "{ chromium }",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "{ chromium }",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L6"
-    },
-    {
-      "id": "tests_ocr_speed_test_fs",
-      "label": "fs",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "fs",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "tests_ocr_speed_test_path",
-      "label": "path",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "tests_ocr_speed_test_serve",
-      "label": "{ serve }",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "{ serve }",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L7"
-    },
-    {
-      "id": "tools_update_graph",
-      "label": "update-graph.cjs",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "update-graph.cjs",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "tools_update_graph_execfilesync",
-      "label": "{ execFileSync }",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "{ execfilesync }",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L5"
-    },
-    {
-      "id": "tools_update_graph_fs",
-      "label": "fs",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "fs",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L3"
-    },
-    {
-      "id": "tools_update_graph_html",
-      "label": "html",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "html",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L9"
-    },
-    {
-      "id": "tools_update_graph_input",
-      "label": "input",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "input",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L8"
-    },
-    {
-      "id": "tools_update_graph_path",
-      "label": "path",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L4"
-    },
-    {
-      "id": "tools_update_graph_root",
-      "label": "root",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "root",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L6"
-    },
-    {
-      "id": "tools_update_graph_source",
-      "label": "source",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "source",
-      "source_file": "tools/update-graph.cjs",
-      "source_location": "L10"
     },
     {
       "id": "readme",
@@ -4043,6 +3647,116 @@
       "source_location": "L7"
     },
     {
+      "id": "tests_package",
+      "label": "package.json",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "package.json",
+      "source_file": "tests/package.json",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_package_devdependencies",
+      "label": "devDependencies",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "devdependencies",
+      "source_file": "tests/package.json",
+      "source_location": "L9"
+    },
+    {
+      "id": "tests_package_devdependencies_playwright",
+      "label": "playwright",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "playwright",
+      "source_file": "tests/package.json",
+      "source_location": "L10"
+    },
+    {
+      "id": "tests_package_name",
+      "label": "name",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "name",
+      "source_file": "tests/package.json",
+      "source_location": "L2"
+    },
+    {
+      "id": "tests_package_private",
+      "label": "private",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "private",
+      "source_file": "tests/package.json",
+      "source_location": "L3"
+    },
+    {
+      "id": "tests_package_scripts",
+      "label": "scripts",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "scripts",
+      "source_file": "tests/package.json",
+      "source_location": "L4"
+    },
+    {
+      "id": "tests_package_scripts_test",
+      "label": "test",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "test",
+      "source_file": "tests/package.json",
+      "source_location": "L5"
+    },
+    {
+      "id": "tests_package_scripts_test_ocr",
+      "label": "test:ocr",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "test:ocr",
+      "source_file": "tests/package.json",
+      "source_location": "L6"
+    },
+    {
+      "id": "tests_package_scripts_test_speed",
+      "label": "test:speed",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "code",
+      "norm_label": "test:speed",
+      "source_file": "tests/package.json",
+      "source_location": "L7"
+    },
+    {
+      "id": "ref_playwright",
+      "label": "playwright",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "playwright",
+      "file_type": "concept",
+      "norm_label": "playwright",
+      "source_file": "tests/package.json",
+      "source_location": "L10"
+    },
+    {
       "id": "agents",
       "label": "AGENTS.md",
       "_origin": "ast",
@@ -4151,6 +3865,226 @@
       "source_location": "L1"
     },
     {
+      "id": "tests_below_minimum_test",
+      "label": "below-minimum.test.js",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "below-minimum.test.js",
+      "source_file": "tests/below-minimum.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_below_minimum_test_chromium",
+      "label": "{ chromium }",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "{ chromium }",
+      "source_file": "tests/below-minimum.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "tests_below_minimum_test_serve",
+      "label": "{ serve }",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "{ serve }",
+      "source_file": "tests/below-minimum.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "tests_school_pages_test",
+      "label": "school-pages.test.js",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "school-pages.test.js",
+      "source_file": "tests/school-pages.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_school_pages_test_chromium",
+      "label": "{ chromium }",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "{ chromium }",
+      "source_file": "tests/school-pages.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "tests_school_pages_test_pages",
+      "label": "pages",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "pages",
+      "source_file": "tests/school-pages.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "tests_school_pages_test_serve",
+      "label": "{ serve }",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "below-minimum.test.js",
+      "file_type": "code",
+      "norm_label": "{ serve }",
+      "source_file": "tests/school-pages.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "tools_update_graph",
+      "label": "update-graph.cjs",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "update-graph.cjs",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "tools_update_graph_execfilesync",
+      "label": "{ execFileSync }",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "{ execfilesync }",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L5"
+    },
+    {
+      "id": "tools_update_graph_fs",
+      "label": "fs",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "fs",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L3"
+    },
+    {
+      "id": "tools_update_graph_html",
+      "label": "html",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "html",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L9"
+    },
+    {
+      "id": "tools_update_graph_input",
+      "label": "input",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "input",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L8"
+    },
+    {
+      "id": "tools_update_graph_path",
+      "label": "path",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L4"
+    },
+    {
+      "id": "tools_update_graph_root",
+      "label": "root",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "root",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L6"
+    },
+    {
+      "id": "tools_update_graph_source",
+      "label": "source",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "update-graph.cjs",
+      "file_type": "code",
+      "norm_label": "source",
+      "source_file": "tools/update-graph.cjs",
+      "source_location": "L10"
+    },
+    {
+      "id": "tests_ocr_categories_test",
+      "label": "ocr-categories.test.js",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
+      "file_type": "code",
+      "norm_label": "ocr-categories.test.js",
+      "source_file": "tests/ocr-categories.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_ocr_categories_test_assert",
+      "label": "assert",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
+      "file_type": "code",
+      "norm_label": "assert",
+      "source_file": "tests/ocr-categories.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_ocr_categories_test_fs",
+      "label": "fs",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
+      "file_type": "code",
+      "norm_label": "fs",
+      "source_file": "tests/ocr-categories.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "tests_ocr_categories_test_html",
+      "label": "html",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
+      "file_type": "code",
+      "norm_label": "html",
+      "source_file": "tests/ocr-categories.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "tests_ocr_categories_test_vm",
+      "label": "vm",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
+      "file_type": "code",
+      "norm_label": "vm",
+      "source_file": "tests/ocr-categories.test.js",
+      "source_location": "L3"
+    },
+    {
       "id": "basehttprequesthandler",
       "label": "BaseHTTPRequestHandler",
       "_origin": "ast",
@@ -4160,6 +4094,116 @@
       "norm_label": "basehttprequesthandler",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "tests_ocr_speed_test",
+      "label": "ocr-speed.test.js",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "ocr-speed.test.js",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_ocr_speed_test_assert",
+      "label": "assert",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "assert",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "tests_ocr_speed_test_chromium",
+      "label": "{ chromium }",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "{ chromium }",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "tests_ocr_speed_test_fs",
+      "label": "fs",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "fs",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "tests_ocr_speed_test_path",
+      "label": "path",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "tests_ocr_speed_test_serve",
+      "label": "{ serve }",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "{ serve }",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L7"
+    },
+    {
+      "id": "tests_subject_entry_test",
+      "label": "subject-entry.test.js",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "subject-entry.test.js",
+      "file_type": "code",
+      "norm_label": "subject-entry.test.js",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_subject_entry_test_assert",
+      "label": "assert",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "subject-entry.test.js",
+      "file_type": "code",
+      "norm_label": "assert",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_subject_entry_test_chromium",
+      "label": "{ chromium }",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "subject-entry.test.js",
+      "file_type": "code",
+      "norm_label": "{ chromium }",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "tests_subject_entry_test_serve",
+      "label": "{ serve }",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "subject-entry.test.js",
+      "file_type": "code",
+      "norm_label": "{ serve }",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L3"
     },
     {
       "id": "portable_ocr_readme",
@@ -4635,14 +4679,14 @@
       "type": "external"
     },
     {
-      "id": "ref_node_assert",
-      "label": "ref_node_assert",
+      "id": "ref_node_stream",
+      "label": "ref_node_stream",
       "_origin": "semantic",
       "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community_name": "ocr-gateway.test.js",
       "external": true,
       "file_type": "concept",
-      "norm_label": "ref_node_assert",
+      "norm_label": "ref_node_stream",
       "source_file": "",
       "type": "external"
     },
@@ -4650,8 +4694,8 @@
       "id": "ref_node_child_process",
       "label": "ref_node_child_process",
       "_origin": "semantic",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community": 28,
+      "community_name": "update-graph.cjs",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_node_child_process",
@@ -4662,8 +4706,8 @@
       "id": "ref_node_fs",
       "label": "ref_node_fs",
       "_origin": "semantic",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_node_fs",
@@ -4671,10 +4715,22 @@
       "type": "external"
     },
     {
+      "id": "ref_node_vm",
+      "label": "ref_node_vm",
+      "_origin": "semantic",
+      "community": 29,
+      "community_name": "ocr-categories.test.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_node_vm",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_node_path",
       "label": "ref_node_path",
       "_origin": "semantic",
-      "community": 18,
+      "community": 30,
       "community_name": "ocr-speed.test.js",
       "external": true,
       "file_type": "concept",
@@ -4683,26 +4739,14 @@
       "type": "external"
     },
     {
-      "id": "ref_node_stream",
-      "label": "ref_node_stream",
+      "id": "ref_node_assert",
+      "label": "ref_node_assert",
       "_origin": "semantic",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
+      "community": 31,
+      "community_name": "subject-entry.test.js",
       "external": true,
       "file_type": "concept",
-      "norm_label": "ref_node_stream",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_node_vm",
-      "label": "ref_node_vm",
-      "_origin": "semantic",
-      "community": 18,
-      "community_name": "ocr-speed.test.js",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_node_vm",
+      "norm_label": "ref_node_assert",
       "source_file": "",
       "type": "external"
     },
@@ -4777,7 +4821,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5420",
+      "source_location": "L5456",
       "weight": 1.0
     },
     {
@@ -5509,7 +5553,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5467",
+      "source_location": "L5503",
       "weight": 1.0
     },
     {
@@ -6241,7 +6285,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L3088",
+      "source_location": "L3124",
       "weight": 1.0
     },
     {
@@ -8053,7 +8097,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L1532",
+      "source_location": "L1568",
       "weight": 1.0
     },
     {
@@ -8125,7 +8169,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L1572",
+      "source_location": "L1608",
       "weight": 1.0
     },
     {
@@ -8286,6 +8330,18 @@
     },
     {
       "source": "graphify_inline_input_readfilewithengine",
+      "target": "graphify_inline_input_extractpages",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L4953",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input_readfilewithengine",
       "target": "graphify_inline_input_textlayertolines",
       "relation": "calls",
       "_origin": "ast",
@@ -8306,18 +8362,6 @@
       "context": "call",
       "source_file": "index.html",
       "source_location": "L5029",
-      "weight": 1.0
-    },
-    {
-      "source": "graphify_inline_input_readfilewithengine",
-      "target": "graphify_inline_input_extractpages",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "index.html",
-      "source_location": "L4953",
       "weight": 1.0
     },
     {
@@ -8461,7 +8505,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5955",
+      "source_location": "L5991",
       "weight": 1.0
     },
     {
@@ -8653,7 +8697,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5356",
+      "source_location": "L5392",
       "weight": 1.0
     },
     {
@@ -10049,6 +10093,18 @@
       "weight": 1.0
     },
     {
+      "source": "tests_subject_entry_test",
+      "target": "tests_subject_entry_test_assert",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
       "source": "portable_ocr_service",
       "target": "secrets",
       "relation": "imports",
@@ -10345,6 +10401,18 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "tests/school-pages.test.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_subject_entry_test",
+      "target": "tests_server_serve",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/subject-entry.test.js",
       "source_location": "L3",
       "weight": 1.0
     },
@@ -10802,6 +10870,42 @@
       "context": "import",
       "source_file": "tests/server.js",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_subject_entry_test",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_subject_entry_test",
+      "target": "ref_playwright",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_subject_entry_test",
+      "target": "tests_server",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -14064,6 +14168,28 @@
       "weight": 1.0
     },
     {
+      "source": "tests_subject_entry_test",
+      "target": "tests_subject_entry_test_chromium",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_subject_entry_test",
+      "target": "tests_subject_entry_test_serve",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/subject-entry.test.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
       "source": "tools_readme",
       "target": "tools_readme_ponytail_and_graphify",
       "relation": "contains",
@@ -14603,5 +14729,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "76ba6e14f6eebcbdd76942cf66abfad102706021"
+  "built_at_commit": "0f2359c61c838b2c68320f9d552a111a6d85a138"
 }

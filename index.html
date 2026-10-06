@@ -1068,6 +1068,38 @@
       #success-message { font-size: 0.8rem; line-height: 1.45; }
       #success-message .big-pct { font-size: clamp(1.6rem, 13vw, 2.2rem); }
     }
+    .entry-intro { color: var(--text-2); font-size: .86rem; line-height: 1.6; margin: 0 0 20px; }
+    .manual-entry-heading { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 22px; }
+    .manual-entry-heading h2 { font-size: 1rem; color: var(--text); margin: 0 0 6px; }
+    .manual-entry-heading p { color: var(--text-2); font-size: .8rem; line-height: 1.6; margin: 0 0 16px; }
+    .ocr-upload-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .ocr-upload-grid .ocr-drop { text-align: left; gap: 5px; padding: 16px; border-width: 1px; border-style: solid; min-width: 0; }
+    .ocr-drop strong { color: var(--text); font-size: .87rem; }
+    .ocr-drop span { font-size: .75rem; line-height: 1.5; }
+    .ocr-drop-all { grid-column: 1 / -1; background: rgba(99,102,241,.09); }
+    .ocr-drop:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+    .subject-card { display: grid; grid-template-columns: minmax(220px, 2fr) minmax(90px, .7fr) minmax(155px, 1fr) 36px; align-items: start; padding: 18px; gap: 14px; }
+    .subject-card:hover { transform: none; }
+    .subject-card .field-group { min-width: 0; gap: 7px; }
+    .subject-card .search-group { grid-column: 1; grid-row: 1; }
+    .subject-card .grade-group, .subject-card .pct-group { grid-column: 2; grid-row: 1; }
+    .subject-card .status-group { grid-column: 3; grid-row: 1; }
+    .subject-card .del-wrap { grid-column: 4; grid-row: 1; margin-top: 25px; }
+    .subject-card .field-label { text-transform: none; letter-spacing: 0; color: var(--text-2); font-size: .78rem; }
+    .subject-card select, .subject-card .subject-search, .subject-card input[type="number"] { min-height: 44px; font-size: .88rem; }
+    @media (max-width: 900px) {
+      .subject-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px; }
+      .subject-card .search-group { grid-column: 1 / 3; }
+      .subject-card .grade-group, .subject-card .pct-group { grid-column: 1; grid-row: 2; }
+      .subject-card .status-group { grid-column: 2; grid-row: 2; }
+      .subject-card .del-wrap { grid-column: 3; grid-row: 1; }
+    }
+    @media (max-width: 560px) {
+      .ocr-upload-grid { grid-template-columns: minmax(0, 1fr); }
+      .subject-card { padding: 14px; gap: 12px; }
+      .subject-card .status-group { grid-column: 1 / 3; grid-row: 3; }
+      .subject-card .grade-group, .subject-card .pct-group { grid-column: 1 / 3; }
+    }
   </style>
   <!-- Vercel Web Analytics -->
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
@@ -1102,18 +1134,20 @@
   <div class="page-wrapper">
     <div class="main-content">
       <div class="main-card">
-        <div class="section-label">Subject entries</div>
+        <div class="section-label">Add student subjects</div>
+        <p class="entry-intro">Upload certificates to read the grades, or enter subjects manually below. Review every result before calculating.</p>
     <div class="bulk-add-section ocr-section" id="ocr-section">
       <div class="bulk-add-header">
         <span class="bulk-add-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
         </span>
         <div class="bulk-add-text">
-          <div class="bulk-add-title">Read subjects from certificates <span class="extra-pill">Beta</span></div>
-          <div class="bulk-add-desc">Choose the certificate type below. Subjects, levels and grades are detected for you to review.</div>
+          <div class="bulk-add-title">Upload certificates <span class="extra-pill">Beta</span></div>
+          <div class="bulk-add-desc">Upload everything together, or choose a certificate type. You can select several files in any option.</div>
         </div>
       </div>
       <div class="ocr-upload-grid">
+        <label class="ocr-drop ocr-drop-all" data-level="" tabindex="0" role="button" for="ocr-file-all"><strong>All certificates together</strong><span>O-Level, AS-Level, A-Level and MOE • choose multiple files or drop them here</span></label>
         <label class="ocr-drop" data-level="o-level" tabindex="0" role="button" for="ocr-file-o"><strong>O-Level / IGCSE certificates</strong><span>Choose files or drop them here</span></label>
         <label class="ocr-drop" data-level="as-level" tabindex="0" role="button" for="ocr-file-as"><strong>AS-Level certificates</strong><span>Choose files or drop them here</span></label>
         <label class="ocr-drop" data-level="a-level" tabindex="0" role="button" for="ocr-file-a"><strong>A-Level certificates</strong><span>Choose files or drop them here</span></label>
@@ -1125,11 +1159,13 @@
         <select id="ocr-engine"></select>
       </div>
       <input type="file" id="ocr-file-o" accept=".pdf,application/pdf,image/*" multiple hidden>
+      <input type="file" id="ocr-file-all" accept=".pdf,application/pdf,image/*" multiple hidden>
       <input type="file" id="ocr-file-as" accept=".pdf,application/pdf,image/*" multiple hidden>
       <input type="file" id="ocr-file-a" accept=".pdf,application/pdf,image/*" multiple hidden>
       <input type="file" id="ocr-file-moe" accept=".pdf,application/pdf,image/*" multiple hidden>
       <div class="ocr-privacy">🔒 Auto uses the connected work OCR computer when available; otherwise, files are read in this browser. Uploaded pages are processed in memory, not saved by the OCR service.</div>
     </div>
+    <div class="manual-entry-heading"><h2>Enter subjects manually</h2><p>Search for a subject, choose its qualification and grade, then confirm whether the result is final or predicted.</p></div>
     <div class="bulk-add-section" id="bulk-add-section">
       <button class="bulk-toggle" type="button" onclick="toggleQuickEntry()" aria-expanded="false" aria-controls="bulk-add-content" id="bulk-toggle-btn">
         <span class="bulk-toggle-left">
@@ -1139,8 +1175,8 @@
             </svg>
           </span>
           <span class="bulk-add-text">
-            <span class="bulk-add-title">Want to add many subjects quickly?</span>
-            <span class="bulk-add-desc">Optional: click here to open Quick Entry Mode.</span>
+            <span class="bulk-add-title">Add several subject rows</span>
+            <span class="bulk-add-desc">Choose how many blank rows you need.</span>
           </span>
         </span>
         <svg class="bulk-toggle-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1798,9 +1834,9 @@ function scenarioComboText(scenario) {
 function subjectCardHTML() {
   return `<div class="subject-card">
     <div class="field-group search-group">
-      <span class="field-label">Subject</span>
+      <span class="field-label">Subject & qualification</span>
       <div class="search-wrap">
-        <input type="text" class="subject-search" placeholder="Start typing a subject name…" autocomplete="off" spellcheck="false">
+        <input type="text" class="subject-search" aria-label="Subject and qualification" placeholder="Search subjects, e.g. Mathematics…" autocomplete="off" spellcheck="false">
         <div class="search-dropdown hidden"></div>
         <input type="hidden" class="subject-val"><input type="hidden" class="level-val"><input type="hidden" class="category-val">
       </div>
@@ -1808,21 +1844,21 @@ function subjectCardHTML() {
     </div>
     <div class="field-group grade-group hidden">
       <span class="field-label">Grade</span>
-      <select class="grade"><option value="">Select Grade</option></select>
+      <select class="grade" aria-label="Subject grade"><option value="">Select Grade</option></select>
     </div>
     <div class="field-group status-group hidden">
-      <span class="field-label">Result Type</span>
-      <select class="grade-status">
-        <option value="final">Final</option>
-        <option value="expected">Expected</option>
+      <span class="field-label">Result status</span>
+      <select class="grade-status" aria-label="Result status">
+        <option value="final">Final / achieved</option>
+        <option value="expected">Predicted / expected</option>
       </select>
     </div>
     <div class="field-group pct-group hidden">
       <span class="field-label">Mark (%)</span>
-      <input type="number" class="percentile" placeholder="0–100" min="0" max="100" step="any">
+      <input type="number" class="percentile" aria-label="School mark as a percentage" placeholder="0–100" min="0" max="100" step="any">
     </div>
     <div class="del-wrap">
-      <button class="delete-btn" onclick="deleteRow(this)" title="Remove subject">
+      <button class="delete-btn" onclick="deleteRow(this)" title="Remove subject" aria-label="Remove subject">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
         </svg>

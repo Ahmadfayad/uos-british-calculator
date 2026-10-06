@@ -50,5 +50,6 @@ const functionSource = (name, next) => html.slice(html.indexOf('async function '
   assert.equal(result.paddle[2].text,'ok');
   assert(!html.includes('ocr-pages'));
   assert.equal((html.match(/class="ocr-drop" data-level=/g) || []).length, 4);
+  assert(html.includes('id="ocr-file-all"') && html.includes('data-level=""'), 'Mixed upload must preserve automatic level detection');
   console.log('PASS four upload categories and Arabic pass safeguards');
 })().catch(e => { console.error(e); process.exitCode = 1; });
