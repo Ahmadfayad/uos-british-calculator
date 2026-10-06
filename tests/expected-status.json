@@ -1,251 +1,267 @@
-﻿{
-    "1.pdf":  {
-                  "1":  [
-                            "final"
-                        ],
-                  "2":  [
-                            "final"
-                        ],
-                  "3":  [
-                            "final"
-                        ],
-                  "6":  [
-                            "expected",
-                            "final"
-                        ],
-                  "9":  [
-                            "final"
-                        ],
-                  "11":  [
-                             "final"
-                         ],
-                  "13":  [
-                             "final"
-                         ]
-              },
-    "2.pdf":  {
-                  "1":  [
-                            "final"
-                        ],
-                  "3":  [
-                            "final"
-                        ],
-                  "4":  [
-                            "final"
-                        ],
-                  "6":  [
-                            "final"
-                        ]
-              },
-    "3.pdf":  {
-                  "1":  [
-                            "final"
-                        ],
-                  "4":  [
-                            "expected"
-                        ],
-                  "5":  [
-                            "final"
-                        ],
-                  "6":  [
-                            "final"
-                        ],
-                  "7":  [
-                            "final"
-                        ],
-                  "8":  [
-                            "final"
-                        ],
-                  "9":  [
-                            "final"
-                        ],
-                  "10":  [
-                             "final"
-                         ]
-              },
-    "4.pdf":  {
-                  "1":  [
-                            "final"
-                        ],
-                  "4":  [
-                            "final"
-                        ],
-                  "5":  [
-                            "final"
-                        ],
-                  "6":  [
-                            "final"
-                        ],
-                  "7":  [
-                            "final"
-                        ],
-                  "8":  [
-                            "final"
-                        ],
-                  "9":  [
-                            "final"
-                        ]
-              },
-    "5x.pdf":  {
-                   "1":  [
-                             "final"
-                         ],
-                   "2":  [
-                             "final"
-                         ],
-                   "3":  [
-                             "final"
-                         ],
-                   "4":  [
-                             "final"
-                         ],
-                   "5":  [
-                             "final"
-                         ],
-                   "8":  [
-                             "final"
-                         ]
-               },
-    "6.pdf":  {
-                  "1":  [
-                            "final"
-                        ],
-                  "2":  [
-                            "final"
-                        ],
-                  "4":  [
-                            "final"
-                        ],
-                  "5":  [
-                            "final"
-                        ],
-                  "6":  [
-                            "final"
-                        ],
-                  "7":  [
-                            "final"
-                        ],
-                  "8":  [
-                            "expected"
-                        ]
-              },
-    "7.pdf":  {
-                  "1":  [
-                            "final"
-                        ],
-                  "2":  [
-                            "final"
-                        ],
-                  "3":  [
-                            "final"
-                        ],
-                  "6":  [
-                            "final"
-                        ],
-                  "7":  [
-                            "final"
-                        ]
-              },
-    "8.pdf":  {
-                  "2":  [
-                            "final"
-                        ],
-                  "3":  [
-                            "final"
-                        ],
-                  "4":  [
-                            "final"
-                        ],
-                  "9":  [
-                            "final"
-                        ],
-                  "10":  [
-                             "final"
-                         ],
-                  "12":  [
-                             "final"
-                         ],
-                  "14":  [
-                             "final"
-                         ],
-                  "16":  [
-                             "final"
-                         ],
-                  "18":  [
-                             "final"
-                         ],
-                  "20":  [
-                             "final"
-                         ],
-                  "22":  [
-                             "final"
-                         ],
-                  "24":  [
-                             "expected"
-                         ],
-                  "26":  [
-                             "final"
-                         ],
-                  "27":  [
-                             "final"
-                         ],
-                  "28":  [
-                             "unclear"
-                         ]
-              },
-    "9.pdf":  {
-                  "1":  [
-                            "final"
-                        ],
-                  "4":  [
-                            "final"
-                        ],
-                  "5":  [
-                            "final"
-                        ],
-                  "6":  [
-                            "expected"
-                        ],
-                  "7":  [
-                            "final"
-                        ],
-                  "8":  [
-                            "final"
-                        ]
-              },
-    "10.pdf":  {
-                   "2":  [
-                             "final"
-                         ],
-                   "5":  [
-                             "final"
-                         ],
-                   "7":  [
-                             "final"
-                         ],
-                   "9":  [
-                             "final"
-                         ],
-                   "11":  [
-                              "final"
-                          ],
-                   "13":  [
-                              "final"
-                          ],
-                   "15":  [
-                              "final"
-                          ],
-                   "17":  [
-                              "expected"
-                          ],
-                   "20":  [
-                              "expected"
-                          ],
-                   "25":  [
-                              "final"
-                          ],
-                   "27":  [
-                              "final"
-                          ]
-               }
+{
+ "1.pdf": {
+  "1": [
+   "final"
+  ],
+  "2": [
+   "final"
+  ],
+  "3": [
+   "final"
+  ],
+  "4": [
+   "expected"
+  ],
+  "5": [
+   "expected"
+  ],
+  "6": [
+   "expected",
+   "final"
+  ],
+  "7": [
+   "expected"
+  ],
+  "9": [
+   "final"
+  ],
+  "11": [
+   "final"
+  ],
+  "13": [
+   "final"
+  ]
+ },
+ "2.pdf": {
+  "1": [
+   "final"
+  ],
+  "3": [
+   "final"
+  ],
+  "4": [
+   "final"
+  ],
+  "6": [
+   "final"
+  ],
+  "8": [
+   "expected",
+   "final"
+  ]
+ },
+ "3.pdf": {
+  "1": [
+   "final"
+  ],
+  "4": [
+   "expected"
+  ],
+  "5": [
+   "final"
+  ],
+  "6": [
+   "final"
+  ],
+  "7": [
+   "final"
+  ],
+  "8": [
+   "final"
+  ],
+  "9": [
+   "final"
+  ],
+  "10": [
+   "final"
+  ]
+ },
+ "4.pdf": {
+  "1": [
+   "final"
+  ],
+  "4": [
+   "final"
+  ],
+  "5": [
+   "final"
+  ],
+  "6": [
+   "final"
+  ],
+  "7": [
+   "final"
+  ],
+  "8": [
+   "final"
+  ],
+  "9": [
+   "final"
+  ]
+ },
+ "5x.pdf": {
+  "1": [
+   "final"
+  ],
+  "2": [
+   "final"
+  ],
+  "3": [
+   "final"
+  ],
+  "4": [
+   "final"
+  ],
+  "5": [
+   "final"
+  ],
+  "8": [
+   "final"
+  ]
+ },
+ "6.pdf": {
+  "1": [
+   "final"
+  ],
+  "2": [
+   "final"
+  ],
+  "4": [
+   "final"
+  ],
+  "5": [
+   "final"
+  ],
+  "6": [
+   "final"
+  ],
+  "7": [
+   "final"
+  ],
+  "8": [
+   "expected"
+  ]
+ },
+ "7.pdf": {
+  "1": [
+   "final"
+  ],
+  "2": [
+   "final"
+  ],
+  "3": [
+   "final"
+  ],
+  "6": [
+   "final"
+  ],
+  "7": [
+   "final"
+  ],
+  "8": [
+   "expected"
+  ]
+ },
+ "8.pdf": {
+  "2": [
+   "final"
+  ],
+  "3": [
+   "final"
+  ],
+  "4": [
+   "final"
+  ],
+  "9": [
+   "final"
+  ],
+  "10": [
+   "final"
+  ],
+  "12": [
+   "final"
+  ],
+  "14": [
+   "final"
+  ],
+  "16": [
+   "final"
+  ],
+  "18": [
+   "final"
+  ],
+  "20": [
+   "final"
+  ],
+  "22": [
+   "final"
+  ],
+  "24": [
+   "expected"
+  ],
+  "26": [
+   "final"
+  ],
+  "27": [
+   "final"
+  ],
+  "28": [
+   "unclear"
+  ]
+ },
+ "9.pdf": {
+  "1": [
+   "final"
+  ],
+  "4": [
+   "final"
+  ],
+  "5": [
+   "final"
+  ],
+  "6": [
+   "expected"
+  ],
+  "7": [
+   "final"
+  ],
+  "8": [
+   "final"
+  ]
+ },
+ "10.pdf": {
+  "2": [
+   "final"
+  ],
+  "5": [
+   "final"
+  ],
+  "7": [
+   "final"
+  ],
+  "9": [
+   "final"
+  ],
+  "11": [
+   "final"
+  ],
+  "13": [
+   "final"
+  ],
+  "15": [
+   "final"
+  ],
+  "17": [
+   "expected"
+  ],
+  "20": [
+   "expected"
+  ],
+  "25": [
+   "final"
+  ],
+  "27": [
+   "final"
+  ]
+ }
 }

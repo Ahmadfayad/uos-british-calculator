@@ -4252,6 +4252,8 @@ function cleanOcrLine(line) {
 function pageLevel(text) {
   if(/ADVANCED SUBSIDIARY|\bAS LEVEL\b/i.test(text)) return 'as-level';
   if(/ADVANCED LEVEL|ADVANCED\s+GCE|\bA LEVEL\b|GCE A/i.test(text)) return 'a-level';
+  // School reports for Year 13 name no level; their grades are university predictions for A Level.
+  if(/YEAR\s*13/i.test(text) && /PREDICT/i.test(text) && !/I?GCSE|O[\s-]?LEVEL/i.test(text)) return 'a-level';
   return 'o-level';
 }
 
@@ -4393,13 +4395,23 @@ function parseSchoolTableLine(line) {
   return grade ? { rawSubject: subject, level, grade } : null;
 }
 
+// Teacher names, exam boards ("Pearson Edexcel", "Internal school") and a trailing
+// "June 2026" sit between the subject and the grade in school tables.
+function stripSchoolNoise(line) {
+  return line
+    .replace(/\b(?:Mr|Mrs|Ms|Miss|Dr)\.?\s+(?:[A-Z]\.?\s+)?[A-Z][a-z'’-]{2,}(?:\s+[A-Z][a-z'’-]{2,})?/g, ' ')
+    .replace(/\b(?:Pearson\s+Edexcel|Edexcel|Cambridge|CAIE|CIE|AQA|OCR|Internal\s+school)\b/gi, ' ')
+    .replace(/\b(?:Jan|Feb|Mar|Apr|May|June?|July?|Aug|Sept?|Oct|Nov|Dec)[a-z]*\s+\d{4}\s*$/i, '')
+    .replace(/\s+/g, ' ').trim();
+}
+
 // Rows without a level column ("Physics (YPH11)  B") on predicted-grade or
 // school-report pages. The level comes from the subject code or the page
 // heading, so these rows are always flagged for checking.
 function parseSchoolGradeOnlyLine(line, level, pageText, sectionKnown = false) {
   if(!/predicted|forecast|transcript|school report|academic record/i.test(pageText)) return null;
   // A double award may be written "7,7" or "7-7".
-  const m = line.match(/^(.+?)\s+(A\*|[A-EU]|[1-9])(?:\s*[,\-]\s*([1-9]))?(?:\s+\d{4}(?:\s*[-\/]\s*\d{2,4})?)?\s*$/);
+  const m = stripSchoolNoise(line).match(/^(.+?)\s+(A\*|[A-EU]|[1-9])(?:\s*[,\-]\s*([1-9]))?(?:\s+\d{4}(?:\s*[-\/]\s*\d{2,4})?)?\s*$/);
   if(!m) return null;
   const code = levelFromCode(line);
   const rowLevel = code || level;
@@ -4446,10 +4458,69 @@ function parseReviewOutcomeLine(line, level, pageText) {
   return grade ? { rawSubject: cleanBoardSubject(m[2]), level: lvl, grade, revised: `${m[3]} → ${m[4]}` } : null;
 }
 
+// Letters listing "Level Subject : Grade", e.g. "CIE A Level BIOLOGY : A*".
+function parseLevelFirstLine(line) {
+  const m = line.match(/^(?:CIE|CAIE|Cambridge|Edexcel|Pearson(?:\s+Edexcel)?|AQA|OCR)?\s*(A[\s-]?Level|AS[\s-]?Level|I?GCSE|O[\s-]?Level)\s+(.+?)\s*[:\-–]\s*(A\*|[A-EU]|[1-9])\s*$/i);
+  if(!m) return null;
+  const level = levelFromToken(m[1]);
+  const subject = cleanSchoolSubject(m[2]);
+  if(!level || !isKnownSubject(subject, level)) return null;
+  const grade = normalizeGrade(m[3], '', level);
+  return grade ? { rawSubject: subject, level, grade } : null;
+}
+
+// School "results status" tables whose cells wrap over several lines, read from the
+// page text as a whole:  "IGCSE Biology June 2023 / Cambridge PASSED - E",
+// "AS Level Chemistry Nov 2025 / Edexcel PREDICTED GRADE - D".
+const MONTH_WORDS = 'Jan|Feb|Mar|Apr|May|June?|July?|Aug|Sept?|Oct|Nov|Dec';
+const STATUS_TABLE_ROW = new RegExp(`\\b(I?GCSE|AS[\\s-]?Level|A[\\s-]?Level)\\s+((?:(?!I?GCSE|AS[\\s-]?Level|A[\\s-]?Level|PASSED|PREDICTED).){3,70}?)\\s+(?:${MONTH_WORDS})[a-z]*\\s+\\d{4}\\s*\\/?\\s*(?:Cambridge|CAIE|CIE|Edexcel|Pearson|AQA|OCR)\\s+(PASSED|PREDICTED)(?:\\s+GRADE)?\\s*[-–—:]?\\s*(A\\*|[A-EU]|[1-9])\\b`, 'gis');
+function parseStatusTableRows(pageText) {
+  const flat = (pageText || '').replace(/\s+/g, ' ');
+  const rows = [];
+  for(const m of flat.matchAll(STATUS_TABLE_ROW)) {
+    const level = levelFromToken(m[1]);
+    const subject = cleanSchoolSubject(m[2].replace(/\(\s*repeated\s*\)/i, ' '));
+    if(!level || (subject.match(/[A-Za-z]/g) || []).length < 3) continue;
+    const grade = normalizeGrade(m[4], '', level);
+    rows.push({ rawSubject: subject, level, grade, rawGrade: grade ? '' : m[4].toUpperCase(), raw: m[0] });
+  }
+  return rows.length ? rows : parseStatusTableByRow(pageText);
+}
+
+// OCR often reads such a table column by column, so a row arrives as separate lines
+// in any order ("June 2023 / PASSED - E", "IGCSE Biology", "Cambridge"). Every row
+// ends on the line naming its board, so the lines up to it are gathered into one row.
+function parseStatusTableByRow(pageText) {
+  const lines = (pageText || '').split('\n').map(l => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  if(!lines.some(l => /\b(?:PASSED|PREDICTED)\b/i.test(l))) return [];
+  const board = /\b(?:Cambridge|CAIE|CIE|Edexcel|Pearson|AQA|OCR)\b/gi;
+  const date = new RegExp(`\\b(?:${MONTH_WORDS})[a-z]*\\s+\\d{4}\\s*\\/?`, 'gi');
+  const rows = [];
+  let start = lines.findIndex(l => new RegExp(`\\b(?:${MONTH_WORDS})[a-z]*\\s+\\d{4}`, 'i').test(l));
+  if(start < 0) return [];
+  for(let i = start; i < lines.length; i++) {
+    if(!/\b(?:Cambridge|CAIE|CIE|Edexcel|Pearson|AQA|OCR)\b/i.test(lines[i])) continue;
+    const text = lines.slice(start, i + 1).join(' ');
+    start = i + 1;
+    const status = text.match(/\b(PASSED|PREDICTED)\b/i);
+    const levelM = text.match(/\b(I?GCSE|AS[\s-]?Level|A[\s-]?Level)\b/i);
+    const gradeM = text.match(/\b(?:PASSED|GRADE)\s*[-–—:]\s*(A\*|[A-EU]|[1-9])\b/i);
+    if(!status || !levelM || !gradeM) continue;
+    const level = levelFromToken(levelM[1]);
+    const subject = cleanSchoolSubject(text.replace(date, ' ').replace(board, ' ').replace(levelM[0], ' ')
+      .replace(/\b(?:PASSED|GRADE)\s*[-–—:]\s*(?:A\*|[A-EU]|[1-9])\b/gi, ' ').replace(/\b(?:PASSED|PREDICTED)\b/gi, ' ')
+      .replace(/\(\s*repeated\s*\)/i, ' ').replace(/[\/\-–—]/g, ' '));
+    if(!level || (subject.match(/[A-Za-z]/g) || []).length < 3) continue;
+    const grade = normalizeGrade(gradeM[1], '', level);
+    rows.push({ rawSubject: subject, level, grade, rawGrade: grade ? '' : gradeM[1].toUpperCase(), raw: text });
+  }
+  return rows;
+}
+
 function parseResultLine(line, level, pageText, sectionKnown = false) {
   return parseAwardLine(line, pageText) || parseGradeLine(line, level) || parseCambridgeElectronicLine(line) || parseBoardMarkLine(line, level, pageText)
     || parseSyllabusLine(line, level) || parseCambridgeCertLine(line, level) || parseReviewOutcomeLine(line, level, pageText)
-    || parseSchoolTableLine(line) || parseSchoolGradeOnlyLine(line, level, pageText, sectionKnown)
+    || parseSchoolTableLine(line) || parseLevelFirstLine(line) || parseSchoolGradeOnlyLine(line, level, pageText, sectionKnown)
     || (typeof parseLearnedLayoutLine === 'function' ? parseLearnedLayoutLine(line, pageText) : null);
 }
 
@@ -4744,6 +4815,7 @@ function parseDocument(pages, fileName, engine) {
       const miss = nearMissLine(line, section.level || pgLevel);
       if(miss) nearMisses.push({ ...miss, ...rowInfo });
     });
+    parseStatusTableRows(pg.text).forEach(r => pushRow(r, { page: pg.page, box: null, pageConfidence: pg.confidence, source: pg.source, sectionStatus: null, pageStatus }));
   });
   // A known subject whose grade was misread ("Biology Cc") is shown for staff to
   // confirm instead of being dropped, but only on pages where other results were read.
