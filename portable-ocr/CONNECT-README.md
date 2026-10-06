@@ -1,6 +1,6 @@
 # Connect the work PC to the online calculator
 
-Staff continue using https://uos-british-calculator.vercel.app/ and Auto mode.
+Staff continue using https://uos-british-calculator.vercel.app/ and the standalone **Server OCR — OpenVINO** option.
 There is no staff login. Anyone able to use the website can request OCR; the
 private connection key protects the work PC endpoint, not access to the website.
 
@@ -33,17 +33,15 @@ Do not give either variable a public/browser prefix. The website sends PNG
 files/pages to its own `/api/ocr`; Vercel adds the private key and forwards them to
 the work PC over HTTPS. Staff do not visit the tunnel or local test page.
 
-The calculator sends original scanned PDFs with up to 3 pages and at most 4 MB
-to the work PC. This preserved every grade in the supplied certificate;
-browser-rendered PNG pages changed one A* to A during testing, so they are not
-used for PDF forwarding. Larger PDFs and PDFs with usable result text layers
-keep the existing browser/text-layer path. Image uploads use lossless PNG at
-their original resolution and must fit 4 MB; larger images use browser OCR.
-If the server is unavailable at the initial check (2 seconds
-maximum), the whole batch uses browser OCR. A connection failure during a batch
-switches the remaining pages to browser OCR; an in-flight request can wait up
-to 14 seconds before falling back. No whole-file retry solely for a connection
-failure. No document or recognised text is saved or logged by the OCR service.
+Server OCR sends original PDFs up to 4 MB to the OCR computer. Images are sent
+as lossless PNG at their original resolution and must also fit 4 MB. Oversized
+files are rejected with a clear message. An unavailable/busy server, timeout,
+or empty result never triggers a different OCR engine. Browser Auto, PaddleOCR,
+Tesseract and combined mode remain separate choices.
+
+The initial server check waits up to 2 seconds; an upload waits up to 14 seconds.
+Larger page counts may exceed that time: split lengthy PDFs into smaller
+certificates. The OCR service does not save or log documents or recognised text.
 Pages transit Vercel and Cloudflare; normal provider operational metadata may
 still be recorded. Do not claim documents remain on the staff computer.
 

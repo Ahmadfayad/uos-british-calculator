@@ -1163,7 +1163,7 @@
       <input type="file" id="ocr-file-as" accept=".pdf,application/pdf,image/*" multiple hidden>
       <input type="file" id="ocr-file-a" accept=".pdf,application/pdf,image/*" multiple hidden>
       <input type="file" id="ocr-file-moe" accept=".pdf,application/pdf,image/*" multiple hidden>
-      <div class="ocr-privacy">🔒 Auto uses the connected work OCR computer when available; otherwise, files are read in this browser. Uploaded pages are processed in memory, not saved by the OCR service.</div>
+      <div class="ocr-privacy">🔒 Server OCR sends files to the connected OCR server and never switches engines. Other options read files in this browser. The OCR service processes uploads in memory without saving them.</div>
     </div>
     <div class="manual-entry-heading"><h2>Enter subjects manually</h2><p>Search for a subject, choose its qualification and grade, then confirm whether the result is final or predicted.</p></div>
     <div class="bulk-add-section" id="bulk-add-section">
@@ -3916,12 +3916,13 @@ const PADDLE_MODELS = {
 };
 
 const OCR_ENGINES = {
-  auto: 'Auto: Work PC when connected, browser OCR as backup (recommended)',
+  openvino: 'Server OCR — OpenVINO',
+  auto: 'Auto: PaddleOCR with Tesseract backup',
   paddle: 'PaddleOCR only (most accurate)',
   tesseract: 'Tesseract only (lighter download)',
   both: 'Both engines combined (most thorough, slower)'
 };
-const ENGINE_NAMES = { paddle: 'PaddleOCR', tesseract: 'Tesseract', openvino: 'Work PC OCR' };
+const ENGINE_NAMES = { paddle: 'PaddleOCR', tesseract: 'Tesseract', openvino: 'Server OCR' };
 
 function getOcrEngine() {
   const value = document.getElementById('ocr-engine')?.value;
@@ -4264,27 +4265,17 @@ async function workOcrAvailable() {
 }
 
 async function workOcrReadPage(canvas, opts = {}) {
-  if(opts.remoteState?.enabled && opts.allowRemotePNG !== false) {
-    try {
-      // Lossless, full-resolution pages preserve the tested certificate detail.
-      const image = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-      if(!image || image.size > 4 * 1024 * 1024) throw new Error('Page exceeds gateway size');
-      const level = opts.forceArabic ? 'moe' : (opts.level || 'moe');
-      const response = await fetch('/api/ocr?level=' + encodeURIComponent(level), {
-        method: 'POST', headers: { 'Content-Type': 'image/png' }, body: image,
-        signal: AbortSignal.timeout(14000)
-      });
-      if(!response.ok) throw new Error('Work OCR unavailable');
-      const read = (await response.json()).pages?.[0];
-      if(typeof read.text !== 'string' || !Array.isArray(read.lineBoxes)) throw new Error('Invalid OCR result');
-      return read;
-    } catch {
-      opts.remoteState.enabled = false;
-      opts.remoteState.failed = true;
-    }
-  }
-  try { return { ...await paddleReadPage(canvas, opts), fallbackEngine: 'paddle' }; }
-  catch { return { ...await tesseractReadPage(canvas, opts), fallbackEngine: 'tesseract' }; }
+  const image = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+  if(!image || image.size > 4 * 1024 * 1024) throw new Error('Server OCR accepts images up to 4 MB.');
+  const level = opts.forceArabic ? 'moe' : (opts.level || 'moe');
+  const response = await fetch('/api/ocr?level=' + encodeURIComponent(level), {
+    method: 'POST', headers: { 'Content-Type': 'image/png' }, body: image,
+    signal: AbortSignal.timeout(14000)
+  });
+  if(!response.ok) throw new Error('Server OCR is unavailable, busy or timed out.');
+  const read = (await response.json()).pages?.[0];
+  if(typeof read?.text !== 'string' || !Array.isArray(read.lineBoxes)) throw new Error('Invalid server OCR result');
+  return read;
 }
 
 const PAGE_READERS = { paddle: paddleReadPage, tesseract: tesseractReadPage, openvino: workOcrReadPage };
@@ -5053,37 +5044,28 @@ async function readFileWithEngine(file, fingerprint, engine, onStatus, opts = {}
   if(_ocrPageCache.has(key)) return _ocrPageCache.get(key);
   if(engine === 'openvino' && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name))) {
     // Send the original PDF: browser rasterisation changed one grade in the test.
-    if(file.size <= 4 * 1024 * 1024 && opts.remoteState?.enabled) {
-      const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
-      let scanned = pdf.numPages <= 3;
-      const arabicLayers = [];
-      try {
-        for(let p = 1; scanned && p <= pdf.numPages; p++) {
-          const page = await pdf.getPage(p);
-          const layer = textLayerToLines((await page.getTextContent()).items, page.getViewport({ scale: 1 })).text;
-          arabicLayers[p - 1] = /[؀-ۿ]{3,}/.test(layer) ? layer : '';
-          scanned = !hasResultLines(layer) || !!arabicLayers[p - 1];
-          page.cleanup();
-        }
-      } finally { await pdf.destroy(); }
-      if(scanned) {
-        try {
-          onStatus('Reading certificate on the work OCR computer…');
-          const response = await fetch('/api/ocr?level=' + encodeURIComponent(arabicLayers.some(Boolean) ? 'moe' : (opts.level || 'moe')), {
-            method: 'POST', headers: { 'Content-Type': 'application/pdf' }, body: file,
-            signal: AbortSignal.timeout(14000)
-          });
-          if(!response.ok) throw new Error('Work OCR unavailable');
-          const pages = (await response.json()).pages;
-          if(!Array.isArray(pages) || pages.length !== pdf.numPages || pages.some(pg => typeof pg.text !== 'string')) throw new Error('Invalid OCR result');
-          pages.forEach((pg, index) => { if(arabicLayers[index]) pg.layerArabic = arabicLayers[index]; });
-          _ocrPageCache.set(key, pages);
-          return pages;
-        } catch { opts.remoteState.enabled = false; opts.remoteState.failed = true; }
+    if(file.size > 4 * 1024 * 1024) throw new Error('Server OCR accepts PDFs up to 4 MB. Split the file into smaller certificates.');
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    const pageCount = pdf.numPages, arabicLayers = [];
+    try {
+      for(let p = 1; p <= pageCount; p++) {
+        const page = await pdf.getPage(p);
+        const layer = textLayerToLines((await page.getTextContent()).items, page.getViewport({ scale: 1 })).text;
+        arabicLayers[p - 1] = /[؀-ۿ]{3,}/.test(layer) ? layer : '';
+        page.cleanup();
       }
-    }
-    // Larger/mixed PDFs retain the existing text-layer and browser OCR path.
-    opts = { ...opts, allowRemotePNG: false };
+    } finally { await pdf.destroy(); }
+    onStatus('Reading certificate with Server OCR…');
+    const response = await fetch('/api/ocr?level=' + encodeURIComponent(arabicLayers.some(Boolean) ? 'moe' : (opts.level || 'moe')), {
+      method: 'POST', headers: { 'Content-Type': 'application/pdf' }, body: file,
+      signal: AbortSignal.timeout(14000)
+    });
+    if(!response.ok) throw new Error('Server OCR is unavailable, busy or timed out.');
+    const pages = (await response.json()).pages;
+    if(!Array.isArray(pages) || pages.length !== pageCount || pages.some(pg => typeof pg.text !== 'string')) throw new Error('Invalid server OCR result');
+    pages.forEach((pg, index) => { if(arabicLayers[index]) pg.layerArabic = arabicLayers[index]; });
+    _ocrPageCache.set(key, pages);
+    return pages;
   }
   const pages = (await extractPages(file, [engine], onStatus, opts))[engine];
   _ocrPageCache.set(key, pages);
@@ -5102,6 +5084,10 @@ async function readFileBothEngines(file, fingerprint, onStatus, opts = {}) {
 
 // Reads one file according to the chosen mode; returns { rows, used, fallback }.
 async function readCertificateFile(file, fingerprint, mode, onStatus, opts = {}) {
+  if(mode === 'openvino') {
+    const pages = await readFileWithEngine(file, fingerprint, 'openvino', onStatus, opts);
+    return { rows: parseDocument(pages, file.name, 'openvino'), used: 'Server OCR' };
+  }
   if(mode === 'tesseract') {
     return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus, opts), file.name, 'tesseract'), used: 'Tesseract' };
   }
@@ -5117,13 +5103,6 @@ async function readCertificateFile(file, fingerprint, mode, onStatus, opts = {})
   }
   // Auto: PaddleOCR first; Tesseract reads the file again if PaddleOCR is
   // unavailable, fails, or finds no subjects, so a file is never left unread.
-  if(opts.remoteState?.enabled) {
-    const pages = await readFileWithEngine(file, fingerprint, 'openvino', onStatus, opts);
-    const rows = parseDocument(pages, file.name, 'openvino');
-    if(rows.length) return { rows, used: rows.some(r => r.engine === 'openvino') ? (opts.remoteState.failed ? 'Work PC OCR with browser retries' : 'Work PC OCR') : 'Browser OCR' };
-    onStatus('Checking unrecognised results with Tesseract…');
-    return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus, opts), file.name, 'tesseract'), used: 'Tesseract', fallback: true };
-  }
   if(!_paddleUnavailable) {
     try {
       const rows = parseDocument(await readFileWithEngine(file, fingerprint, 'paddle', onStatus, { ...opts, fallback: true }), file.name, 'paddle');
@@ -5176,13 +5155,12 @@ async function handleCertificateFiles(fileList, level = '') {
   const started = performance.now();
   const progress = files.map(f => ({ name: f.name, state: 'Waiting…' }));
   const warnings = [];
-  const remoteState = { enabled: false, failed: false };
   try {
-    progress.forEach(p => p.state = 'Loading the reading engine (downloaded once, then cached)…');
+    progress.forEach(p => p.state = mode === 'openvino' ? 'Connecting to Server OCR…' : 'Loading the reading engine (downloaded once, then cached)…');
     setOcrProgress(progress);
     await loadPdfLibrary();
-    remoteState.enabled = mode === 'auto' && await workOcrAvailable();
-    if(mode !== 'tesseract' && !remoteState.enabled) {
+    if(mode === 'openvino' && !await workOcrAvailable()) throw new Error('Server OCR is offline or not configured. Start the OCR server and its secure connection, then try again.');
+    if(mode !== 'tesseract' && mode !== 'openvino') {
       try {
         await ensurePaddleReady();
       } catch(e) {
@@ -5218,7 +5196,7 @@ async function handleCertificateFiles(fileList, level = '') {
       }
       seen.set(fp, file.name);
       batchFiles.set(fp, file);
-      const res = await readCertificateFile(file, fp, mode, msg => { p.state = msg; setOcrProgress(progress); }, { british: !!level && level !== 'moe', level, remoteState });
+      const res = await readCertificateFile(file, fp, mode, msg => { p.state = msg; setOcrProgress(progress); }, { british: !!level && level !== 'moe', level });
       if(level && res.rows.some(r => r.level !== level)) warnings.push(`<strong>${escHtml(file.name)}</strong> contains results outside the selected certificate type. Check the detected levels below; all results have been kept.`);
       rows.push(...res.rows);
       const n = res.rows.length;
@@ -5229,7 +5207,7 @@ async function handleCertificateFiles(fileList, level = '') {
       else if(!n) warnings.push(`No subjects were recognised in <strong>${escHtml(file.name)}</strong>. Add them manually, teach the reader its layout below, or try another reading engine.`);
     } catch(e) {
       p.state = 'Could not read this file'; p.cls = 'error';
-      warnings.push(`<strong>${escHtml(file.name)}</strong> could not be read (${escHtml(String(e.message || e))}).${mode !== 'tesseract' ? ' Try again with "Tesseract only".' : ''}`);
+      warnings.push(`<strong>${escHtml(file.name)}</strong> could not be read (${escHtml(String(e.message || e))}).${mode !== 'tesseract' && mode !== 'openvino' ? ' Try again with "Tesseract only".' : ''}`);
     }
     setOcrProgress(progress);
   }
@@ -5237,7 +5215,6 @@ async function handleCertificateFiles(fileList, level = '') {
   if(_ocrCancelled) { _ocrBusy = false; return; }
   // Keep what was read so staff can teach layouts from unrecognised lines.
   window._ocrBatch = [...seen].map(([fp, name]) => ({ name, file: batchFiles.get(fp), pages: _ocrPageCache.get(`${fp}|openvino`) || _ocrPageCache.get(`${fp}|paddle`) || _ocrPageCache.get(`${fp}|tesseract`) || [] }));
-  if(remoteState.failed) warnings.push('The work OCR computer was unavailable or busy. Remaining pages were read in this browser.');
   window._ocrRows = resolveRepeatedSubjects(rows);
   const secs = Math.round((performance.now() - started) / 1000);
   setOcrProgress(progress, `Finished in ${secs} s · ${OCR_ENGINES[mode]}`);
