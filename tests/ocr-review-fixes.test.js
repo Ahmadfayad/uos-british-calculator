@@ -11,7 +11,15 @@ const { serve } = require('./server');
     assert(await page.locator('body').evaluate(body=>body.classList.contains('light-theme')));
     assert.equal(await page.locator('.theme-toggle').count(),0);
     assert.equal(await page.locator('.action-bar .reset-visible').count(),0);
-    assert.equal(await page.locator('.buttons-row .reset-visible').count(),1);
+    assert.equal(await page.locator('.floating-reset').count(),1);
+    assert.equal(await page.locator('.floating-reset').evaluate(el=>getComputedStyle(el).position),'fixed');
+    await page.evaluate(()=>{_ocrBusy=true;updateOcrWaitingButtons();});
+    assert(await page.locator('#ocr-add-btn').isDisabled());
+    assert.equal((await page.locator('#ocr-add-btn').textContent()).trim(),'Please wait…');
+    assert.equal(await page.locator('#manual-add-subject-btn .ocr-spinner').count(),1);
+    await page.evaluate(()=>{_ocrBusy=false;window._ocrRows=[{include:true}];updateOcrWaitingButtons();});
+    assert.equal((await page.locator('#ocr-add-btn').textContent()).trim(),'Add Subject');
+    assert(!(await page.locator('#ocr-add-btn').isDisabled()));
     const result=await page.evaluate(()=>{
       const english=parseGradeLine('ENGLISH LANGUAGE GRADE8 (eight)','o-level');
       const starLine='9706 ACCOUNTING A*(a*)';

@@ -1102,6 +1102,12 @@
     }
     .action-bar { position: static; }
     .reset-visible { border: 2px solid #b91c1c; color: #b91c1c; background: #fff; font-weight: 700; }
+    .floating-reset { position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); z-index: 100; box-shadow: 0 4px 18px rgba(0,0,0,.18); }
+    .buttons-row .floating-reset { width: auto; }
+    .mobile-breakdown-fab { bottom: calc(78px + env(safe-area-inset-bottom)); }
+    .ocr-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: ocrSpin .8s linear infinite; }
+    @keyframes ocrSpin { to { transform: rotate(360deg); } }
+    .ocr-page-summary { display: block; font-size: .75rem; color: var(--text-2); margin-top: 4px; }
     .document-thumbnail { display: block; width: 100%; border: 0; padding: 0; background: transparent; cursor: zoom-in; }
     .document-dialog { overflow: hidden; width: 96vw; max-width: 1600px; height: 92dvh; max-height: 96dvh; margin: auto; padding: 0; border: 1px solid var(--border); border-radius: 12px; background: #fff; color: #0f172a; }
     .document-dialog[open] { display: flex; flex-direction: column; }
@@ -1221,7 +1227,7 @@
       </div>
     </div>
     <div class="buttons-row">
-      <button class="btn btn-success" onclick="addSubjectRow()">
+      <button class="btn btn-success" id="manual-add-subject-btn" onclick="addSubjectRow()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add Subject
       </button>
@@ -1238,7 +1244,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
         Download All Excel
       </button>
-      <button class="btn btn-outline reset-visible" type="button" onclick="resetForm()">
+      <button class="btn btn-outline reset-visible floating-reset" type="button" onclick="resetForm()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
         Reset calculator
       </button>
@@ -3469,6 +3475,9 @@ function _doDownloadScenarioPDF(idx, studentName='', studentId='', employeeName=
 }
 
 function resetForm() {
+  _ocrPageCache.clear();
+  window._ocrRows = [];
+  window._ocrBatch = [];
   window._lastScenarios = null;
   window._lastBreakdownTotal = 0;
   clearStaleState();
@@ -5025,7 +5034,8 @@ const _ocrPageCache = new Map();
 
 async function readFileWithEngine(file, fingerprint, engine, onStatus, opts = {}) {
   const key = `${fingerprint}|${engine}`;
-  if(_ocrPageCache.has(key)) return _ocrPageCache.get(key);
+  // A server restart/model change must not reuse an earlier incomplete reading.
+  if(engine !== 'openvino' && _ocrPageCache.has(key)) return _ocrPageCache.get(key);
   if(engine === 'openvino' && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name))) {
     // Send the original PDF: browser rasterisation changed one grade in the test.
     if(file.size > 4 * 1024 * 1024) throw new Error('Server OCR accepts PDFs up to 4 MB. Split the file into smaller certificates.');
@@ -5070,7 +5080,8 @@ async function readFileBothEngines(file, fingerprint, onStatus, opts = {}) {
 async function readCertificateFile(file, fingerprint, mode, onStatus, opts = {}) {
   if(mode === 'openvino') {
     const pages = await readFileWithEngine(file, fingerprint, 'openvino', onStatus, opts);
-    return { rows: parseDocument(pages, file.name, 'openvino'), used: 'Server OCR' };
+    const rows = parseDocument(pages, file.name, 'openvino');
+    return { rows, used: 'Server OCR', pageResults: pages.map(pg => ({ page: pg.page, hasText: !!pg.text.trim(), subjects: rows.filter(row => row.page === pg.page).length })) };
   }
   if(mode === 'tesseract') {
     return { rows: parseDocument(await readFileWithEngine(file, fingerprint, 'tesseract', onStatus, opts), file.name, 'tesseract'), used: 'Tesseract' };
@@ -5111,7 +5122,7 @@ window._ocrRows = [];
 
 function setOcrProgress(items, summary = '') {
   document.getElementById('ocr-progress').innerHTML = items.map(it =>
-    `<div class="ocr-progress-item"><span>${escHtml(it.name)}</span><span class="state ${it.cls || ''}">${escHtml(it.state)}</span></div>`).join('') +
+    `<div class="ocr-progress-item"><span>${escHtml(it.name)}${it.detail ? `<small class="ocr-page-summary">${escHtml(it.detail)}</small>` : ''}</span><span class="state ${it.cls || ''}">${escHtml(it.state)}</span></div>`).join('') +
     (summary ? `<div class="ocr-summary">${escHtml(summary)}</div>` : '');
 }
 
@@ -5121,11 +5132,22 @@ function showOcrWarnings(warnings) {
 }
 
 let _ocrBusy = false, _ocrCancelled = false;
+function updateOcrWaitingButtons() {
+  const manual = document.getElementById('manual-add-subject-btn');
+  manual.disabled = _ocrBusy;
+  manual.innerHTML = _ocrBusy ? '<span class="ocr-spinner" aria-hidden="true"></span> Please wait…' : 'Add Subject';
+  manual.setAttribute('aria-busy', String(_ocrBusy));
+  const add = document.getElementById('ocr-add-btn');
+  add.setAttribute('aria-busy', String(_ocrBusy));
+  if(_ocrBusy) { add.disabled = true; add.innerHTML = '<span class="ocr-spinner" aria-hidden="true"></span> Please wait…'; }
+  else updateOcrAddButton();
+}
 async function handleCertificateFiles(fileList, level = '') {
   const files = Array.from(fileList || []).filter(f => /pdf$|^image\//i.test(f.type) || /\.(pdf|png|jpe?g|webp|bmp|tiff?)$/i.test(f.name));
   if(!files.length) return;
   if(_ocrBusy) { appAlert('The previous certificates are still being read. Please try again in a moment.'); return; }
   _ocrBusy = true;
+  updateOcrWaitingButtons();
   _ocrCancelled = false;
   const mode = getOcrEngine();
   const modal = document.getElementById('ocr-modal');
@@ -5157,6 +5179,7 @@ async function handleCertificateFiles(fileList, level = '') {
     setOcrProgress(progress);
     showOcrWarnings([escHtml(e.message || 'Could not load the reading engine. Please check the internet connection and try again.')]);
     _ocrBusy = false;
+    updateOcrWaitingButtons();
     return;
   }
 
@@ -5185,6 +5208,12 @@ async function handleCertificateFiles(fileList, level = '') {
       rows.push(...res.rows);
       const n = res.rows.length;
       p.state = n ? `${n} subject${n > 1 ? 's' : ''} found · ${res.used}` : `No subjects found · ${res.used}`;
+      if(res.pageResults) {
+        p.state += ` · ${res.pageResults.length} pages read`;
+        p.detail = res.pageResults.map(pg => `Page ${pg.page}: ${pg.subjects} subject${pg.subjects === 1 ? '' : 's'}${pg.hasText ? '' : ' (no text returned)'}`).join(' · ');
+        const emptyPages = res.pageResults.filter(pg => !pg.hasText).map(pg => pg.page);
+        if(emptyPages.length) warnings.push(`<strong>${escHtml(file.name)}</strong>: Server OCR returned no readable text on page${emptyPages.length === 1 ? '' : 's'} ${emptyPages.join(', ')}. Check these pages on the OCR computer's local test page.`);
+      }
       p.cls = n ? 'done' : 'error';
       const readText = (_ocrPageCache.get(fp + '|openvino') || _ocrPageCache.get(fp + '|paddle') || _ocrPageCache.get(fp + '|tesseract') || []).map(pg => pg.text).join(' ');
       if(!n && /AICE\s+Diploma/i.test(readText)) warnings.push(`<strong>${escHtml(file.name)}</strong> is an AICE Diploma certificate: it shows the diploma award but no subjects. Upload the AS & A Level statement of results or certificate instead.`);
@@ -5196,15 +5225,16 @@ async function handleCertificateFiles(fileList, level = '') {
     setOcrProgress(progress);
   }
 
-  if(_ocrCancelled) { _ocrBusy = false; return; }
+  if(_ocrCancelled) { _ocrBusy = false; updateOcrWaitingButtons(); return; }
   // Keep what was read so staff can teach layouts from unrecognised lines.
   window._ocrBatch = [...seen].map(([fp, name]) => ({ name, file: batchFiles.get(fp), pages: _ocrPageCache.get(`${fp}|openvino`) || _ocrPageCache.get(`${fp}|paddle`) || _ocrPageCache.get(`${fp}|tesseract`) || [] }));
   window._ocrRows = resolveRepeatedSubjects(rows);
   const secs = Math.round((performance.now() - started) / 1000);
   setOcrProgress(progress, `Finished in ${secs} s · ${OCR_ENGINES[mode]}`);
   showOcrWarnings(warnings);
-  renderOcrReview();
   _ocrBusy = false;
+  renderOcrReview();
+  updateOcrWaitingButtons();
 }
 
 function ocrSubjectOptions(level, selected) {
@@ -5397,10 +5427,12 @@ document.getElementById('ocr-review').addEventListener('click', e => {
 });
 
 function updateOcrAddButton() {
+  if(_ocrBusy) return;
   const count = window._ocrRows.filter(r => r.include).length;
   const btn = document.getElementById('ocr-add-btn');
   btn.disabled = count === 0;
-  btn.textContent = count ? `Add ${count} subject${count > 1 ? 's' : ''}` : 'Add selected subjects';
+  btn.textContent = 'Add Subject';
+  btn.title = count ? `Add ${count} selected subject${count > 1 ? 's' : ''}` : 'No subjects selected';
 }
 
 document.getElementById('ocr-review').addEventListener('change', e => {

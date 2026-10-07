@@ -52,5 +52,13 @@ async function request(method, body = Buffer.alloc(0), headers = {}) {
   const empty=await vm.runInContext("readCertificateFile({name:'test.pdf'},'test','openvino',()=>{})",context);
   assert.equal(empty.used,'Server OCR');
   assert.equal(empty.rows.length,0,'No subjects must not trigger another engine');
+  const fileReader=html.slice(html.indexOf('async function readFileWithEngine('),html.indexOf('async function readFileBothEngines('));
+  context._ocrPageCache=new Map([['same|openvino',[]]]);
+  let freshReads=0;
+  context.extractPages=async()=>{freshReads++;return {openvino:[{text:'new result'}]};};
+  vm.runInContext(fileReader,context);
+  await vm.runInContext("readFileWithEngine({name:'scan.png',type:'image/png'},'same','openvino',()=>{})",context);
+  await vm.runInContext("readFileWithEngine({name:'scan.png',type:'image/png'},'same','openvino',()=>{})",context);
+  assert.equal(freshReads,2,'Each Server OCR upload must obtain a fresh reading');
   console.log('PASS gateway security and standalone Server OCR without fallback');
 })().catch(error=>{console.error(error);process.exitCode=1;});
