@@ -28,3 +28,5 @@ For GPU versus the current threaded CPU, use `node ocr-speed.test.js --gpu 2.pdf
 GPU reports use a separate `.gpu.benchmark.json` file; `--reuse-baseline --gpu`
 compares to the saved threaded CPU run. `--british` tests the British reader
 on CPU against the saved threaded CPU run. Startup is reported separately.
+
+Run `node tests/subject-catalog.test.js` from the project root to check catalog CRUD, OCR aliases, inactivity, CSV/XLSX exports and offline fallback. It uses mocked catalog responses and installed Chrome; it does not change live data.

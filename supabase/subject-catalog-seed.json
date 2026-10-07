@@ -1,0 +1,1142 @@
+[
+  {
+    "subject": "Afrikaans - Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Arabic - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "first language arabic"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Arabic - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "arabic as a foreign language"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Bahasa Indonesia",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Bengali",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chinese - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chinese - Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chinese (Mandarin) - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Dutch - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "dutch"
+    ],
+    "active": true
+  },
+  {
+    "subject": "English - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "first language english"
+    ],
+    "active": true
+  },
+  {
+    "subject": "English - Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "english as a second language",
+      "english as a second language speaking endorsement",
+      "esl",
+      "efl"
+    ],
+    "active": true
+  },
+  {
+    "subject": "English Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "English - Literature",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "english literature",
+      "literature in english",
+      "literature"
+    ],
+    "active": true
+  },
+  {
+    "subject": "French - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "French - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "french"
+    ],
+    "active": true
+  },
+  {
+    "subject": "German - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "German - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "german"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Hindi as a Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "IsiZulu as a Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Italian - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "italian"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Japanese - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Japanese - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Kazakh as a Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Korean as a Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Malay - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "malay"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Marathi",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Nepali",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Portuguese - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Portuguese - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Punjabi",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Russian - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Sinhala",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Spanish - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Spanish - Foreign Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [
+      "spanish"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Tamil",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Thai - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Turkish - First Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Urdu",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Vietnamese as a Second Language",
+    "level": "o-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Accounting",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Bangladesh Studies",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Business Studies",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [
+      "business"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Business",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Development Studies",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Economics",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Enterprise",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Geography",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Global Perspectives",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "History",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Islamic Studies",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [
+      "islamiyat"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Media Studies",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [
+      "media"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Pakistan Studies",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Physical Education",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [
+      "pe"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Psychology",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Religious Studies",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [
+      "religious education"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Sociology",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Travel & Tourism",
+    "level": "o-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Agriculture",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Biology",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Human Biology",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chemistry",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Combined Science",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Computer Science",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Co-ordinated Sciences (Double Award)",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [
+      "science double award"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Design & Technology",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Environmental Management",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Food & Nutrition",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Information & Communication Technology",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [
+      "ict"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Marine Science",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Physical Science",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Physics",
+    "level": "o-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Mathematics",
+    "level": "o-level",
+    "category": "Math",
+    "aliases": [
+      "mathematics a",
+      "mathematics b",
+      "maths",
+      "mathematics without coursework"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Additional Mathematics",
+    "level": "o-level",
+    "category": "Math",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "International Mathematics",
+    "level": "o-level",
+    "category": "Math",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Further Pure Mathematics",
+    "level": "o-level",
+    "category": "Math",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Art & Design",
+    "level": "o-level",
+    "category": "Arts and Design",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Drama",
+    "level": "o-level",
+    "category": "Arts and Design",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Music",
+    "level": "o-level",
+    "category": "Arts and Design",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Afrikaans - Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Arabic - Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chinese Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "English Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "English - Language and Literature",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [
+      "english language & literature",
+      "language & literature in english",
+      "language & literature in eng"
+    ],
+    "active": true
+  },
+  {
+    "subject": "French - Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "German - Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Hindi - Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Portuguese - Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Spanish - Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Spanish Literature",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Tamil",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Urdu",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Japanese Language",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "English General Paper",
+    "level": "as-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Accounting",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Business",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Commerce",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Economics",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Geography",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Global Perspectives & Research",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Law",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Media Studies",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [
+      "media"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Physical Education",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [
+      "pe"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Psychology",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Sociology",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Thinking Skills",
+    "level": "as-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Biology",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Human Biology",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chemistry",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Computer Science",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Design & Technology",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Environmental Management",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Information Technology",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Marine Science",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Physics",
+    "level": "as-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Mathematics",
+    "level": "as-level",
+    "category": "Math",
+    "aliases": [
+      "maths"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Further Mathematics",
+    "level": "as-level",
+    "category": "Math",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Further Pure Mathematics",
+    "level": "as-level",
+    "category": "Math",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Drama",
+    "level": "as-level",
+    "category": "Arts and Design",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Arabic",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chinese - Language & Literature",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Urdu",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "English Language",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [
+      "english language & literature"
+    ],
+    "active": true
+  },
+  {
+    "subject": "English Literature",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "French",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "French Language & Literature",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "German",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "German Language & Literature",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Portuguese",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Spanish",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Spanish - Language & Literature",
+    "level": "a-level",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Accounting",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Biblical Studies",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Business",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Classical Studies",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Economics",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Geography",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "History",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Islamic Studies",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Physical Education",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [
+      "pe"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Psychology",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Sociology",
+    "level": "a-level",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Biology",
+    "level": "a-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Human Biology",
+    "level": "a-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Chemistry",
+    "level": "a-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Computer Science",
+    "level": "a-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Design & Technology",
+    "level": "a-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Information Technology",
+    "level": "a-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Physics",
+    "level": "a-level",
+    "category": "Sciences",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Mathematics",
+    "level": "a-level",
+    "category": "Math",
+    "aliases": [
+      "maths"
+    ],
+    "active": true
+  },
+  {
+    "subject": "Further Mathematics",
+    "level": "a-level",
+    "category": "Math",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Further Pure Mathematics",
+    "level": "a-level",
+    "category": "Math",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Digital Media & Design",
+    "level": "a-level",
+    "category": "Arts and Design",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Grade 12 Arabic",
+    "level": "moe",
+    "category": "Languages",
+    "aliases": [],
+    "active": true
+  },
+  {
+    "subject": "Grade 12 Islamic",
+    "level": "moe",
+    "category": "Social Studies",
+    "aliases": [],
+    "active": true
+  }
+]

@@ -832,6 +832,11 @@
     .teach-form select, .teach-form input { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 7px; font: inherit; font-size: 0.78rem; }
     .teach-form .teach-keywords { flex: 1; min-width: 200px; }
     .teach-form #teach-msg { flex-basis: 100%; }
+    #admin-subject-catalog .admin-actions { flex-wrap: wrap; align-items: end; }
+    #admin-subject-catalog label { display: flex; flex-direction: column; gap: 4px; }
+    #admin-subject-catalog input:not([type=checkbox]), #admin-subject-catalog select, #admin-subject-catalog textarea { padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--text); max-width: 100%; }
+    #catalog-message { flex-basis: 100%; }
+    #catalog-table td { white-space: normal; min-width: 85px; }
     .admin-actions { display: flex; gap: 6px; white-space: nowrap; }
     .admin-badge { display: inline-block; min-width: 18px; padding: 1px 6px; margin-left: 5px; border-radius: 999px; background: #ef4444; color: #fff; font-size: 0.68rem; font-weight: 700; text-decoration: none; line-height: 1.5; vertical-align: middle; }
     .admin-badge.hidden { display: none; }
@@ -1152,6 +1157,7 @@
       <div class="main-card">
         <div class="section-label">Add student subjects</div>
         <p class="entry-intro">Upload certificates to read the grades, or enter subjects manually below. Review every result before calculating.</p>
+        <p id="subject-catalog-status" class="teach-help" role="status"></p>
     <div class="bulk-add-section ocr-section" id="ocr-section">
       <div class="bulk-add-header">
         <span class="bulk-add-icon">
@@ -1961,7 +1967,7 @@ function getMatches(query) {
     .map((s, idx) => {
       const subjectNorm = normalizeSearch(s.subject);
       const includes = subjectNorm.includes(q);
-      const aliasHit = aliasTargets.some(target => subjectNorm.includes(target));
+      const aliasHit = aliasTargets.some(target => subjectNorm.includes(target)) || (s.aliases || []).some(alias => normalizeSearch(alias).includes(q));
       if(!includes && !aliasHit) return null;
 
       let score = 0;
@@ -3173,6 +3179,8 @@ function describeSubject(s) {
 }
 
 function coreScienceType(name='') {
+  const entry = allSubjects.find(subject => subject.subject === name);
+  name = [name, ...(entry?.aliases || [])].join(' ');
   if(/chemistry/i.test(name)) return 'chemistry';
   if(/biology/i.test(name)) return 'biology';
   if(/physics/i.test(name)) return 'physics';
@@ -4764,7 +4772,14 @@ function findMoeMark(text, subjectDef, allowAnywhere) {
 // it cannot read Arabic words but reads digits more reliably than the Arabic model.
 function parseMoeRows(layerText, ocrArabic, englishText) {
   const norm = normalizeArabic([layerText, ocrArabic, englishText].join('\n'));
-  const present = MOE_SUBJECTS.filter(def => def.find.test(norm));
+  const definitions = allSubjects.filter(s => s.level === 'moe').map(s => {
+    const builtIn = MOE_SUBJECTS.find(def => def.subject === s.subject || (s.aliases || []).includes(def.subject));
+    const names = [s.subject, ...(s.aliases || [])].map(normalizeArabic).filter(Boolean);
+    const pattern = new RegExp(names.map(escapeRegex).join('|'), 'i');
+    return builtIn ? {...builtIn, subject:s.subject, find:new RegExp(builtIn.find.source + '|' + pattern.source, 'i')} :
+      {subject:s.subject, rawSubject:s.subject, find:pattern, rowWords:pattern, notRow:/$^/};
+  });
+  const present = definitions.filter(def => def.find.test(norm));
   const englishMarks = new Set(englishText.split('\n').map(digitMark).filter(v => v !== null));
   return present.map(def => {
     // With two Grade 12 subjects on one page, only marks on the subject's own row are trusted.
@@ -4833,6 +4848,8 @@ function matchOcrSubject(rawSubject, level) {
   const subjectNorm = s => normalizeSearch(s.subject.replace(/\band\b/gi, '&'));
   const exact = candidates.find(s => subjectNorm(s) === norm);
   if(exact) return { subject: exact.subject, how: 'exact' };
+  const catalogAlias = candidates.find(s => (s.aliases || []).some(alias => normalizeSearch(alias.replace(/\band\b/gi, '&')) === norm));
+  if(catalogAlias) return { subject: catalogAlias.subject, how: 'alias' };
   const taught = typeof learnedAliasFor === 'function' ? learnedAliasFor(level, norm) : '';
   if(taught && candidates.some(s => s.subject === taught)) return { subject: taught, how: 'alias' };
   // "German Language" where the list says "German" (Cambridge certificates).
@@ -4842,7 +4859,7 @@ function matchOcrSubject(rawSubject, level) {
     if(plain) return { subject: plain.subject, how: 'alias' };
   }
   const alias = OCR_SUBJECT_ALIASES[level]?.[norm];
-  if(alias && candidates.some(s => s.subject === alias)) return { subject: alias, how: 'alias' };
+  if(alias && candidates.some(s => s.subject === alias && s.aliases === undefined)) return { subject: alias, how: 'alias' };
   let best = null, bestScore = 0;
   candidates.forEach(s => {
     const score = bigramSimilarity(subjectNorm(s), norm);
@@ -5165,6 +5182,7 @@ async function handleCertificateFiles(fileList, level = '') {
     progress.forEach(p => p.state = mode === 'openvino' ? 'Connecting to Server OCR…' : 'Loading the reading engine (downloaded once, then cached)…');
     setOcrProgress(progress);
     await loadPdfLibrary();
+    await loadSubjectCatalog();
     if(mode === 'openvino' && !await workOcrAvailable()) throw new Error('Server OCR is offline or not configured. Start the OCR server and its secure connection, then try again.');
     if(mode !== 'tesseract' && mode !== 'openvino') {
       try {
@@ -5558,10 +5576,10 @@ const learned = { aliases: new Map(), layouts: [], approved: [], loadedAt: 0, er
 
 function supabaseReady() { return !!(SUPABASE_URL && SUPABASE_KEY); }
 
-async function sbFetch(path, { method = 'GET', body, token, prefer = 'return=representation' } = {}) {
+async function sbFetch(path, { method = 'GET', body, token, prefer = 'return=representation', signal } = {}) {
   const headers = { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: prefer };
   if(token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(SUPABASE_URL.replace(/\/$/, '') + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  const res = await fetch(SUPABASE_URL.replace(/\/$/, '') + path, { method, headers, signal, body: body ? JSON.stringify(body) : undefined });
   const text = await res.text();
   if(!res.ok) throw new Error(`${res.status}: ${text.slice(0, 200)}`);
   return text ? JSON.parse(text) : null;
@@ -6003,6 +6021,7 @@ async function renderAdminPanel(message = '', kind = '') {
     markPendingSeen(pending.length);
     body.innerHTML = `${adminMsg(kind || 'success', message)}${passwordCard}
       <p class="teach-help">Signed in as ${escHtml(_adminUser?.email || 'admin')}</p>
+      <section class="teach-box"><h3>Subject catalog</h3><div id="admin-subject-catalog">Loading subjects…</div></section>
       <h3>Waiting for approval (${pending.length})</h3>${table(pending)}
       <h3>Approved (used by everyone)</h3>${table(rules.filter(r => r.status === 'approved'))}
       ${await adminAlertsHTML()}
@@ -6011,6 +6030,7 @@ async function renderAdminPanel(message = '', kind = '') {
         ${offerChange ? '' : `<button class="btn btn-ghost" onclick="adminShowChangePassword()">Change password</button>`}
         <button class="btn btn-ghost" onclick="adminSignOut()">Sign out</button>
       </div>`;
+    await renderSubjectCatalog();
   } catch(e) {
     if(/^401|JWT/i.test(e.message)) { adminSignOut(); renderAdminPanel('Your session expired. Please sign in again.'); return; }
     body.innerHTML = adminMsg('error', e.message);
@@ -6261,6 +6281,7 @@ setInterval(refreshPendingBadge, 3 * 60 * 1000);
     </div>
   </div>
 </div>
+<script src="subject-catalog.js"></script>
 </body>
 </html>
 

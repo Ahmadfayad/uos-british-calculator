@@ -13,3 +13,4 @@ graphify-out/
 .env*
 tools/
 __pycache__/
+supabase/
