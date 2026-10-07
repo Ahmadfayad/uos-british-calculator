@@ -4,12 +4,12 @@
 - cluster-only mode — file stats not available
 
 ## Summary
-- 405 nodes · 860 edges · 32 communities (25 shown, 7 thin omitted)
+- 410 nodes · 869 edges · 29 communities (22 shown, 7 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bba560ea`
+- Built from commit: `91731a13`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,31 +18,28 @@
 - server.js
 - UOS British Calculator
 - Handler
-- loadPdfLibrary
-- findMoeMark
+- saveLearnedRule
 - Set up OCR on the other Windows PC
 - index.ts
 - vercel.json
 - index.html
-- parseDocument
+- submitTeach
 - formatPercentage
 - renderAdminPanel
 - addOcrRowsToCalculator
-- submitTeach
+- handleCertificateFiles
 - appAlert
 - extractPages
 - ocr-gateway.test.js
-- looksLikeMoeDocument
-- paddleReadWith
+- loadPdfLibrary
 - Connect the work PC to the online calculator
 - playwright
 - AGENTS.md
 - tools/README.md
 - below-minimum.test.js
 - update-graph.cjs
-- ocr-categories.test.js
 - ocr-speed.test.js
-- subject-entry.test.js
+- ocr-review-fixes.test.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `renderAdminPanel()` - 22 edges
@@ -65,7 +62,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (32 total, 7 thin omitted)
+## Communities (29 total, 7 thin omitted)
 
 ### Community 0 - "service.py"
 Cohesion: 0.08
@@ -79,13 +76,9 @@ Nodes (11): { chromium }, expected, fs, path, samples, { serve }, fs, http (+3 m
 Cohesion: 0.29
 Nodes (6): 📦 Deployment, 📝 Features, 🚀 Live Site, 🛠️ Local Development, Teaching the reader (shared rules), UOS British Calculator
 
-### Community 4 - "loadPdfLibrary"
-Cohesion: 0.25
-Nodes (9): getOcrEngine(), getTessWorker(), loadOrt(), loadPdfLibrary(), loadScriptOnce(), renderPageJpeg(), resetTessWorker(), tessRecognize() (+1 more)
-
-### Community 5 - "findMoeMark"
-Cohesion: 0.70
-Nodes (5): arabicWordMarks(), digitMark(), findMoeMark(), normalizeArabic(), parseMoeRows()
+### Community 4 - "saveLearnedRule"
+Cohesion: 0.29
+Nodes (10): buildLayoutRegex(), compileLearnedRules(), escapeRegex(), loadLearnedRules(), readLocalRules(), ruleKey(), saveLearnedRule(), supabaseReady() (+2 more)
 
 ### Community 6 - "Set up OCR on the other Windows PC"
 Cohesion: 0.50
@@ -97,47 +90,43 @@ Nodes (4): maxDuration, functions, api/ocr.js, headers
 
 ### Community 10 - "index.html"
 Cohesion: 0.05
-Nodes (33): allSubjects, AR_NUMBER_WORDS, buildLayoutRegex(), closeSuccessModal(), closeSuccessModalAndScrollToScenarios(), ENGINE_NAMES, escapeRegex(), GRADE_WORDS (+25 more)
+Nodes (31): allSubjects, AR_NUMBER_WORDS, closeSuccessModal(), closeSuccessModalAndScrollToScenarios(), ENGINE_NAMES, GRADE_WORDS, gradeNotes, gradeStatusLabels (+23 more)
 
-### Community 11 - "parseDocument"
-Cohesion: 0.10
-Nodes (41): bigramSimilarity(), classifyPageStatus(), cleanBoardSubject(), cleanOcrLine(), cleanSchoolSubject(), deriveLayoutTemplate(), expandSubjectAbbreviations(), getMatches() (+33 more)
+### Community 11 - "submitTeach"
+Cohesion: 0.11
+Nodes (41): bigramSimilarity(), classifyPageStatus(), cleanBoardSubject(), cleanOcrLine(), cleanSchoolSubject(), deriveLayoutTemplate(), expandSubjectAbbreviations(), guessTeachValues() (+33 more)
 
 ### Community 12 - "formatPercentage"
 Cohesion: 0.12
 Nodes (36): addSubjectToScenario(), appendExcludedSubjectsToPdf(), buildPdfHeader(), buildScenarioPresentation(), buildStablePresentation(), _calcScenarioPDFBodyHeight(), calculateOverallPercentage(), coreScienceType() (+28 more)
 
 ### Community 13 - "renderAdminPanel"
-Cohesion: 0.15
-Nodes (22): adminAlertsHTML(), adminCleanupPages(), adminMsg(), adminPasswordPrompt(), adminSaveNewPassword(), adminSaveWebhook(), adminSendPasswordLink(), adminSetStatus() (+14 more)
+Cohesion: 0.17
+Nodes (20): adminAlertsHTML(), adminMsg(), adminPasswordPrompt(), adminSaveNewPassword(), adminSaveWebhook(), adminSendPasswordLink(), adminSetStatus(), adminShowChangePassword() (+12 more)
 
 ### Community 14 - "addOcrRowsToCalculator"
-Cohesion: 0.12
-Nodes (29): addFilledSubjectCard(), addOcrRowsToCalculator(), addSubjectRow(), adminConfirmDeleteAllPages(), appConfirm(), autoAddNextRow(), categoryOf(), clearStaleState() (+21 more)
-
-### Community 15 - "submitTeach"
 Cohesion: 0.11
-Nodes (32): compileLearnedRules(), cropSnapshot(), escHtml(), fileFingerprint(), handleCertificateFiles(), loadLearnedRules(), makeSnapshots(), needsConfirmation() (+24 more)
+Nodes (30): addFilledSubjectCard(), addOcrRowsToCalculator(), addSubjectRow(), adminCleanupPages(), adminConfirmDeleteAllPages(), appConfirm(), autoAddNextRow(), categoryOf() (+22 more)
+
+### Community 15 - "handleCertificateFiles"
+Cohesion: 0.12
+Nodes (24): cropSnapshot(), escHtml(), fileFingerprint(), handleCertificateFiles(), highlightMatch(), makeSnapshots(), needsConfirmation(), ocrFileFor() (+16 more)
 
 ### Community 16 - "appAlert"
-Cohesion: 0.32
-Nodes (12): appAlert(), bulkAddRows(), downloadData(), downloadScenarioPDF(), getRequiredEmployeeName(), getRequiredStudentId(), loadJsPDF(), _preloadLogo() (+4 more)
+Cohesion: 0.28
+Nodes (13): adminViewSample(), appAlert(), bulkAddRows(), downloadData(), downloadScenarioPDF(), getRequiredEmployeeName(), getRequiredStudentId(), loadJsPDF() (+5 more)
 
 ### Community 17 - "extractPages"
-Cohesion: 0.27
-Nodes (10): extractPages(), imageFileToCanvas(), mergeEngineRows(), readCertificateFile(), readFileBothEngines(), readFileWithEngine(), renderPdfPage(), rowKey() (+2 more)
+Cohesion: 0.25
+Nodes (11): extractPages(), hasResultLines(), imageFileToCanvas(), mergeEngineRows(), readCertificateFile(), readFileBothEngines(), readFileWithEngine(), renderPdfPage() (+3 more)
 
 ### Community 18 - "ocr-gateway.test.js"
 Cohesion: 0.25
 Nodes (6): assert, fs, handler, { Readable }, request(), vm
 
-### Community 19 - "looksLikeMoeDocument"
-Cohesion: 0.67
-Nodes (4): looksLikeMoeDocument(), paddleReadPage(), tesseractReadPage(), workOcrReadPage()
-
-### Community 20 - "paddleReadWith"
-Cohesion: 0.27
-Nodes (10): ensurePaddleReady(), groupPaddleLines(), normalizeBoxes(), paddleDetect(), paddleDict(), paddleReadWith(), paddleRecognize(), paddleSession() (+2 more)
+### Community 20 - "loadPdfLibrary"
+Cohesion: 0.10
+Nodes (28): arabicWordMarks(), digitMark(), ensurePaddleReady(), findMoeMark(), getOcrEngine(), getTessWorker(), groupPaddleLines(), loadOrt() (+20 more)
 
 ### Community 21 - "Connect the work PC to the online calculator"
 Cohesion: 0.50
@@ -155,37 +144,33 @@ Nodes (6): { chromium }, { serve }, { chromium }, pages, { serve }, serve()
 Cohesion: 0.22
 Nodes (7): { execFileSync }, fs, html, input, path, root, source
 
-### Community 29 - "ocr-categories.test.js"
-Cohesion: 0.25
-Nodes (4): assert, fs, html, vm
+### Community 29 - "ocr-speed.test.js"
+Cohesion: 0.14
+Nodes (9): assert, fs, html, vm, assert, { chromium }, fs, path (+1 more)
 
-### Community 30 - "ocr-speed.test.js"
-Cohesion: 0.29
-Nodes (5): assert, { chromium }, fs, path, { serve }
-
-### Community 31 - "subject-entry.test.js"
-Cohesion: 0.40
-Nodes (3): assert, { chromium }, { serve }
+### Community 31 - "ocr-review-fixes.test.js"
+Cohesion: 0.22
+Nodes (6): assert, { chromium }, { serve }, assert, { chromium }, { serve }
 
 ## Knowledge Gaps
-- **87 isolated node(s):** `{ chromium }`, `expected`, `fs`, `path`, `samples` (+82 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 137 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **90 isolated node(s):** `{ chromium }`, `expected`, `fs`, `path`, `samples` (+85 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 140 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `isBelowMinimum()` connect `formatPercentage` to `index.html`, `below-minimum.test.js`?**
-  _High betweenness centrality (0.229) - this node is a cross-community bridge._
+  _High betweenness centrality (0.237) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `addOcrRowsToCalculator()` (e.g. with `escHtml()` and `needsConfirmation()`) actually correct?**
   _`addOcrRowsToCalculator()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `{ chromium }`, `expected`, `fs` to the rest of the system?**
-  _87 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _90 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `service.py` be split into smaller, more focused modules?**
   _Cohesion score 0.07507507507507508 - nodes in this community are weakly interconnected._
-- **Why does `playwright` connect `playwright` to `server.js`, `below-minimum.test.js`, `ocr-speed.test.js`, `subject-entry.test.js`?**
-  _High betweenness centrality (0.089) - this node is a cross-community bridge._
+- **Why does `playwright` connect `playwright` to `server.js`, `below-minimum.test.js`, `ocr-speed.test.js`, `ocr-review-fixes.test.js`?**
+  _High betweenness centrality (0.092) - this node is a cross-community bridge._
 - **Should `server.js` be split into smaller, more focused modules?**
   _Cohesion score 0.14166666666666666 - nodes in this community are weakly interconnected._
-- **Why does `serve()` connect `below-minimum.test.js` to `server.js`, `ocr-speed.test.js`, `subject-entry.test.js`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+- **Why does `serve()` connect `below-minimum.test.js` to `server.js`, `ocr-speed.test.js`, `ocr-review-fixes.test.js`?**
+  _High betweenness centrality (0.057) - this node is a cross-community bridge._

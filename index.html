@@ -1100,15 +1100,18 @@
       .subject-card .status-group { grid-column: 1 / 3; grid-row: 3; }
       .subject-card .grade-group, .subject-card .pct-group { grid-column: 1 / 3; }
     }
-    .action-bar { position: sticky; top: 8px; z-index: 30; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 10px; }
-    .reset-visible { border: 2px solid #ef4444; color: #ef4444; font-weight: 700; }
+    .action-bar { position: static; }
+    .reset-visible { border: 2px solid #b91c1c; color: #b91c1c; background: #fff; font-weight: 700; }
     .document-thumbnail { display: block; width: 100%; border: 0; padding: 0; background: transparent; cursor: zoom-in; }
-    .document-dialog { width: 96vw; max-width: 1600px; height: 92dvh; max-height: 96dvh; margin: auto; padding: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+    .document-dialog { overflow: hidden; width: 96vw; max-width: 1600px; height: 92dvh; max-height: 96dvh; margin: auto; padding: 0; border: 1px solid var(--border); border-radius: 12px; background: #fff; color: #0f172a; }
+    .document-dialog[open] { display: flex; flex-direction: column; }
     .document-dialog::backdrop { background: rgba(0,0,0,.75); }
-    .document-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+    .document-toolbar { background: #fff; color: #0f172a; position: sticky; top: 0; z-index: 1; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
     .document-toolbar strong { flex: 1; min-width: 120px; overflow-wrap: anywhere; }
-    .document-toolbar select { width: auto; }
-    .document-scroll { height: calc(100% - 90px); overflow: auto; padding: 16px; background: #d7dce3; }
+    .document-toolbar select { width: auto; background-color: #fff; color: #0f172a; border: 1px solid #64748b; min-height: 44px; }
+    .document-toolbar .btn { color: #fff; background: #4338ca; border: 1px solid #4338ca; min-height: 44px; }
+    .document-toolbar .btn:focus-visible, .document-toolbar select:focus-visible { outline: 3px solid #0891b2; outline-offset: 2px; }
+    .document-scroll { flex: 1; min-height: 0; overflow: auto; padding: 16px; background: #d7dce3; }
     #document-image { display: block; width: 100%; max-width: none; height: auto; background: white; }
     #document-image[hidden] { display: none; }
     #document-preview-status { color: #172033; }
@@ -1116,12 +1119,7 @@
   <!-- Vercel Web Analytics -->
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </head>
-<body>
-<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-  <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-  </svg>
-</button>
+<body class="light-theme">
 <button class="demo-toggle" onclick="loadDemoData()" title="Load demo data">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
@@ -1137,7 +1135,6 @@
     <p class="page-subtitle">Convert letter grades to an overall percentage.</p>
   </header>
   <div class="action-bar">
-    <button class="btn btn-outline reset-visible" type="button" onclick="resetForm()">Reset calculator</button>
     <button class="btn btn-success" id="view-combinations-btn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
       Admission Requirements
@@ -1241,9 +1238,9 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
         Download All Excel
       </button>
-      <button class="btn btn-outline" onclick="resetForm()">
+      <button class="btn btn-outline reset-visible" type="button" onclick="resetForm()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
-        Reset
+        Reset calculator
       </button>
     </div>
     <div class="feedback-area">
@@ -3490,24 +3487,6 @@ function resetForm() {
   document.getElementById('download-all-excel-btn').style.display = 'none';
 }
 
-function toggleTheme() {
-  document.body.classList.toggle('light-theme');
-  const icon = document.getElementById('theme-icon');
-  const isLight = document.body.classList.contains('light-theme');
-  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if(isLight) {
-    icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-    // Only save if overriding the system (system is dark but user picks light)
-    if(systemPrefersDark) localStorage.setItem('theme', 'light');
-    else localStorage.removeItem('theme');
-  } else {
-    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-    // Only save if overriding the system (system is light but user picks dark)
-    if(!systemPrefersDark) localStorage.setItem('theme', 'dark');
-    else localStorage.removeItem('theme');
-  }
-}
-
 function toggleQuickEntry(forceOpen=false) {
   const section = document.getElementById('bulk-add-section');
   const btn = document.getElementById('bulk-toggle-btn');
@@ -3864,25 +3843,6 @@ document.addEventListener('keydown',e=>{
 });
 
 updateLevelCounter();
-const savedTheme = localStorage.getItem('theme');
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const useLightTheme = savedTheme === 'light' || (!savedTheme && !prefersDark);
-if(useLightTheme) {
-  document.body.classList.add('light-theme');
-  document.getElementById('theme-icon').innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-}
-// Follow system preference changes in real-time (only if user hasn't manually overridden)
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-  if(localStorage.getItem('theme')) return; // user has a manual preference, respect it
-  if(e.matches) {
-    document.body.classList.remove('light-theme');
-    document.getElementById('theme-icon').innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-  } else {
-    document.body.classList.add('light-theme');
-    document.getElementById('theme-icon').innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
-  }
-});
-
 // In-page dialogs. The browser's own confirm()/alert() can be silently
 // blocked ("prevent this page from creating additional dialogs", embedded
 // viewers), which made buttons appear to do nothing.
@@ -4364,7 +4324,7 @@ const GRADE_WORDS = { nine:'9', eight:'8', seven:'7', six:'6', five:'5', four:'4
 function cleanOcrLine(line) {
   // Text layers and OCR sometimes split A* into "A *"; annotated samples carry
   // markers such as "2>" that are not part of the result.
-  return line.replace(/(^|\s)\d>\s*/g, '$1').replace(/\bA\s+\*/g, 'A*').replace(/[|=_~—–“”"`;!]+/g, ' ').replace(/\s+/g, ' ').trim();
+  return line.replace(/(^|\s)(A\*|[A-GU]|[1-9])(?=\()/g, '$1$2 ').replace(/(^|\s)\d>\s*/g, '$1').replace(/\bA\s+\*/g, 'A*').replace(/[|=_~—–“”"`;!]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function pageLevel(text) {
@@ -4424,13 +4384,13 @@ function parseAwardLine(line, pageText) {
 
 // Certificates that print "SUBJECT  GRADE 8 (eight)" (Pearson GCSE / International GCSE, Cambridge style).
 function parseGradeLine(line, level) {
-  const idx = line.search(/\sGRADE\s/);
+  const idx = line.search(/\sGRADE(?=\s|A\*|[A-GU](?:\s|\()|[1-9](?:\s|\())/);
   if(idx < 0) return null;
   // OCR often reads a capital I as a lowercase l inside capitals ("PHYSlCS").
   const subject = line.slice(0, idx).replace(/^[^A-Za-z]+/, '').replace(/(?<=[A-Z])l(?=[A-Z]|\b)/g, 'I').trim();
   // The capitalised keyword " GRADE " already skips the lowercase explanatory text on the back of certificates.
   if(!/^[A-Za-z][A-Za-z0-9 &(),.'\/-]{2,60}$/.test(subject)) return null;
-  const after = line.slice(idx).replace(/^\sGRADE\s+/, '');
+  const after = line.slice(idx).replace(/^\sGRADE\s*/, '');
   const g = after.match(/^(A\s?\*|[A-GU]|[1-9])\b/);
   const w = after.match(/\(\s*([a-z* ]+?)\s*\)/i);
   if(!g && !w) return null;
@@ -5344,7 +5304,7 @@ async function makeSnapshots(rows) {
 }
 
 async function openDocumentPreview(row) {
-  const file = ocrFileFor(row);
+  const file = row.previewFile || ocrFileFor(row);
   if(!file) return;
   window._documentPreviewRow = row;
   const dialog = document.getElementById('document-dialog'), image = document.getElementById('document-image');
@@ -5716,15 +5676,17 @@ function deriveLayoutTemplate(line, subject, grade) {
   const tokens = cleanOcrLine(line).split(' ');
   const gIdx = tokens.lastIndexOf(grade);
   if(gIdx < 1) return { error: `The grade "${grade}" does not appear in this line.` };
+  const prefix = /^\d{4}$/.test(tokens[0]) ? tokens.shift() : '';
+  const gradeIndex = prefix ? gIdx - 1 : gIdx;
   const target = normalizeSearch(subject);
   let bestK = 1, best = -1;
-  for(let k = 1; k <= gIdx; k++) {
+  for(let k = 1; k <= gradeIndex; k++) {
     const score = bigramSimilarity(normalizeSearch(tokens.slice(0, k).join(' ')), target);
     if(score > best) { best = score; bestK = k; }
   }
-  const middle = tokens.slice(bestK, gIdx).map(t => /^\(?[A-Z0-9]{3,6}\)?$/.test(t) && /\d/.test(t) ? '{code}' : (/^\d+$/.test(t) ? '{num}' : t));
-  const pattern = ['{subject}', ...middle, '{grade}', ...(gIdx < tokens.length - 1 ? ['*'] : [])].join(' ');
-  return { pattern, subjectText: tokens.slice(0, bestK).join(' '), hasLiteral: middle.some(t => !t.startsWith('{')) };
+  const middle = tokens.slice(bestK, gradeIndex).map(t => /^\(?[A-Z0-9]{3,6}\)?$/.test(t) && /\d/.test(t) ? '{code}' : (/^\d+$/.test(t) ? '{num}' : t));
+  const pattern = [prefix, '{subject}', ...middle, '{grade}', ...(gradeIndex < tokens.length - 1 ? ['*'] : [])].filter(Boolean).join(' ');
+  return { pattern, subjectText: tokens.slice(0, bestK).join(' '), hasLiteral: !!prefix || middle.some(t => !t.startsWith('{')) };
 }
 
 // ── Teaching inside the review dialog ──
@@ -5782,7 +5744,7 @@ function guessTeachValues(line, pageText) {
 // The selected line cut from the document, so staff read the values off the real scan.
 async function showTeachSnapshot(t) {
   const el = document.getElementById('teach-snap');
-  if(!el || !t.docFile || !t.box) return;
+  if(!el || !t.docFile) return;
   if(!t.snapshot) {
     el.innerHTML = '<div class="ocr-snap-caption">Loading the line from the document…</div>';
     try {
@@ -5792,7 +5754,11 @@ async function showTeachSnapshot(t) {
     } catch(e) { el.innerHTML = ''; return; }
   }
   if(_teachLine !== t) return;
-  el.innerHTML = `<img class="ocr-snap" src="${t.snapshot}" alt="This line on the document"><div class="ocr-snap-caption">On the document (outlined)</div>`;
+  el.innerHTML = `<button type="button" class="document-thumbnail" onclick="openTeachDocument()" aria-label="Enlarge teaching document"><img class="ocr-snap" src="${t.snapshot}" alt="This line on the document"></button><button type="button" class="btn btn-outline" onclick="openTeachDocument()">Enlarge document</button><div class="ocr-snap-caption">On the document (outlined)</div>`;
+}
+
+function openTeachDocument() {
+  if(_teachLine?.docFile) openDocumentPreview({ ..._teachLine, previewFile: _teachLine.docFile });
 }
 
 function openTeachForm(i) {

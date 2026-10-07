@@ -102,18 +102,6 @@
       "source_location": "L16"
     },
     {
-      "id": "graphify_inline_input_buildlayoutregex",
-      "label": "buildLayoutRegex()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "index.html",
-      "file_type": "code",
-      "norm_label": "buildlayoutregex()",
-      "source_file": "index.html",
-      "source_location": "L5590"
-    },
-    {
       "id": "graphify_inline_input_cancelcondconfirm",
       "label": "cancelCondConfirm()",
       "_callable": true,
@@ -123,7 +111,7 @@
       "file_type": "code",
       "norm_label": "cancelcondconfirm()",
       "source_file": "index.html",
-      "source_location": "L3918"
+      "source_location": "L3878"
     },
     {
       "id": "graphify_inline_input_cancelstudentmodal",
@@ -135,7 +123,7 @@
       "file_type": "code",
       "norm_label": "cancelstudentmodal()",
       "source_file": "index.html",
-      "source_location": "L1724"
+      "source_location": "L1721"
     },
     {
       "id": "graphify_inline_input_closeadminpanel",
@@ -147,7 +135,7 @@
       "file_type": "code",
       "norm_label": "closeadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5935"
+      "source_location": "L5901"
     },
     {
       "id": "graphify_inline_input_closemodal",
@@ -159,7 +147,7 @@
       "file_type": "code",
       "norm_label": "closemodal()",
       "source_file": "index.html",
-      "source_location": "L3842"
+      "source_location": "L3821"
     },
     {
       "id": "graphify_inline_input_closescenariopickmodal",
@@ -171,7 +159,7 @@
       "file_type": "code",
       "norm_label": "closescenariopickmodal()",
       "source_file": "index.html",
-      "source_location": "L1720"
+      "source_location": "L1717"
     },
     {
       "id": "graphify_inline_input_closesuccessmodal",
@@ -183,7 +171,7 @@
       "file_type": "code",
       "norm_label": "closesuccessmodal()",
       "source_file": "index.html",
-      "source_location": "L3844"
+      "source_location": "L3823"
     },
     {
       "id": "graphify_inline_input_closesuccessmodalandscrolltoscenarios",
@@ -195,7 +183,7 @@
       "file_type": "code",
       "norm_label": "closesuccessmodalandscrolltoscenarios()",
       "source_file": "index.html",
-      "source_location": "L3848"
+      "source_location": "L3827"
     },
     {
       "id": "graphify_inline_input_confirmcondconfirm",
@@ -207,19 +195,7 @@
       "file_type": "code",
       "norm_label": "confirmcondconfirm()",
       "source_file": "index.html",
-      "source_location": "L3914"
-    },
-    {
-      "id": "graphify_inline_input_escaperegex",
-      "label": "escapeRegex()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "index.html",
-      "file_type": "code",
-      "norm_label": "escaperegex()",
-      "source_file": "index.html",
-      "source_location": "L5586"
+      "source_location": "L3874"
     },
     {
       "id": "graphify_inline_input_openmobilebreakdown",
@@ -231,7 +207,7 @@
       "file_type": "code",
       "norm_label": "openmobilebreakdown()",
       "source_file": "index.html",
-      "source_location": "L3521"
+      "source_location": "L3500"
     },
     {
       "id": "graphify_inline_input_pickscenario",
@@ -243,7 +219,7 @@
       "file_type": "code",
       "norm_label": "pickscenario()",
       "source_file": "index.html",
-      "source_location": "L1714"
+      "source_location": "L1711"
     },
     {
       "id": "graphify_inline_input_toggletheme",
@@ -263,11 +239,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "bigramsimilarity()",
       "source_file": "index.html",
-      "source_location": "L4837"
+      "source_location": "L4797"
     },
     {
       "id": "graphify_inline_input_classifypagestatus",
@@ -275,11 +251,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "classifypagestatus()",
       "source_file": "index.html",
-      "source_location": "L4672"
+      "source_location": "L4632"
     },
     {
       "id": "graphify_inline_input_cleanboardsubject",
@@ -287,11 +263,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "cleanboardsubject()",
       "source_file": "index.html",
-      "source_location": "L4391"
+      "source_location": "L4351"
     },
     {
       "id": "graphify_inline_input_cleanocrline",
@@ -299,11 +275,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "cleanocrline()",
       "source_file": "index.html",
-      "source_location": "L4364"
+      "source_location": "L4324"
     },
     {
       "id": "graphify_inline_input_cleanschoolsubject",
@@ -311,11 +287,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "cleanschoolsubject()",
       "source_file": "index.html",
-      "source_location": "L4494"
+      "source_location": "L4454"
     },
     {
       "id": "graphify_inline_input_derivelayouttemplate",
@@ -323,11 +299,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "derivelayouttemplate()",
       "source_file": "index.html",
-      "source_location": "L5715"
+      "source_location": "L5675"
     },
     {
       "id": "graphify_inline_input_expandsubjectabbreviations",
@@ -335,23 +311,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "expandsubjectabbreviations()",
       "source_file": "index.html",
-      "source_location": "L4855"
-    },
-    {
-      "id": "graphify_inline_input_getmatches",
-      "label": "getMatches()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "parseDocument",
-      "file_type": "code",
-      "norm_label": "getmatches()",
-      "source_file": "index.html",
-      "source_location": "L1940"
+      "source_location": "L4815"
     },
     {
       "id": "graphify_inline_input_guessteachvalues",
@@ -359,23 +323,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "guessteachvalues()",
       "source_file": "index.html",
-      "source_location": "L5763"
-    },
-    {
-      "id": "graphify_inline_input_hasresultlines",
-      "label": "hasResultLines()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "parseDocument",
-      "file_type": "code",
-      "norm_label": "hasresultlines()",
-      "source_file": "index.html",
-      "source_location": "L4701"
+      "source_location": "L5725"
     },
     {
       "id": "graphify_inline_input_isgcsepage",
@@ -383,11 +335,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "isgcsepage()",
       "source_file": "index.html",
-      "source_location": "L4387"
+      "source_location": "L4347"
     },
     {
       "id": "graphify_inline_input_isknownsubject",
@@ -395,11 +347,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "isknownsubject()",
       "source_file": "index.html",
-      "source_location": "L4500"
+      "source_location": "L4460"
     },
     {
       "id": "graphify_inline_input_isskippedline",
@@ -407,11 +359,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "isskippedline()",
       "source_file": "index.html",
-      "source_location": "L4696"
+      "source_location": "L4656"
     },
     {
       "id": "graphify_inline_input_learncorrectedsubjects",
@@ -419,11 +371,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "learncorrectedsubjects()",
       "source_file": "index.html",
-      "source_location": "L5906"
+      "source_location": "L5872"
     },
     {
       "id": "graphify_inline_input_learnedaliasfor",
@@ -431,11 +383,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "learnedaliasfor()",
       "source_file": "index.html",
-      "source_location": "L5692"
+      "source_location": "L5652"
     },
     {
       "id": "graphify_inline_input_levelfromcode",
@@ -443,11 +395,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "levelfromcode()",
       "source_file": "index.html",
-      "source_location": "L4489"
+      "source_location": "L4449"
     },
     {
       "id": "graphify_inline_input_levelfromtoken",
@@ -455,11 +407,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "levelfromtoken()",
       "source_file": "index.html",
-      "source_location": "L4480"
+      "source_location": "L4440"
     },
     {
       "id": "graphify_inline_input_matchocrsubject",
@@ -467,11 +419,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "matchocrsubject()",
       "source_file": "index.html",
-      "source_location": "L4859"
+      "source_location": "L4819"
     },
     {
       "id": "graphify_inline_input_nearmissline",
@@ -479,11 +431,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "nearmissline()",
       "source_file": "index.html",
-      "source_location": "L4890"
+      "source_location": "L4850"
     },
     {
       "id": "graphify_inline_input_normalizegrade",
@@ -491,11 +443,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "normalizegrade()",
       "source_file": "index.html",
-      "source_location": "L4378"
+      "source_location": "L4338"
     },
     {
       "id": "graphify_inline_input_normalizesearch",
@@ -503,11 +455,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "normalizesearch()",
       "source_file": "index.html",
-      "source_location": "L1936"
+      "source_location": "L1933"
     },
     {
       "id": "graphify_inline_input_pagelevel",
@@ -515,11 +467,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "pagelevel()",
       "source_file": "index.html",
-      "source_location": "L4370"
+      "source_location": "L4330"
     },
     {
       "id": "graphify_inline_input_parseawardline",
@@ -527,11 +479,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parseawardline()",
       "source_file": "index.html",
-      "source_location": "L4398"
+      "source_location": "L4358"
     },
     {
       "id": "graphify_inline_input_parseboardmarkline",
@@ -539,11 +491,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parseboardmarkline()",
       "source_file": "index.html",
-      "source_location": "L4559"
+      "source_location": "L4519"
     },
     {
       "id": "graphify_inline_input_parsecambridgecertline",
@@ -551,11 +503,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsecambridgecertline()",
       "source_file": "index.html",
-      "source_location": "L4460"
+      "source_location": "L4420"
     },
     {
       "id": "graphify_inline_input_parsecambridgeelectronicline",
@@ -563,11 +515,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsecambridgeelectronicline()",
       "source_file": "index.html",
-      "source_location": "L4549"
+      "source_location": "L4509"
     },
     {
       "id": "graphify_inline_input_parsedocument",
@@ -575,11 +527,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsedocument()",
       "source_file": "index.html",
-      "source_location": "L4902"
+      "source_location": "L4862"
     },
     {
       "id": "graphify_inline_input_parsegradeline",
@@ -587,11 +539,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsegradeline()",
       "source_file": "index.html",
-      "source_location": "L4426"
+      "source_location": "L4386"
     },
     {
       "id": "graphify_inline_input_parselearnedlayoutline",
@@ -599,11 +551,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parselearnedlayoutline()",
       "source_file": "index.html",
-      "source_location": "L5697"
+      "source_location": "L5657"
     },
     {
       "id": "graphify_inline_input_parselevelfirstline",
@@ -611,11 +563,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parselevelfirstline()",
       "source_file": "index.html",
-      "source_location": "L4580"
+      "source_location": "L4540"
     },
     {
       "id": "graphify_inline_input_parseresultline",
@@ -623,11 +575,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parseresultline()",
       "source_file": "index.html",
-      "source_location": "L4638"
+      "source_location": "L4598"
     },
     {
       "id": "graphify_inline_input_parsereviewoutcomeline",
@@ -635,11 +587,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsereviewoutcomeline()",
       "source_file": "index.html",
-      "source_location": "L4570"
+      "source_location": "L4530"
     },
     {
       "id": "graphify_inline_input_parseschoolgradeonlyline",
@@ -647,11 +599,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parseschoolgradeonlyline()",
       "source_file": "index.html",
-      "source_location": "L4529"
+      "source_location": "L4489"
     },
     {
       "id": "graphify_inline_input_parseschooltableline",
@@ -659,11 +611,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parseschooltableline()",
       "source_file": "index.html",
-      "source_location": "L4506"
+      "source_location": "L4466"
     },
     {
       "id": "graphify_inline_input_parsestatustablebyrow",
@@ -671,11 +623,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsestatustablebyrow()",
       "source_file": "index.html",
-      "source_location": "L4611"
+      "source_location": "L4571"
     },
     {
       "id": "graphify_inline_input_parsestatustablerows",
@@ -683,11 +635,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsestatustablerows()",
       "source_file": "index.html",
-      "source_location": "L4595"
+      "source_location": "L4555"
     },
     {
       "id": "graphify_inline_input_parsesyllabusline",
@@ -695,11 +647,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "parsesyllabusline()",
       "source_file": "index.html",
-      "source_location": "L4442"
+      "source_location": "L4402"
+    },
+    {
+      "id": "graphify_inline_input_renderteachsection",
+      "label": "renderTeachSection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "submitTeach",
+      "file_type": "code",
+      "norm_label": "renderteachsection()",
+      "source_file": "index.html",
+      "source_location": "L5711"
     },
     {
       "id": "graphify_inline_input_rowresultstatus",
@@ -707,11 +671,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "rowresultstatus()",
       "source_file": "index.html",
-      "source_location": "L4687"
+      "source_location": "L4647"
     },
     {
       "id": "graphify_inline_input_sectionheading",
@@ -719,11 +683,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "sectionheading()",
       "source_file": "index.html",
-      "source_location": "L4647"
+      "source_location": "L4607"
     },
     {
       "id": "graphify_inline_input_stripschoolnoise",
@@ -731,11 +695,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "stripschoolnoise()",
       "source_file": "index.html",
-      "source_location": "L4518"
+      "source_location": "L4478"
+    },
+    {
+      "id": "graphify_inline_input_submitteach",
+      "label": "submitTeach()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "submitTeach",
+      "file_type": "code",
+      "norm_label": "submitteach()",
+      "source_file": "index.html",
+      "source_location": "L5813"
     },
     {
       "id": "graphify_inline_input_unrecognisedlines",
@@ -743,11 +719,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "parseDocument",
+      "community_name": "submitTeach",
       "file_type": "code",
       "norm_label": "unrecognisedlines()",
       "source_file": "index.html",
-      "source_location": "L5734"
+      "source_location": "L5696"
     },
     {
       "id": "graphify_inline_input_addsubjecttoscenario",
@@ -759,7 +735,7 @@
       "file_type": "code",
       "norm_label": "addsubjecttoscenario()",
       "source_file": "index.html",
-      "source_location": "L2626"
+      "source_location": "L2623"
     },
     {
       "id": "graphify_inline_input_appendexcludedsubjectstopdf",
@@ -771,7 +747,7 @@
       "file_type": "code",
       "norm_label": "appendexcludedsubjectstopdf()",
       "source_file": "index.html",
-      "source_location": "L3256"
+      "source_location": "L3253"
     },
     {
       "id": "graphify_inline_input_buildpdfheader",
@@ -783,7 +759,7 @@
       "file_type": "code",
       "norm_label": "buildpdfheader()",
       "source_file": "index.html",
-      "source_location": "L1729"
+      "source_location": "L1726"
     },
     {
       "id": "graphify_inline_input_buildscenariopresentation",
@@ -795,7 +771,7 @@
       "file_type": "code",
       "norm_label": "buildscenariopresentation()",
       "source_file": "index.html",
-      "source_location": "L1503"
+      "source_location": "L1500"
     },
     {
       "id": "graphify_inline_input_buildstablepresentation",
@@ -807,7 +783,7 @@
       "file_type": "code",
       "norm_label": "buildstablepresentation()",
       "source_file": "index.html",
-      "source_location": "L1555"
+      "source_location": "L1552"
     },
     {
       "id": "graphify_inline_input_calcscenariopdfbodyheight",
@@ -819,7 +795,7 @@
       "file_type": "code",
       "norm_label": "_calcscenariopdfbodyheight()",
       "source_file": "index.html",
-      "source_location": "L3351"
+      "source_location": "L3348"
     },
     {
       "id": "graphify_inline_input_calculateoverallpercentage",
@@ -831,7 +807,7 @@
       "file_type": "code",
       "norm_label": "calculateoverallpercentage()",
       "source_file": "index.html",
-      "source_location": "L2894"
+      "source_location": "L2891"
     },
     {
       "id": "graphify_inline_input_coresciencetype",
@@ -843,7 +819,7 @@
       "file_type": "code",
       "norm_label": "coresciencetype()",
       "source_file": "index.html",
-      "source_location": "L3172"
+      "source_location": "L3169"
     },
     {
       "id": "graphify_inline_input_countlevels",
@@ -855,7 +831,7 @@
       "file_type": "code",
       "norm_label": "countlevels()",
       "source_file": "index.html",
-      "source_location": "L1836"
+      "source_location": "L1833"
     },
     {
       "id": "graphify_inline_input_describesubject",
@@ -867,7 +843,7 @@
       "file_type": "code",
       "norm_label": "describesubject()",
       "source_file": "index.html",
-      "source_location": "L3168"
+      "source_location": "L3165"
     },
     {
       "id": "graphify_inline_input_detectmajortypes",
@@ -879,7 +855,7 @@
       "file_type": "code",
       "norm_label": "detectmajortypes()",
       "source_file": "index.html",
-      "source_location": "L3237"
+      "source_location": "L3234"
     },
     {
       "id": "graphify_inline_input_dodownloaddata",
@@ -891,7 +867,7 @@
       "file_type": "code",
       "norm_label": "_dodownloaddata()",
       "source_file": "index.html",
-      "source_location": "L3559"
+      "source_location": "L3538"
     },
     {
       "id": "graphify_inline_input_dodownloadscenariopdf",
@@ -903,7 +879,7 @@
       "file_type": "code",
       "norm_label": "_dodownloadscenariopdf()",
       "source_file": "index.html",
-      "source_location": "L3368"
+      "source_location": "L3365"
     },
     {
       "id": "graphify_inline_input_drawnoteligiblepill",
@@ -915,7 +891,7 @@
       "file_type": "code",
       "norm_label": "drawnoteligiblepill()",
       "source_file": "index.html",
-      "source_location": "L3344"
+      "source_location": "L3341"
     },
     {
       "id": "graphify_inline_input_eligibilitypool",
@@ -927,7 +903,7 @@
       "file_type": "code",
       "norm_label": "eligibilitypool()",
       "source_file": "index.html",
-      "source_location": "L2579"
+      "source_location": "L2576"
     },
     {
       "id": "graphify_inline_input_eligiblemajorstext",
@@ -939,7 +915,7 @@
       "file_type": "code",
       "norm_label": "eligiblemajorstext()",
       "source_file": "index.html",
-      "source_location": "L1777"
+      "source_location": "L1774"
     },
     {
       "id": "graphify_inline_input_evaluatemajorrequirements",
@@ -951,7 +927,7 @@
       "file_type": "code",
       "norm_label": "evaluatemajorrequirements()",
       "source_file": "index.html",
-      "source_location": "L3181"
+      "source_location": "L3178"
     },
     {
       "id": "graphify_inline_input_exclusionreason",
@@ -963,7 +939,7 @@
       "file_type": "code",
       "norm_label": "exclusionreason()",
       "source_file": "index.html",
-      "source_location": "L2661"
+      "source_location": "L2658"
     },
     {
       "id": "graphify_inline_input_exportallscenariostoexcel",
@@ -975,7 +951,7 @@
       "file_type": "code",
       "norm_label": "exportallscenariostoexcel()",
       "source_file": "index.html",
-      "source_location": "L3748"
+      "source_location": "L3727"
     },
     {
       "id": "graphify_inline_input_exportscenariotoexcel",
@@ -987,7 +963,7 @@
       "file_type": "code",
       "norm_label": "exportscenariotoexcel()",
       "source_file": "index.html",
-      "source_location": "L3687"
+      "source_location": "L3666"
     },
     {
       "id": "graphify_inline_input_formatpercentage",
@@ -999,7 +975,7 @@
       "file_type": "code",
       "norm_label": "formatpercentage()",
       "source_file": "index.html",
-      "source_location": "L1781"
+      "source_location": "L1778"
     },
     {
       "id": "graphify_inline_input_generatescenarios",
@@ -1011,7 +987,7 @@
       "file_type": "code",
       "norm_label": "generatescenarios()",
       "source_file": "index.html",
-      "source_location": "L3027"
+      "source_location": "L3024"
     },
     {
       "id": "graphify_inline_input_getcombinations",
@@ -1023,7 +999,7 @@
       "file_type": "code",
       "norm_label": "getcombinations()",
       "source_file": "index.html",
-      "source_location": "L3140"
+      "source_location": "L3137"
     },
     {
       "id": "graphify_inline_input_getpdfmajorpriority",
@@ -1035,7 +1011,7 @@
       "file_type": "code",
       "norm_label": "getpdfmajorpriority()",
       "source_file": "index.html",
-      "source_location": "L1766"
+      "source_location": "L1763"
     },
     {
       "id": "graphify_inline_input_isbelowminimum",
@@ -1047,7 +1023,7 @@
       "file_type": "code",
       "norm_label": "isbelowminimum()",
       "source_file": "index.html",
-      "source_location": "L1773"
+      "source_location": "L1770"
     },
     {
       "id": "graphify_inline_input_loadxlsx",
@@ -1059,7 +1035,7 @@
       "file_type": "code",
       "norm_label": "loadxlsx()",
       "source_file": "index.html",
-      "source_location": "L1463"
+      "source_location": "L1460"
     },
     {
       "id": "graphify_inline_input_meetsbasecombination",
@@ -1071,7 +1047,7 @@
       "file_type": "code",
       "norm_label": "meetsbasecombination()",
       "source_file": "index.html",
-      "source_location": "L1849"
+      "source_location": "L1846"
     },
     {
       "id": "graphify_inline_input_openscenariopickmodal",
@@ -1083,7 +1059,7 @@
       "file_type": "code",
       "norm_label": "openscenariopickmodal()",
       "source_file": "index.html",
-      "source_location": "L1687"
+      "source_location": "L1684"
     },
     {
       "id": "graphify_inline_input_recalculatescenario",
@@ -1095,7 +1071,7 @@
       "file_type": "code",
       "norm_label": "recalculatescenario()",
       "source_file": "index.html",
-      "source_location": "L2559"
+      "source_location": "L2556"
     },
     {
       "id": "graphify_inline_input_removesubjectfromscenario",
@@ -1107,7 +1083,7 @@
       "file_type": "code",
       "norm_label": "removesubjectfromscenario()",
       "source_file": "index.html",
-      "source_location": "L2645"
+      "source_location": "L2642"
     },
     {
       "id": "graphify_inline_input_renderscenariocards",
@@ -1119,7 +1095,7 @@
       "file_type": "code",
       "norm_label": "renderscenariocards()",
       "source_file": "index.html",
-      "source_location": "L2740"
+      "source_location": "L2737"
     },
     {
       "id": "graphify_inline_input_scenariocombotext",
@@ -1131,7 +1107,7 @@
       "file_type": "code",
       "norm_label": "scenariocombotext()",
       "source_file": "index.html",
-      "source_location": "L1854"
+      "source_location": "L1851"
     },
     {
       "id": "graphify_inline_input_scenariohasexpectedgrades",
@@ -1143,7 +1119,7 @@
       "file_type": "code",
       "norm_label": "scenariohasexpectedgrades()",
       "source_file": "index.html",
-      "source_location": "L2584"
+      "source_location": "L2581"
     },
     {
       "id": "graphify_inline_input_scenarioreasoninghtml",
@@ -1155,7 +1131,7 @@
       "file_type": "code",
       "norm_label": "scenarioreasoninghtml()",
       "source_file": "index.html",
-      "source_location": "L2672"
+      "source_location": "L2669"
     },
     {
       "id": "graphify_inline_input_scenariosubjectkey",
@@ -1167,7 +1143,7 @@
       "file_type": "code",
       "norm_label": "scenariosubjectkey()",
       "source_file": "index.html",
-      "source_location": "L2555"
+      "source_location": "L2552"
     },
     {
       "id": "graphify_inline_input_selectdisplayscenarios",
@@ -1179,7 +1155,7 @@
       "file_type": "code",
       "norm_label": "selectdisplayscenarios()",
       "source_file": "index.html",
-      "source_location": "L2588"
+      "source_location": "L2585"
     },
     {
       "id": "graphify_inline_input_adminalertshtml",
@@ -1191,19 +1167,7 @@
       "file_type": "code",
       "norm_label": "adminalertshtml()",
       "source_file": "index.html",
-      "source_location": "L6235"
-    },
-    {
-      "id": "graphify_inline_input_admincleanuppages",
-      "label": "adminCleanupPages()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "renderAdminPanel",
-      "file_type": "code",
-      "norm_label": "admincleanuppages()",
-      "source_file": "index.html",
-      "source_location": "L6220"
+      "source_location": "L6201"
     },
     {
       "id": "graphify_inline_input_adminmsg",
@@ -1215,7 +1179,7 @@
       "file_type": "code",
       "norm_label": "adminmsg()",
       "source_file": "index.html",
-      "source_location": "L5937"
+      "source_location": "L5903"
     },
     {
       "id": "graphify_inline_input_adminpasswordprompt",
@@ -1227,7 +1191,7 @@
       "file_type": "code",
       "norm_label": "adminpasswordprompt()",
       "source_file": "index.html",
-      "source_location": "L6075"
+      "source_location": "L6041"
     },
     {
       "id": "graphify_inline_input_adminsavenewpassword",
@@ -1239,7 +1203,7 @@
       "file_type": "code",
       "norm_label": "adminsavenewpassword()",
       "source_file": "index.html",
-      "source_location": "L6049"
+      "source_location": "L6015"
     },
     {
       "id": "graphify_inline_input_adminsavewebhook",
@@ -1251,7 +1215,7 @@
       "file_type": "code",
       "norm_label": "adminsavewebhook()",
       "source_file": "index.html",
-      "source_location": "L6182"
+      "source_location": "L6148"
     },
     {
       "id": "graphify_inline_input_adminsendpasswordlink",
@@ -1263,7 +1227,7 @@
       "file_type": "code",
       "norm_label": "adminsendpasswordlink()",
       "source_file": "index.html",
-      "source_location": "L6038"
+      "source_location": "L6004"
     },
     {
       "id": "graphify_inline_input_adminsetstatus",
@@ -1275,7 +1239,7 @@
       "file_type": "code",
       "norm_label": "adminsetstatus()",
       "source_file": "index.html",
-      "source_location": "L6112"
+      "source_location": "L6078"
     },
     {
       "id": "graphify_inline_input_adminshowchangepassword",
@@ -1287,7 +1251,7 @@
       "file_type": "code",
       "norm_label": "adminshowchangepassword()",
       "source_file": "index.html",
-      "source_location": "L6087"
+      "source_location": "L6053"
     },
     {
       "id": "graphify_inline_input_adminsignin",
@@ -1299,7 +1263,7 @@
       "file_type": "code",
       "norm_label": "adminsignin()",
       "source_file": "index.html",
-      "source_location": "L6022"
+      "source_location": "L5988"
     },
     {
       "id": "graphify_inline_input_adminsignout",
@@ -1311,7 +1275,7 @@
       "file_type": "code",
       "norm_label": "adminsignout()",
       "source_file": "index.html",
-      "source_location": "L6093"
+      "source_location": "L6059"
     },
     {
       "id": "graphify_inline_input_adminstoragehtml",
@@ -1323,7 +1287,7 @@
       "file_type": "code",
       "norm_label": "adminstoragehtml()",
       "source_file": "index.html",
-      "source_location": "L6195"
+      "source_location": "L6161"
     },
     {
       "id": "graphify_inline_input_admintogglenotifications",
@@ -1335,19 +1299,7 @@
       "file_type": "code",
       "norm_label": "admintogglenotifications()",
       "source_file": "index.html",
-      "source_location": "L6170"
-    },
-    {
-      "id": "graphify_inline_input_adminviewsample",
-      "label": "adminViewSample()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "renderAdminPanel",
-      "file_type": "code",
-      "norm_label": "adminviewsample()",
-      "source_file": "index.html",
-      "source_location": "L6128"
+      "source_location": "L6136"
     },
     {
       "id": "graphify_inline_input_markpendingseen",
@@ -1359,7 +1311,7 @@
       "file_type": "code",
       "norm_label": "markpendingseen()",
       "source_file": "index.html",
-      "source_location": "L6166"
+      "source_location": "L6132"
     },
     {
       "id": "graphify_inline_input_newpasswordfields",
@@ -1371,7 +1323,7 @@
       "file_type": "code",
       "norm_label": "newpasswordfields()",
       "source_file": "index.html",
-      "source_location": "L5939"
+      "source_location": "L5905"
     },
     {
       "id": "graphify_inline_input_openadminpanel",
@@ -1383,7 +1335,7 @@
       "file_type": "code",
       "norm_label": "openadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5931"
+      "source_location": "L5897"
     },
     {
       "id": "graphify_inline_input_readnewpassword",
@@ -1395,7 +1347,7 @@
       "file_type": "code",
       "norm_label": "readnewpassword()",
       "source_file": "index.html",
-      "source_location": "L5945"
+      "source_location": "L5911"
     },
     {
       "id": "graphify_inline_input_refreshpendingbadge",
@@ -1407,7 +1359,7 @@
       "file_type": "code",
       "norm_label": "refreshpendingbadge()",
       "source_file": "index.html",
-      "source_location": "L6144"
+      "source_location": "L6110"
     },
     {
       "id": "graphify_inline_input_renderadminpanel",
@@ -1419,7 +1371,7 @@
       "file_type": "code",
       "norm_label": "renderadminpanel()",
       "source_file": "index.html",
-      "source_location": "L5953"
+      "source_location": "L5919"
     },
     {
       "id": "graphify_inline_input_sbfetch",
@@ -1431,7 +1383,7 @@
       "file_type": "code",
       "norm_label": "sbfetch()",
       "source_file": "index.html",
-      "source_location": "L5569"
+      "source_location": "L5529"
     },
     {
       "id": "graphify_inline_input_setadminsession",
@@ -1443,7 +1395,7 @@
       "file_type": "code",
       "norm_label": "setadminsession()",
       "source_file": "index.html",
-      "source_location": "L5924"
+      "source_location": "L5890"
     },
     {
       "id": "graphify_inline_input_addfilledsubjectcard",
@@ -1455,7 +1407,7 @@
       "file_type": "code",
       "norm_label": "addfilledsubjectcard()",
       "source_file": "index.html",
-      "source_location": "L2418"
+      "source_location": "L2415"
     },
     {
       "id": "graphify_inline_input_addocrrowstocalculator",
@@ -1467,7 +1419,7 @@
       "file_type": "code",
       "norm_label": "addocrrowstocalculator()",
       "source_file": "index.html",
-      "source_location": "L5473"
+      "source_location": "L5433"
     },
     {
       "id": "graphify_inline_input_addsubjectrow",
@@ -1479,7 +1431,19 @@
       "file_type": "code",
       "norm_label": "addsubjectrow()",
       "source_file": "index.html",
-      "source_location": "L2453"
+      "source_location": "L2450"
+    },
+    {
+      "id": "graphify_inline_input_admincleanuppages",
+      "label": "adminCleanupPages()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "addOcrRowsToCalculator",
+      "file_type": "code",
+      "norm_label": "admincleanuppages()",
+      "source_file": "index.html",
+      "source_location": "L6186"
     },
     {
       "id": "graphify_inline_input_adminconfirmdeleteallpages",
@@ -1491,7 +1455,7 @@
       "file_type": "code",
       "norm_label": "adminconfirmdeleteallpages()",
       "source_file": "index.html",
-      "source_location": "L6212"
+      "source_location": "L6178"
     },
     {
       "id": "graphify_inline_input_appconfirm",
@@ -1503,7 +1467,7 @@
       "file_type": "code",
       "norm_label": "appconfirm()",
       "source_file": "index.html",
-      "source_location": "L3890"
+      "source_location": "L3850"
     },
     {
       "id": "graphify_inline_input_autoaddnextrow",
@@ -1515,7 +1479,7 @@
       "file_type": "code",
       "norm_label": "autoaddnextrow()",
       "source_file": "index.html",
-      "source_location": "L2160"
+      "source_location": "L2157"
     },
     {
       "id": "graphify_inline_input_categoryof",
@@ -1527,7 +1491,7 @@
       "file_type": "code",
       "norm_label": "categoryof()",
       "source_file": "index.html",
-      "source_location": "L1827"
+      "source_location": "L1824"
     },
     {
       "id": "graphify_inline_input_clearstalestate",
@@ -1539,7 +1503,7 @@
       "file_type": "code",
       "norm_label": "clearstalestate()",
       "source_file": "index.html",
-      "source_location": "L2144"
+      "source_location": "L2141"
     },
     {
       "id": "graphify_inline_input_closemobilebreakdown",
@@ -1551,7 +1515,7 @@
       "file_type": "code",
       "norm_label": "closemobilebreakdown()",
       "source_file": "index.html",
-      "source_location": "L3527"
+      "source_location": "L3506"
     },
     {
       "id": "graphify_inline_input_closeocrmodal",
@@ -1563,7 +1527,7 @@
       "file_type": "code",
       "norm_label": "closeocrmodal()",
       "source_file": "index.html",
-      "source_location": "L5523"
+      "source_location": "L5483"
     },
     {
       "id": "graphify_inline_input_deleterow",
@@ -1575,7 +1539,7 @@
       "file_type": "code",
       "norm_label": "deleterow()",
       "source_file": "index.html",
-      "source_location": "L2472"
+      "source_location": "L2469"
     },
     {
       "id": "graphify_inline_input_filldemodata",
@@ -1587,7 +1551,19 @@
       "file_type": "code",
       "norm_label": "filldemodata()",
       "source_file": "index.html",
-      "source_location": "L2183"
+      "source_location": "L2180"
+    },
+    {
+      "id": "graphify_inline_input_getmatches",
+      "label": "getMatches()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "addOcrRowsToCalculator",
+      "file_type": "code",
+      "norm_label": "getmatches()",
+      "source_file": "index.html",
+      "source_location": "L1937"
     },
     {
       "id": "graphify_inline_input_getusedsubjectcounts",
@@ -1599,7 +1575,7 @@
       "file_type": "code",
       "norm_label": "getusedsubjectcounts()",
       "source_file": "index.html",
-      "source_location": "L1992"
+      "source_location": "L1989"
     },
     {
       "id": "graphify_inline_input_handlekey",
@@ -1611,7 +1587,7 @@
       "file_type": "code",
       "norm_label": "handlekey()",
       "source_file": "index.html",
-      "source_location": "L2097"
+      "source_location": "L2094"
     },
     {
       "id": "graphify_inline_input_handlemobilebreakdownbackdrop",
@@ -1623,19 +1599,7 @@
       "file_type": "code",
       "norm_label": "handlemobilebreakdownbackdrop()",
       "source_file": "index.html",
-      "source_location": "L3533"
-    },
-    {
-      "id": "graphify_inline_input_highlightmatch",
-      "label": "highlightMatch()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "addOcrRowsToCalculator",
-      "file_type": "code",
-      "norm_label": "highlightmatch()",
-      "source_file": "index.html",
-      "source_location": "L1895"
+      "source_location": "L3512"
     },
     {
       "id": "graphify_inline_input_initsearchcard",
@@ -1647,7 +1611,7 @@
       "file_type": "code",
       "norm_label": "initsearchcard()",
       "source_file": "index.html",
-      "source_location": "L1901"
+      "source_location": "L1898"
     },
     {
       "id": "graphify_inline_input_loaddemodata",
@@ -1659,7 +1623,7 @@
       "file_type": "code",
       "norm_label": "loaddemodata()",
       "source_file": "index.html",
-      "source_location": "L2172"
+      "source_location": "L2169"
     },
     {
       "id": "graphify_inline_input_markresultsstale",
@@ -1671,7 +1635,7 @@
       "file_type": "code",
       "norm_label": "markresultsstale()",
       "source_file": "index.html",
-      "source_location": "L2137"
+      "source_location": "L2134"
     },
     {
       "id": "graphify_inline_input_maxalloweduses",
@@ -1683,7 +1647,7 @@
       "file_type": "code",
       "norm_label": "maxalloweduses()",
       "source_file": "index.html",
-      "source_location": "L1987"
+      "source_location": "L1984"
     },
     {
       "id": "graphify_inline_input_renderdropdown",
@@ -1695,7 +1659,7 @@
       "file_type": "code",
       "norm_label": "renderdropdown()",
       "source_file": "index.html",
-      "source_location": "L2005"
+      "source_location": "L2002"
     },
     {
       "id": "graphify_inline_input_resetform",
@@ -1707,7 +1671,7 @@
       "file_type": "code",
       "norm_label": "resetform()",
       "source_file": "index.html",
-      "source_location": "L3474"
+      "source_location": "L3471"
     },
     {
       "id": "graphify_inline_input_resolverepeatedsubjects",
@@ -1719,7 +1683,7 @@
       "file_type": "code",
       "norm_label": "resolverepeatedsubjects()",
       "source_file": "index.html",
-      "source_location": "L5029"
+      "source_location": "L4989"
     },
     {
       "id": "graphify_inline_input_selectsubjectwithgrade",
@@ -1731,7 +1695,7 @@
       "file_type": "code",
       "norm_label": "selectsubjectwithgrade()",
       "source_file": "index.html",
-      "source_location": "L2111"
+      "source_location": "L2108"
     },
     {
       "id": "graphify_inline_input_setgradeoptionsforlevel",
@@ -1743,7 +1707,7 @@
       "file_type": "code",
       "norm_label": "setgradeoptionsforlevel()",
       "source_file": "index.html",
-      "source_location": "L2103"
+      "source_location": "L2100"
     },
     {
       "id": "graphify_inline_input_showcondconfirm",
@@ -1755,7 +1719,7 @@
       "file_type": "code",
       "norm_label": "showcondconfirm()",
       "source_file": "index.html",
-      "source_location": "L3906"
+      "source_location": "L3866"
     },
     {
       "id": "graphify_inline_input_subjectcardhtml",
@@ -1767,7 +1731,7 @@
       "file_type": "code",
       "norm_label": "subjectcardhtml()",
       "source_file": "index.html",
-      "source_location": "L1858"
+      "source_location": "L1855"
     },
     {
       "id": "graphify_inline_input_subjectusagekey",
@@ -1779,7 +1743,7 @@
       "file_type": "code",
       "norm_label": "subjectusagekey()",
       "source_file": "index.html",
-      "source_location": "L1983"
+      "source_location": "L1980"
     },
     {
       "id": "graphify_inline_input_updatelevelcounter",
@@ -1791,19 +1755,7 @@
       "file_type": "code",
       "norm_label": "updatelevelcounter()",
       "source_file": "index.html",
-      "source_location": "L2492"
-    },
-    {
-      "id": "graphify_inline_input_compilelearnedrules",
-      "label": "compileLearnedRules()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "compilelearnedrules()",
-      "source_file": "index.html",
-      "source_location": "L5601"
+      "source_location": "L2489"
     },
     {
       "id": "graphify_inline_input_cropsnapshot",
@@ -1811,11 +1763,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "cropsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5300"
+      "source_location": "L5260"
     },
     {
       "id": "graphify_inline_input_eschtml",
@@ -1823,11 +1775,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "eschtml()",
       "source_file": "index.html",
-      "source_location": "L1894"
+      "source_location": "L1891"
     },
     {
       "id": "graphify_inline_input_filefingerprint",
@@ -1835,11 +1787,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "filefingerprint()",
       "source_file": "index.html",
-      "source_location": "L4356"
+      "source_location": "L4316"
     },
     {
       "id": "graphify_inline_input_handlecertificatefiles",
@@ -1847,23 +1799,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "handlecertificatefiles()",
       "source_file": "index.html",
-      "source_location": "L5164"
+      "source_location": "L5124"
     },
     {
-      "id": "graphify_inline_input_loadlearnedrules",
-      "label": "loadLearnedRules()",
+      "id": "graphify_inline_input_highlightmatch",
+      "label": "highlightMatch()",
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
-      "norm_label": "loadlearnedrules()",
+      "norm_label": "highlightmatch()",
       "source_file": "index.html",
-      "source_location": "L5615"
+      "source_location": "L1892"
     },
     {
       "id": "graphify_inline_input_makesnapshots",
@@ -1871,11 +1823,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "makesnapshots()",
       "source_file": "index.html",
-      "source_location": "L5327"
+      "source_location": "L5287"
     },
     {
       "id": "graphify_inline_input_needsconfirmation",
@@ -1883,11 +1835,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "needsconfirmation()",
       "source_file": "index.html",
-      "source_location": "L5268"
+      "source_location": "L5228"
     },
     {
       "id": "graphify_inline_input_ocrfilefor",
@@ -1895,11 +1847,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "ocrfilefor()",
       "source_file": "index.html",
-      "source_location": "L5272"
+      "source_location": "L5232"
     },
     {
       "id": "graphify_inline_input_ocrflag",
@@ -1907,11 +1859,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "ocrflag()",
       "source_file": "index.html",
-      "source_location": "L5380"
+      "source_location": "L5340"
     },
     {
       "id": "graphify_inline_input_ocrgradecell",
@@ -1919,11 +1871,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "ocrgradecell()",
       "source_file": "index.html",
-      "source_location": "L5256"
+      "source_location": "L5216"
     },
     {
       "id": "graphify_inline_input_ocrsubjectoptions",
@@ -1931,11 +1883,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "ocrsubjectoptions()",
       "source_file": "index.html",
-      "source_location": "L5250"
+      "source_location": "L5210"
     },
     {
       "id": "graphify_inline_input_opendocumentpreview",
@@ -1943,11 +1895,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "opendocumentpreview()",
       "source_file": "index.html",
-      "source_location": "L5346"
+      "source_location": "L5306"
+    },
+    {
+      "id": "graphify_inline_input_openteachdocument",
+      "label": "openTeachDocument()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "handleCertificateFiles",
+      "file_type": "code",
+      "norm_label": "openteachdocument()",
+      "source_file": "index.html",
+      "source_location": "L5760"
     },
     {
       "id": "graphify_inline_input_openteachform",
@@ -1955,11 +1919,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "openteachform()",
       "source_file": "index.html",
-      "source_location": "L5798"
+      "source_location": "L5764"
     },
     {
       "id": "graphify_inline_input_parseocrpages",
@@ -1967,23 +1931,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "parseocrpages()",
       "source_file": "index.html",
       "source_location": "L4227"
-    },
-    {
-      "id": "graphify_inline_input_readlocalrules",
-      "label": "readLocalRules()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "readlocalrules()",
-      "source_file": "index.html",
-      "source_location": "L5578"
     },
     {
       "id": "graphify_inline_input_rememberedteachername",
@@ -1991,11 +1943,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "rememberedteachername()",
       "source_file": "index.html",
-      "source_location": "L5667"
+      "source_location": "L5627"
     },
     {
       "id": "graphify_inline_input_renderocrreview",
@@ -2003,11 +1955,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "renderocrreview()",
       "source_file": "index.html",
-      "source_location": "L5387"
+      "source_location": "L5347"
     },
     {
       "id": "graphify_inline_input_renderpageforsnapshot",
@@ -2015,47 +1967,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "renderpageforsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5276"
-    },
-    {
-      "id": "graphify_inline_input_renderteachsection",
-      "label": "renderTeachSection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "renderteachsection()",
-      "source_file": "index.html",
-      "source_location": "L5749"
-    },
-    {
-      "id": "graphify_inline_input_rulekey",
-      "label": "ruleKey()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "rulekey()",
-      "source_file": "index.html",
-      "source_location": "L5584"
-    },
-    {
-      "id": "graphify_inline_input_savelearnedrule",
-      "label": "saveLearnedRule()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "savelearnedrule()",
-      "source_file": "index.html",
-      "source_location": "L5672"
+      "source_location": "L5236"
     },
     {
       "id": "graphify_inline_input_setocrprogress",
@@ -2063,11 +1979,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "setocrprogress()",
       "source_file": "index.html",
-      "source_location": "L5152"
+      "source_location": "L5112"
     },
     {
       "id": "graphify_inline_input_showocrwarnings",
@@ -2075,11 +1991,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "showocrwarnings()",
       "source_file": "index.html",
-      "source_location": "L5158"
+      "source_location": "L5118"
     },
     {
       "id": "graphify_inline_input_showteachsnapshot",
@@ -2087,11 +2003,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "showteachsnapshot()",
       "source_file": "index.html",
-      "source_location": "L5783"
+      "source_location": "L5745"
     },
     {
       "id": "graphify_inline_input_snapshotcell",
@@ -2099,35 +2015,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "snapshotcell()",
       "source_file": "index.html",
-      "source_location": "L5370"
-    },
-    {
-      "id": "graphify_inline_input_submitteach",
-      "label": "submitTeach()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "submitteach()",
-      "source_file": "index.html",
-      "source_location": "L5847"
-    },
-    {
-      "id": "graphify_inline_input_supabaseready",
-      "label": "supabaseReady()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "supabaseready()",
-      "source_file": "index.html",
-      "source_location": "L5567"
+      "source_location": "L5330"
     },
     {
       "id": "graphify_inline_input_updateocraddbutton",
@@ -2135,23 +2027,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "updateocraddbutton()",
       "source_file": "index.html",
-      "source_location": "L5439"
-    },
-    {
-      "id": "graphify_inline_input_uploadteachsample",
-      "label": "uploadTeachSample()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
-      "file_type": "code",
-      "norm_label": "uploadteachsample()",
-      "source_file": "index.html",
-      "source_location": "L5658"
+      "source_location": "L5399"
     },
     {
       "id": "graphify_inline_input_workocravailable",
@@ -2159,23 +2039,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "submitTeach",
+      "community_name": "handleCertificateFiles",
       "file_type": "code",
       "norm_label": "workocravailable()",
       "source_file": "index.html",
-      "source_location": "L4284"
+      "source_location": "L4244"
     },
     {
-      "id": "graphify_inline_input_writelocalrules",
-      "label": "writeLocalRules()",
+      "id": "graphify_inline_input_adminviewsample",
+      "label": "adminViewSample()",
       "_callable": true,
       "_origin": "ast",
-      "community": 15,
-      "community_name": "submitTeach",
+      "community": 16,
+      "community_name": "appAlert",
       "file_type": "code",
-      "norm_label": "writelocalrules()",
+      "norm_label": "adminviewsample()",
       "source_file": "index.html",
-      "source_location": "L5581"
+      "source_location": "L6094"
     },
     {
       "id": "graphify_inline_input_appalert",
@@ -2187,7 +2067,7 @@
       "file_type": "code",
       "norm_label": "appalert()",
       "source_file": "index.html",
-      "source_location": "L3903"
+      "source_location": "L3863"
     },
     {
       "id": "graphify_inline_input_bulkaddrows",
@@ -2199,7 +2079,7 @@
       "file_type": "code",
       "norm_label": "bulkaddrows()",
       "source_file": "index.html",
-      "source_location": "L3537"
+      "source_location": "L3516"
     },
     {
       "id": "graphify_inline_input_downloaddata",
@@ -2211,7 +2091,7 @@
       "file_type": "code",
       "norm_label": "downloaddata()",
       "source_file": "index.html",
-      "source_location": "L3551"
+      "source_location": "L3530"
     },
     {
       "id": "graphify_inline_input_downloadscenariopdf",
@@ -2223,7 +2103,7 @@
       "file_type": "code",
       "norm_label": "downloadscenariopdf()",
       "source_file": "index.html",
-      "source_location": "L3339"
+      "source_location": "L3336"
     },
     {
       "id": "graphify_inline_input_getrequiredemployeename",
@@ -2235,7 +2115,7 @@
       "file_type": "code",
       "norm_label": "getrequiredemployeename()",
       "source_file": "index.html",
-      "source_location": "L1618"
+      "source_location": "L1615"
     },
     {
       "id": "graphify_inline_input_getrequiredstudentid",
@@ -2247,7 +2127,7 @@
       "file_type": "code",
       "norm_label": "getrequiredstudentid()",
       "source_file": "index.html",
-      "source_location": "L1609"
+      "source_location": "L1606"
     },
     {
       "id": "graphify_inline_input_loadjspdf",
@@ -2259,7 +2139,7 @@
       "file_type": "code",
       "norm_label": "loadjspdf()",
       "source_file": "index.html",
-      "source_location": "L1448"
+      "source_location": "L1445"
     },
     {
       "id": "graphify_inline_input_preloadlogo",
@@ -2271,7 +2151,7 @@
       "file_type": "code",
       "norm_label": "_preloadlogo()",
       "source_file": "index.html",
-      "source_location": "L1478"
+      "source_location": "L1475"
     },
     {
       "id": "graphify_inline_input_promptstudentinfo",
@@ -2283,7 +2163,7 @@
       "file_type": "code",
       "norm_label": "promptstudentinfo()",
       "source_file": "index.html",
-      "source_location": "L1586"
+      "source_location": "L1583"
     },
     {
       "id": "graphify_inline_input_promptstudentinfothenpick",
@@ -2295,7 +2175,7 @@
       "file_type": "code",
       "norm_label": "promptstudentinfothenpick()",
       "source_file": "index.html",
-      "source_location": "L1627"
+      "source_location": "L1624"
     },
     {
       "id": "graphify_inline_input_togglequickentry",
@@ -2307,7 +2187,7 @@
       "file_type": "code",
       "norm_label": "togglequickentry()",
       "source_file": "index.html",
-      "source_location": "L3511"
+      "source_location": "L3490"
     },
     {
       "id": "graphify_inline_input_withfreshresults",
@@ -2319,7 +2199,7 @@
       "file_type": "code",
       "norm_label": "withfreshresults()",
       "source_file": "index.html",
-      "source_location": "L2150"
+      "source_location": "L2147"
     },
     {
       "id": "graphify_inline_input_extractpages",
@@ -2331,7 +2211,19 @@
       "file_type": "code",
       "norm_label": "extractpages()",
       "source_file": "index.html",
-      "source_location": "L4310"
+      "source_location": "L4270"
+    },
+    {
+      "id": "graphify_inline_input_hasresultlines",
+      "label": "hasResultLines()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "extractPages",
+      "file_type": "code",
+      "norm_label": "hasresultlines()",
+      "source_file": "index.html",
+      "source_location": "L4661"
     },
     {
       "id": "graphify_inline_input_imagefiletocanvas",
@@ -2343,7 +2235,7 @@
       "file_type": "code",
       "norm_label": "imagefiletocanvas()",
       "source_file": "index.html",
-      "source_location": "L4246"
+      "source_location": "L4206"
     },
     {
       "id": "graphify_inline_input_mergeenginerows",
@@ -2355,7 +2247,7 @@
       "file_type": "code",
       "norm_label": "mergeenginerows()",
       "source_file": "index.html",
-      "source_location": "L4999"
+      "source_location": "L4959"
     },
     {
       "id": "graphify_inline_input_readcertificatefile",
@@ -2367,7 +2259,7 @@
       "file_type": "code",
       "norm_label": "readcertificatefile()",
       "source_file": "index.html",
-      "source_location": "L5110"
+      "source_location": "L5070"
     },
     {
       "id": "graphify_inline_input_readfilebothengines",
@@ -2379,7 +2271,7 @@
       "file_type": "code",
       "norm_label": "readfilebothengines()",
       "source_file": "index.html",
-      "source_location": "L5099"
+      "source_location": "L5059"
     },
     {
       "id": "graphify_inline_input_readfilewithengine",
@@ -2391,7 +2283,7 @@
       "file_type": "code",
       "norm_label": "readfilewithengine()",
       "source_file": "index.html",
-      "source_location": "L5066"
+      "source_location": "L5026"
     },
     {
       "id": "graphify_inline_input_renderpdfpage",
@@ -2403,7 +2295,7 @@
       "file_type": "code",
       "norm_label": "renderpdfpage()",
       "source_file": "index.html",
-      "source_location": "L4235"
+      "source_location": "L4195"
     },
     {
       "id": "graphify_inline_input_rowkey",
@@ -2415,7 +2307,7 @@
       "file_type": "code",
       "norm_label": "rowkey()",
       "source_file": "index.html",
-      "source_location": "L4992"
+      "source_location": "L4952"
     },
     {
       "id": "graphify_inline_input_textlayertolines",
@@ -2427,7 +2319,7 @@
       "file_type": "code",
       "norm_label": "textlayertolines()",
       "source_file": "index.html",
-      "source_location": "L4260"
+      "source_location": "L4220"
     },
     {
       "id": "graphify_inline_input_tograyscale",
@@ -2439,7 +2331,7 @@
       "file_type": "code",
       "norm_label": "tograyscale()",
       "source_file": "index.html",
-      "source_location": "L4221"
+      "source_location": "L4181"
     },
     {
       "id": "tests_ocr_gateway_test_request",
@@ -2454,52 +2346,28 @@
       "source_location": "L6"
     },
     {
-      "id": "graphify_inline_input_lookslikemoedocument",
-      "label": "looksLikeMoeDocument()",
+      "id": "graphify_inline_input_arabicwordmarks",
+      "label": "arabicWordMarks()",
       "_callable": true,
       "_origin": "ast",
-      "community": 19,
-      "community_name": "looksLikeMoeDocument",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
-      "norm_label": "lookslikemoedocument()",
+      "norm_label": "arabicwordmarks()",
       "source_file": "index.html",
-      "source_location": "L4278"
+      "source_location": "L4699"
     },
     {
-      "id": "graphify_inline_input_paddlereadpage",
-      "label": "paddleReadPage()",
+      "id": "graphify_inline_input_digitmark",
+      "label": "digitMark()",
       "_callable": true,
       "_origin": "ast",
-      "community": 19,
-      "community_name": "looksLikeMoeDocument",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
-      "norm_label": "paddlereadpage()",
+      "norm_label": "digitmark()",
       "source_file": "index.html",
-      "source_location": "L4205"
-    },
-    {
-      "id": "graphify_inline_input_tesseractreadpage",
-      "label": "tesseractReadPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "looksLikeMoeDocument",
-      "file_type": "code",
-      "norm_label": "tesseractreadpage()",
-      "source_file": "index.html",
-      "source_location": "L4009"
-    },
-    {
-      "id": "graphify_inline_input_workocrreadpage",
-      "label": "workOcrReadPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "looksLikeMoeDocument",
-      "file_type": "code",
-      "norm_label": "workocrreadpage()",
-      "source_file": "index.html",
-      "source_location": "L4291"
+      "source_location": "L4722"
     },
     {
       "id": "graphify_inline_input_ensurepaddleready",
@@ -2507,11 +2375,47 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "ensurepaddleready()",
       "source_file": "index.html",
-      "source_location": "L4077"
+      "source_location": "L4037"
+    },
+    {
+      "id": "graphify_inline_input_findmoemark",
+      "label": "findMoeMark()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "findmoemark()",
+      "source_file": "index.html",
+      "source_location": "L4733"
+    },
+    {
+      "id": "graphify_inline_input_getocrengine",
+      "label": "getOcrEngine()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "getocrengine()",
+      "source_file": "index.html",
+      "source_location": "L3911"
+    },
+    {
+      "id": "graphify_inline_input_gettessworker",
+      "label": "getTessWorker()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "gettessworker()",
+      "source_file": "index.html",
+      "source_location": "L3937"
     },
     {
       "id": "graphify_inline_input_grouppaddlelines",
@@ -2519,11 +2423,71 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "grouppaddlelines()",
       "source_file": "index.html",
-      "source_location": "L4167"
+      "source_location": "L4127"
+    },
+    {
+      "id": "graphify_inline_input_loadort",
+      "label": "loadOrt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "loadort()",
+      "source_file": "index.html",
+      "source_location": "L3988"
+    },
+    {
+      "id": "graphify_inline_input_loadpdflibrary",
+      "label": "loadPdfLibrary()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "loadpdflibrary()",
+      "source_file": "index.html",
+      "source_location": "L3930"
+    },
+    {
+      "id": "graphify_inline_input_loadscriptonce",
+      "label": "loadScriptOnce()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "loadscriptonce()",
+      "source_file": "index.html",
+      "source_location": "L3917"
+    },
+    {
+      "id": "graphify_inline_input_lookslikemoedocument",
+      "label": "looksLikeMoeDocument()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "lookslikemoedocument()",
+      "source_file": "index.html",
+      "source_location": "L4238"
+    },
+    {
+      "id": "graphify_inline_input_normalizearabic",
+      "label": "normalizeArabic()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "normalizearabic()",
+      "source_file": "index.html",
+      "source_location": "L4689"
     },
     {
       "id": "graphify_inline_input_normalizeboxes",
@@ -2531,11 +2495,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "normalizeboxes()",
       "source_file": "index.html",
-      "source_location": "L4183"
+      "source_location": "L4143"
     },
     {
       "id": "graphify_inline_input_paddledetect",
@@ -2543,11 +2507,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "paddledetect()",
       "source_file": "index.html",
-      "source_location": "L4088"
+      "source_location": "L4048"
     },
     {
       "id": "graphify_inline_input_paddledict",
@@ -2555,11 +2519,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "paddledict()",
       "source_file": "index.html",
-      "source_location": "L4066"
+      "source_location": "L4026"
+    },
+    {
+      "id": "graphify_inline_input_paddlereadpage",
+      "label": "paddleReadPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "paddlereadpage()",
+      "source_file": "index.html",
+      "source_location": "L4165"
     },
     {
       "id": "graphify_inline_input_paddlereadwith",
@@ -2567,11 +2543,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "paddlereadwith()",
       "source_file": "index.html",
-      "source_location": "L4187"
+      "source_location": "L4147"
     },
     {
       "id": "graphify_inline_input_paddlerecognize",
@@ -2579,11 +2555,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "paddlerecognize()",
       "source_file": "index.html",
-      "source_location": "L4142"
+      "source_location": "L4102"
     },
     {
       "id": "graphify_inline_input_paddlesession",
@@ -2591,11 +2567,47 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "paddlesession()",
       "source_file": "index.html",
-      "source_location": "L4036"
+      "source_location": "L3996"
+    },
+    {
+      "id": "graphify_inline_input_parsemoerows",
+      "label": "parseMoeRows()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "parsemoerows()",
+      "source_file": "index.html",
+      "source_location": "L4756"
+    },
+    {
+      "id": "graphify_inline_input_renderpagejpeg",
+      "label": "renderPageJpeg()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "renderpagejpeg()",
+      "source_file": "index.html",
+      "source_location": "L5593"
+    },
+    {
+      "id": "graphify_inline_input_resettessworker",
+      "label": "resetTessWorker()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "resettessworker()",
+      "source_file": "index.html",
+      "source_location": "L3941"
     },
     {
       "id": "graphify_inline_input_reversearabicprediction",
@@ -2603,11 +2615,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "reversearabicprediction()",
       "source_file": "index.html",
-      "source_location": "L4130"
+      "source_location": "L4090"
     },
     {
       "id": "graphify_inline_input_runpaddle",
@@ -2615,11 +2627,59 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "paddleReadWith",
+      "community_name": "loadPdfLibrary",
       "file_type": "code",
       "norm_label": "runpaddle()",
       "source_file": "index.html",
-      "source_location": "L4052"
+      "source_location": "L4012"
+    },
+    {
+      "id": "graphify_inline_input_tesseractreadpage",
+      "label": "tesseractReadPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "tesseractreadpage()",
+      "source_file": "index.html",
+      "source_location": "L3969"
+    },
+    {
+      "id": "graphify_inline_input_tessrecognize",
+      "label": "tessRecognize()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "tessrecognize()",
+      "source_file": "index.html",
+      "source_location": "L3949"
+    },
+    {
+      "id": "graphify_inline_input_warmupocr",
+      "label": "warmUpOcr()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "warmupocr()",
+      "source_file": "index.html",
+      "source_location": "L5102"
+    },
+    {
+      "id": "graphify_inline_input_workocrreadpage",
+      "label": "workOcrReadPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "loadPdfLibrary",
+      "file_type": "code",
+      "norm_label": "workocrreadpage()",
+      "source_file": "index.html",
+      "source_location": "L4251"
     },
     {
       "id": "tests_below_minimum_test_aslevels",
@@ -2663,7 +2723,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 29,
-      "community_name": "ocr-categories.test.js",
+      "community_name": "ocr-speed.test.js",
       "file_type": "code",
       "norm_label": "functionsource()",
       "source_file": "tests/ocr-categories.test.js",
@@ -2742,172 +2802,124 @@
       "source_location": "L134"
     },
     {
-      "id": "graphify_inline_input_getocrengine",
-      "label": "getOcrEngine()",
+      "id": "graphify_inline_input_buildlayoutregex",
+      "label": "buildLayoutRegex()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "getocrengine()",
+      "norm_label": "buildlayoutregex()",
       "source_file": "index.html",
-      "source_location": "L3951"
+      "source_location": "L5550"
     },
     {
-      "id": "graphify_inline_input_gettessworker",
-      "label": "getTessWorker()",
+      "id": "graphify_inline_input_compilelearnedrules",
+      "label": "compileLearnedRules()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "gettessworker()",
+      "norm_label": "compilelearnedrules()",
       "source_file": "index.html",
-      "source_location": "L3977"
+      "source_location": "L5561"
     },
     {
-      "id": "graphify_inline_input_loadort",
-      "label": "loadOrt()",
+      "id": "graphify_inline_input_escaperegex",
+      "label": "escapeRegex()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "loadort()",
+      "norm_label": "escaperegex()",
       "source_file": "index.html",
-      "source_location": "L4028"
+      "source_location": "L5546"
     },
     {
-      "id": "graphify_inline_input_loadpdflibrary",
-      "label": "loadPdfLibrary()",
+      "id": "graphify_inline_input_loadlearnedrules",
+      "label": "loadLearnedRules()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "loadpdflibrary()",
+      "norm_label": "loadlearnedrules()",
       "source_file": "index.html",
-      "source_location": "L3970"
+      "source_location": "L5575"
     },
     {
-      "id": "graphify_inline_input_loadscriptonce",
-      "label": "loadScriptOnce()",
+      "id": "graphify_inline_input_readlocalrules",
+      "label": "readLocalRules()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "loadscriptonce()",
+      "norm_label": "readlocalrules()",
       "source_file": "index.html",
-      "source_location": "L3957"
+      "source_location": "L5538"
     },
     {
-      "id": "graphify_inline_input_renderpagejpeg",
-      "label": "renderPageJpeg()",
+      "id": "graphify_inline_input_rulekey",
+      "label": "ruleKey()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "renderpagejpeg()",
+      "norm_label": "rulekey()",
       "source_file": "index.html",
-      "source_location": "L5633"
+      "source_location": "L5544"
     },
     {
-      "id": "graphify_inline_input_resettessworker",
-      "label": "resetTessWorker()",
+      "id": "graphify_inline_input_savelearnedrule",
+      "label": "saveLearnedRule()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "resettessworker()",
+      "norm_label": "savelearnedrule()",
       "source_file": "index.html",
-      "source_location": "L3981"
+      "source_location": "L5632"
     },
     {
-      "id": "graphify_inline_input_tessrecognize",
-      "label": "tessRecognize()",
+      "id": "graphify_inline_input_supabaseready",
+      "label": "supabaseReady()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "tessrecognize()",
+      "norm_label": "supabaseready()",
       "source_file": "index.html",
-      "source_location": "L3989"
+      "source_location": "L5527"
     },
     {
-      "id": "graphify_inline_input_warmupocr",
-      "label": "warmUpOcr()",
+      "id": "graphify_inline_input_uploadteachsample",
+      "label": "uploadTeachSample()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "loadPdfLibrary",
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "warmupocr()",
+      "norm_label": "uploadteachsample()",
       "source_file": "index.html",
-      "source_location": "L5142"
+      "source_location": "L5618"
     },
     {
-      "id": "graphify_inline_input_arabicwordmarks",
-      "label": "arabicWordMarks()",
+      "id": "graphify_inline_input_writelocalrules",
+      "label": "writeLocalRules()",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "findMoeMark",
+      "community": 4,
+      "community_name": "saveLearnedRule",
       "file_type": "code",
-      "norm_label": "arabicwordmarks()",
+      "norm_label": "writelocalrules()",
       "source_file": "index.html",
-      "source_location": "L4739"
-    },
-    {
-      "id": "graphify_inline_input_digitmark",
-      "label": "digitMark()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "findMoeMark",
-      "file_type": "code",
-      "norm_label": "digitmark()",
-      "source_file": "index.html",
-      "source_location": "L4762"
-    },
-    {
-      "id": "graphify_inline_input_findmoemark",
-      "label": "findMoeMark()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "findMoeMark",
-      "file_type": "code",
-      "norm_label": "findmoemark()",
-      "source_file": "index.html",
-      "source_location": "L4773"
-    },
-    {
-      "id": "graphify_inline_input_normalizearabic",
-      "label": "normalizeArabic()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "findMoeMark",
-      "file_type": "code",
-      "norm_label": "normalizearabic()",
-      "source_file": "index.html",
-      "source_location": "L4729"
-    },
-    {
-      "id": "graphify_inline_input_parsemoerows",
-      "label": "parseMoeRows()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "findMoeMark",
-      "file_type": "code",
-      "norm_label": "parsemoerows()",
-      "source_file": "index.html",
-      "source_location": "L4796"
+      "source_location": "L5541"
     },
     {
       "id": "supabase_functions_cleanup_teach_samples_index_json",
@@ -3139,7 +3151,7 @@
       "file_type": "code",
       "norm_label": "allsubjects",
       "source_file": "index.html",
-      "source_location": "L1818"
+      "source_location": "L1815"
     },
     {
       "id": "graphify_inline_input_ar_number_words",
@@ -3150,7 +3162,7 @@
       "file_type": "code",
       "norm_label": "ar_number_words",
       "source_file": "index.html",
-      "source_location": "L4721"
+      "source_location": "L4681"
     },
     {
       "id": "graphify_inline_input_engine_names",
@@ -3161,7 +3173,7 @@
       "file_type": "code",
       "norm_label": "engine_names",
       "source_file": "index.html",
-      "source_location": "L3949"
+      "source_location": "L3909"
     },
     {
       "id": "graphify_inline_input_grade_words",
@@ -3172,7 +3184,7 @@
       "file_type": "code",
       "norm_label": "grade_words",
       "source_file": "index.html",
-      "source_location": "L4362"
+      "source_location": "L4322"
     },
     {
       "id": "graphify_inline_input_gradenotes",
@@ -3183,7 +3195,7 @@
       "file_type": "code",
       "norm_label": "gradenotes",
       "source_file": "index.html",
-      "source_location": "L1790"
+      "source_location": "L1787"
     },
     {
       "id": "graphify_inline_input_gradestatuslabels",
@@ -3194,7 +3206,7 @@
       "file_type": "code",
       "norm_label": "gradestatuslabels",
       "source_file": "index.html",
-      "source_location": "L1825"
+      "source_location": "L1822"
     },
     {
       "id": "graphify_inline_input_gradingscheme",
@@ -3205,7 +3217,7 @@
       "file_type": "code",
       "norm_label": "gradingscheme",
       "source_file": "index.html",
-      "source_location": "L1785"
+      "source_location": "L1782"
     },
     {
       "id": "graphify_inline_input_jspdfqueue",
@@ -3216,7 +3228,7 @@
       "file_type": "code",
       "norm_label": "_jspdfqueue",
       "source_file": "index.html",
-      "source_location": "L1447"
+      "source_location": "L1444"
     },
     {
       "id": "graphify_inline_input_learned",
@@ -3227,7 +3239,7 @@
       "file_type": "code",
       "norm_label": "learned",
       "source_file": "index.html",
-      "source_location": "L5565"
+      "source_location": "L5525"
     },
     {
       "id": "graphify_inline_input_levellabels",
@@ -3238,7 +3250,7 @@
       "file_type": "code",
       "norm_label": "levellabels",
       "source_file": "index.html",
-      "source_location": "L1824"
+      "source_location": "L1821"
     },
     {
       "id": "graphify_inline_input_major_rules",
@@ -3249,7 +3261,7 @@
       "file_type": "code",
       "norm_label": "major_rules",
       "source_file": "index.html",
-      "source_location": "L3158"
+      "source_location": "L3155"
     },
     {
       "id": "graphify_inline_input_moe_subjects",
@@ -3260,7 +3272,7 @@
       "file_type": "code",
       "norm_label": "moe_subjects",
       "source_file": "index.html",
-      "source_location": "L4713"
+      "source_location": "L4673"
     },
     {
       "id": "graphify_inline_input_ocr_engines",
@@ -3271,7 +3283,7 @@
       "file_type": "code",
       "norm_label": "ocr_engines",
       "source_file": "index.html",
-      "source_location": "L3942"
+      "source_location": "L3902"
     },
     {
       "id": "graphify_inline_input_ocr_subject_aliases",
@@ -3282,7 +3294,7 @@
       "file_type": "code",
       "norm_label": "ocr_subject_aliases",
       "source_file": "index.html",
-      "source_location": "L4816"
+      "source_location": "L4776"
     },
     {
       "id": "graphify_inline_input_ocrpagecache",
@@ -3293,7 +3305,7 @@
       "file_type": "code",
       "norm_label": "_ocrpagecache",
       "source_file": "index.html",
-      "source_location": "L5064"
+      "source_location": "L5024"
     },
     {
       "id": "graphify_inline_input_paddle_models",
@@ -3304,7 +3316,7 @@
       "file_type": "code",
       "norm_label": "paddle_models",
       "source_file": "index.html",
-      "source_location": "L3936"
+      "source_location": "L3896"
     },
     {
       "id": "graphify_inline_input_paddlecpupaths",
@@ -3315,7 +3327,7 @@
       "file_type": "code",
       "norm_label": "_paddlecpupaths",
       "source_file": "index.html",
-      "source_location": "L4026"
+      "source_location": "L3986"
     },
     {
       "id": "graphify_inline_input_paddledicts",
@@ -3326,7 +3338,7 @@
       "file_type": "code",
       "norm_label": "_paddledicts",
       "source_file": "index.html",
-      "source_location": "L4024"
+      "source_location": "L3984"
     },
     {
       "id": "graphify_inline_input_paddlesessions",
@@ -3337,7 +3349,7 @@
       "file_type": "code",
       "norm_label": "_paddlesessions",
       "source_file": "index.html",
-      "source_location": "L4024"
+      "source_location": "L3984"
     },
     {
       "id": "graphify_inline_input_page_readers",
@@ -3348,7 +3360,7 @@
       "file_type": "code",
       "norm_label": "page_readers",
       "source_file": "index.html",
-      "source_location": "L4305"
+      "source_location": "L4265"
     },
     {
       "id": "graphify_inline_input_savedtheme",
@@ -3370,7 +3382,7 @@
       "file_type": "code",
       "norm_label": "_scriptpromises",
       "source_file": "index.html",
-      "source_location": "L3956"
+      "source_location": "L3916"
     },
     {
       "id": "graphify_inline_input_shortlevellabels",
@@ -3381,7 +3393,7 @@
       "file_type": "code",
       "norm_label": "shortlevellabels",
       "source_file": "index.html",
-      "source_location": "L3166"
+      "source_location": "L3163"
     },
     {
       "id": "graphify_inline_input_status_table_row",
@@ -3392,7 +3404,7 @@
       "file_type": "code",
       "norm_label": "status_table_row",
       "source_file": "index.html",
-      "source_location": "L4594"
+      "source_location": "L4554"
     },
     {
       "id": "graphify_inline_input_subject_abbreviations",
@@ -3403,7 +3415,7 @@
       "file_type": "code",
       "norm_label": "subject_abbreviations",
       "source_file": "index.html",
-      "source_location": "L4848"
+      "source_location": "L4808"
     },
     {
       "id": "graphify_inline_input_subjectlists",
@@ -3414,7 +3426,7 @@
       "file_type": "code",
       "norm_label": "subjectlists",
       "source_file": "index.html",
-      "source_location": "L1794"
+      "source_location": "L1791"
     },
     {
       "id": "graphify_inline_input_tessworkers",
@@ -3425,7 +3437,7 @@
       "file_type": "code",
       "norm_label": "_tessworkers",
       "source_file": "index.html",
-      "source_location": "L3976"
+      "source_location": "L3936"
     },
     {
       "id": "graphify_inline_input_valid_combos",
@@ -3436,7 +3448,7 @@
       "file_type": "code",
       "norm_label": "valid_combos",
       "source_file": "index.html",
-      "source_location": "L1832"
+      "source_location": "L1829"
     },
     {
       "id": "graphify_inline_input_xlsxqueue",
@@ -3447,7 +3459,7 @@
       "file_type": "code",
       "norm_label": "_xlsxqueue",
       "source_file": "index.html",
-      "source_location": "L1462"
+      "source_location": "L1459"
     },
     {
       "id": "api_ocr",
@@ -4046,7 +4058,7 @@
       "label": "ocr-categories.test.js",
       "_origin": "ast",
       "community": 29,
-      "community_name": "ocr-categories.test.js",
+      "community_name": "ocr-speed.test.js",
       "file_type": "code",
       "norm_label": "ocr-categories.test.js",
       "source_file": "tests/ocr-categories.test.js",
@@ -4057,7 +4069,7 @@
       "label": "assert",
       "_origin": "ast",
       "community": 29,
-      "community_name": "ocr-categories.test.js",
+      "community_name": "ocr-speed.test.js",
       "file_type": "code",
       "norm_label": "assert",
       "source_file": "tests/ocr-categories.test.js",
@@ -4068,7 +4080,7 @@
       "label": "fs",
       "_origin": "ast",
       "community": 29,
-      "community_name": "ocr-categories.test.js",
+      "community_name": "ocr-speed.test.js",
       "file_type": "code",
       "norm_label": "fs",
       "source_file": "tests/ocr-categories.test.js",
@@ -4079,7 +4091,7 @@
       "label": "html",
       "_origin": "ast",
       "community": 29,
-      "community_name": "ocr-categories.test.js",
+      "community_name": "ocr-speed.test.js",
       "file_type": "code",
       "norm_label": "html",
       "source_file": "tests/ocr-categories.test.js",
@@ -4090,11 +4102,77 @@
       "label": "vm",
       "_origin": "ast",
       "community": 29,
-      "community_name": "ocr-categories.test.js",
+      "community_name": "ocr-speed.test.js",
       "file_type": "code",
       "norm_label": "vm",
       "source_file": "tests/ocr-categories.test.js",
       "source_location": "L3"
+    },
+    {
+      "id": "tests_ocr_speed_test",
+      "label": "ocr-speed.test.js",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "ocr-speed.test.js",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_ocr_speed_test_assert",
+      "label": "assert",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "assert",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "tests_ocr_speed_test_chromium",
+      "label": "{ chromium }",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "{ chromium }",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "tests_ocr_speed_test_fs",
+      "label": "fs",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "fs",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "tests_ocr_speed_test_path",
+      "label": "path",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "tests_ocr_speed_test_serve",
+      "label": "{ serve }",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ocr-speed.test.js",
+      "file_type": "code",
+      "norm_label": "{ serve }",
+      "source_file": "tests/ocr-speed.test.js",
+      "source_location": "L7"
     },
     {
       "id": "basehttprequesthandler",
@@ -4108,77 +4186,55 @@
       "source_location": ""
     },
     {
-      "id": "tests_ocr_speed_test",
-      "label": "ocr-speed.test.js",
+      "id": "tests_ocr_review_fixes_test",
+      "label": "ocr-review-fixes.test.js",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "ocr-speed.test.js",
+      "community": 31,
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
-      "norm_label": "ocr-speed.test.js",
-      "source_file": "tests/ocr-speed.test.js",
+      "norm_label": "ocr-review-fixes.test.js",
+      "source_file": "tests/ocr-review-fixes.test.js",
       "source_location": "L1"
     },
     {
-      "id": "tests_ocr_speed_test_assert",
+      "id": "tests_ocr_review_fixes_test_assert",
       "label": "assert",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "ocr-speed.test.js",
+      "community": 31,
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
       "norm_label": "assert",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L3"
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L1"
     },
     {
-      "id": "tests_ocr_speed_test_chromium",
+      "id": "tests_ocr_review_fixes_test_chromium",
       "label": "{ chromium }",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "ocr-speed.test.js",
+      "community": 31,
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
       "norm_label": "{ chromium }",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L6"
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L2"
     },
     {
-      "id": "tests_ocr_speed_test_fs",
-      "label": "fs",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "fs",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "tests_ocr_speed_test_path",
-      "label": "path",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "ocr-speed.test.js",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "tests_ocr_speed_test_serve",
+      "id": "tests_ocr_review_fixes_test_serve",
       "label": "{ serve }",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "ocr-speed.test.js",
+      "community": 31,
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
       "norm_label": "{ serve }",
-      "source_file": "tests/ocr-speed.test.js",
-      "source_location": "L7"
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L3"
     },
     {
       "id": "tests_subject_entry_test",
       "label": "subject-entry.test.js",
       "_origin": "ast",
       "community": 31,
-      "community_name": "subject-entry.test.js",
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
       "norm_label": "subject-entry.test.js",
       "source_file": "tests/subject-entry.test.js",
@@ -4189,7 +4245,7 @@
       "label": "assert",
       "_origin": "ast",
       "community": 31,
-      "community_name": "subject-entry.test.js",
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
       "norm_label": "assert",
       "source_file": "tests/subject-entry.test.js",
@@ -4200,7 +4256,7 @@
       "label": "{ chromium }",
       "_origin": "ast",
       "community": 31,
-      "community_name": "subject-entry.test.js",
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
       "norm_label": "{ chromium }",
       "source_file": "tests/subject-entry.test.js",
@@ -4211,7 +4267,7 @@
       "label": "{ serve }",
       "_origin": "ast",
       "community": 31,
-      "community_name": "subject-entry.test.js",
+      "community_name": "ocr-review-fixes.test.js",
       "file_type": "code",
       "norm_label": "{ serve }",
       "source_file": "tests/subject-entry.test.js",
@@ -4719,7 +4775,7 @@
       "label": "ref_node_fs",
       "_origin": "semantic",
       "community": 29,
-      "community_name": "ocr-categories.test.js",
+      "community_name": "ocr-speed.test.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_node_fs",
@@ -4727,22 +4783,10 @@
       "type": "external"
     },
     {
-      "id": "ref_node_vm",
-      "label": "ref_node_vm",
-      "_origin": "semantic",
-      "community": 29,
-      "community_name": "ocr-categories.test.js",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_node_vm",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "ref_node_path",
       "label": "ref_node_path",
       "_origin": "semantic",
-      "community": 30,
+      "community": 29,
       "community_name": "ocr-speed.test.js",
       "external": true,
       "file_type": "concept",
@@ -4751,11 +4795,23 @@
       "type": "external"
     },
     {
+      "id": "ref_node_vm",
+      "label": "ref_node_vm",
+      "_origin": "semantic",
+      "community": 29,
+      "community_name": "ocr-speed.test.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_node_vm",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_node_assert",
       "label": "ref_node_assert",
       "_origin": "semantic",
       "community": 31,
-      "community_name": "subject-entry.test.js",
+      "community_name": "ocr-review-fixes.test.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_node_assert",
@@ -4833,7 +4889,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5482",
+      "source_location": "L5442",
       "weight": 1.0
     },
     {
@@ -5565,7 +5621,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5529",
+      "source_location": "L5489",
       "weight": 1.0
     },
     {
@@ -6297,7 +6353,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L3148",
+      "source_location": "L3145",
       "weight": 1.0
     },
     {
@@ -7138,6 +7194,18 @@
       "context": "call",
       "source_file": "index.html",
       "source_location": "L1641",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input_openteachdocument",
+      "target": "graphify_inline_input_opendocumentpreview",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L5761",
       "weight": 1.0
     },
     {
@@ -8133,7 +8201,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L1592",
+      "source_location": "L1589",
       "weight": 1.0
     },
     {
@@ -8205,7 +8273,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L1632",
+      "source_location": "L1629",
       "weight": 1.0
     },
     {
@@ -8541,7 +8609,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L6017",
+      "source_location": "L5983",
       "weight": 1.0
     },
     {
@@ -8733,7 +8801,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "index.html",
-      "source_location": "L5418",
+      "source_location": "L5378",
       "weight": 1.0
     },
     {
@@ -9950,18 +10018,6 @@
     },
     {
       "source": "graphify_inline_input",
-      "target": "graphify_inline_input_opendocumentpreview",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "index.html",
-      "source_location": "L5346",
-      "weight": 1.0
-    },
-    {
-      "source": "graphify_inline_input",
       "target": "graphify_inline_input_markresultsstale",
       "relation": "contains",
       "_origin": "ast",
@@ -10042,6 +10098,18 @@
       "context": "call",
       "source_file": "index.html",
       "source_location": "L5267",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input",
+      "target": "graphify_inline_input_opendocumentpreview",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "index.html",
+      "source_location": "L5346",
       "weight": 1.0
     },
     {
@@ -10138,6 +10206,18 @@
       "context": "call",
       "source_file": "tests/ocr-gateway.test.js",
       "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_review_fixes_test",
+      "target": "tests_ocr_review_fixes_test_assert",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -10402,6 +10482,18 @@
       "context": "import",
       "source_file": "tests/ocr-native-speed.py",
       "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_review_fixes_test",
+      "target": "tests_server_serve",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -10741,6 +10833,42 @@
       "weight": 1.0
     },
     {
+      "source": "tests_ocr_review_fixes_test",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_review_fixes_test",
+      "target": "ref_playwright",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_review_fixes_test",
+      "target": "tests_server",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
       "source": "tests_ocr_speed_test",
       "target": "ref_node_vm",
       "relation": "imports_from",
@@ -11023,6 +11151,17 @@
       "confidence_score": 1.0,
       "source_file": ".githooks/post-commit",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "graphify_inline_input",
+      "target": "graphify_inline_input_openteachdocument",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "source_location": "L5760",
       "weight": 1.0
     },
     {
@@ -13919,6 +14058,28 @@
       "weight": 1.0
     },
     {
+      "source": "tests_ocr_review_fixes_test",
+      "target": "tests_ocr_review_fixes_test_chromium",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_ocr_review_fixes_test",
+      "target": "tests_ocr_review_fixes_test_serve",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/ocr-review-fixes.test.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
       "source": "tests_ocr_speed_test",
       "target": "tests_ocr_speed_test_assert",
       "relation": "contains",
@@ -14777,5 +14938,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "bba560eacff360b0f140b47fec3697b7aa46bb61"
+  "built_at_commit": "91731a132cdff7f51d8a8e72d257c2bd9854f914"
 }
