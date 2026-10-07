@@ -1,15 +1,15 @@
-# Graph Report - UOS British Calculator  (2026-10-06)
+# Graph Report - UOS British Calculator  (2026-10-07)
 
 ## Corpus Check
 - cluster-only mode — file stats not available
 
 ## Summary
-- 404 nodes · 857 edges · 32 communities (25 shown, 7 thin omitted)
+- 405 nodes · 860 edges · 32 communities (25 shown, 7 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3f4f563e`
+- Built from commit: `bba560ea`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,22 +18,22 @@
 - server.js
 - UOS British Calculator
 - Handler
-- handleCertificateFiles
+- loadPdfLibrary
 - findMoeMark
 - Set up OCR on the other Windows PC
 - index.ts
 - vercel.json
 - index.html
-- submitTeach
+- parseDocument
 - formatPercentage
 - renderAdminPanel
 - addOcrRowsToCalculator
-- renderOcrReview
+- submitTeach
 - appAlert
 - extractPages
 - ocr-gateway.test.js
+- looksLikeMoeDocument
 - paddleReadWith
-- paddleSession
 - Connect the work PC to the online calculator
 - playwright
 - AGENTS.md
@@ -50,8 +50,8 @@
 3. `parseDocument()` - 15 edges
 4. `parseResultLine()` - 15 edges
 5. `addOcrRowsToCalculator()` - 15 edges
-6. `renderOcrReview()` - 15 edges
-7. `handleCertificateFiles()` - 15 edges
+6. `handleCertificateFiles()` - 15 edges
+7. `renderOcrReview()` - 15 edges
 8. `normalizeGrade()` - 14 edges
 9. `sbFetch()` - 14 edges
 10. `escHtml()` - 13 edges
@@ -79,9 +79,9 @@ Nodes (11): { chromium }, expected, fs, path, samples, { serve }, fs, http (+3 m
 Cohesion: 0.29
 Nodes (6): 📦 Deployment, 📝 Features, 🚀 Live Site, 🛠️ Local Development, Teaching the reader (shared rules), UOS British Calculator
 
-### Community 4 - "handleCertificateFiles"
-Cohesion: 0.18
-Nodes (14): ensurePaddleReady(), fileFingerprint(), getOcrEngine(), getTessWorker(), handleCertificateFiles(), loadOrt(), loadPdfLibrary(), loadScriptOnce() (+6 more)
+### Community 4 - "loadPdfLibrary"
+Cohesion: 0.25
+Nodes (9): getOcrEngine(), getTessWorker(), loadOrt(), loadPdfLibrary(), loadScriptOnce(), renderPageJpeg(), resetTessWorker(), tessRecognize() (+1 more)
 
 ### Community 5 - "findMoeMark"
 Cohesion: 0.70
@@ -99,45 +99,45 @@ Nodes (4): maxDuration, functions, api/ocr.js, headers
 Cohesion: 0.05
 Nodes (33): allSubjects, AR_NUMBER_WORDS, buildLayoutRegex(), closeSuccessModal(), closeSuccessModalAndScrollToScenarios(), ENGINE_NAMES, escapeRegex(), GRADE_WORDS (+25 more)
 
-### Community 11 - "submitTeach"
-Cohesion: 0.11
-Nodes (41): bigramSimilarity(), classifyPageStatus(), cleanBoardSubject(), cleanOcrLine(), cleanSchoolSubject(), deriveLayoutTemplate(), expandSubjectAbbreviations(), guessTeachValues() (+33 more)
+### Community 11 - "parseDocument"
+Cohesion: 0.10
+Nodes (41): bigramSimilarity(), classifyPageStatus(), cleanBoardSubject(), cleanOcrLine(), cleanSchoolSubject(), deriveLayoutTemplate(), expandSubjectAbbreviations(), getMatches() (+33 more)
 
 ### Community 12 - "formatPercentage"
 Cohesion: 0.12
 Nodes (36): addSubjectToScenario(), appendExcludedSubjectsToPdf(), buildPdfHeader(), buildScenarioPresentation(), buildStablePresentation(), _calcScenarioPDFBodyHeight(), calculateOverallPercentage(), coreScienceType() (+28 more)
 
 ### Community 13 - "renderAdminPanel"
-Cohesion: 0.13
-Nodes (28): adminAlertsHTML(), adminMsg(), adminPasswordPrompt(), adminSaveNewPassword(), adminSaveWebhook(), adminSendPasswordLink(), adminSetStatus(), adminShowChangePassword() (+20 more)
+Cohesion: 0.15
+Nodes (22): adminAlertsHTML(), adminCleanupPages(), adminMsg(), adminPasswordPrompt(), adminSaveNewPassword(), adminSaveWebhook(), adminSendPasswordLink(), adminSetStatus() (+14 more)
 
 ### Community 14 - "addOcrRowsToCalculator"
-Cohesion: 0.11
-Nodes (31): addFilledSubjectCard(), addOcrRowsToCalculator(), addSubjectRow(), adminCleanupPages(), adminConfirmDeleteAllPages(), appConfirm(), autoAddNextRow(), categoryOf() (+23 more)
+Cohesion: 0.12
+Nodes (29): addFilledSubjectCard(), addOcrRowsToCalculator(), addSubjectRow(), adminConfirmDeleteAllPages(), appConfirm(), autoAddNextRow(), categoryOf(), clearStaleState() (+21 more)
 
-### Community 15 - "renderOcrReview"
-Cohesion: 0.19
-Nodes (16): cropSnapshot(), escHtml(), highlightMatch(), makeSnapshots(), needsConfirmation(), ocrFileFor(), ocrFlag(), ocrGradeCell() (+8 more)
+### Community 15 - "submitTeach"
+Cohesion: 0.11
+Nodes (32): compileLearnedRules(), cropSnapshot(), escHtml(), fileFingerprint(), handleCertificateFiles(), loadLearnedRules(), makeSnapshots(), needsConfirmation() (+24 more)
 
 ### Community 16 - "appAlert"
-Cohesion: 0.28
-Nodes (13): adminViewSample(), appAlert(), bulkAddRows(), downloadData(), downloadScenarioPDF(), getRequiredEmployeeName(), getRequiredStudentId(), loadJsPDF() (+5 more)
+Cohesion: 0.32
+Nodes (12): appAlert(), bulkAddRows(), downloadData(), downloadScenarioPDF(), getRequiredEmployeeName(), getRequiredStudentId(), loadJsPDF(), _preloadLogo() (+4 more)
 
 ### Community 17 - "extractPages"
-Cohesion: 0.25
-Nodes (11): extractPages(), hasResultLines(), imageFileToCanvas(), mergeEngineRows(), readCertificateFile(), readFileBothEngines(), readFileWithEngine(), renderPdfPage() (+3 more)
+Cohesion: 0.27
+Nodes (10): extractPages(), imageFileToCanvas(), mergeEngineRows(), readCertificateFile(), readFileBothEngines(), readFileWithEngine(), renderPdfPage(), rowKey() (+2 more)
 
 ### Community 18 - "ocr-gateway.test.js"
 Cohesion: 0.25
 Nodes (6): assert, fs, handler, { Readable }, request(), vm
 
-### Community 19 - "paddleReadWith"
-Cohesion: 0.28
-Nodes (9): groupPaddleLines(), looksLikeMoeDocument(), normalizeBoxes(), paddleReadPage(), paddleReadWith(), resetTessWorker(), tesseractReadPage(), tessRecognize() (+1 more)
+### Community 19 - "looksLikeMoeDocument"
+Cohesion: 0.67
+Nodes (4): looksLikeMoeDocument(), paddleReadPage(), tesseractReadPage(), workOcrReadPage()
 
-### Community 20 - "paddleSession"
-Cohesion: 0.60
-Nodes (5): paddleDetect(), paddleRecognize(), paddleSession(), reverseArabicPrediction(), runPaddle()
+### Community 20 - "paddleReadWith"
+Cohesion: 0.27
+Nodes (10): ensurePaddleReady(), groupPaddleLines(), normalizeBoxes(), paddleDetect(), paddleDict(), paddleReadWith(), paddleRecognize(), paddleSession() (+2 more)
 
 ### Community 21 - "Connect the work PC to the online calculator"
 Cohesion: 0.50

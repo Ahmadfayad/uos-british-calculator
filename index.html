@@ -1100,6 +1100,18 @@
       .subject-card .status-group { grid-column: 1 / 3; grid-row: 3; }
       .subject-card .grade-group, .subject-card .pct-group { grid-column: 1 / 3; }
     }
+    .action-bar { position: sticky; top: 8px; z-index: 30; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 10px; }
+    .reset-visible { border: 2px solid #ef4444; color: #ef4444; font-weight: 700; }
+    .document-thumbnail { display: block; width: 100%; border: 0; padding: 0; background: transparent; cursor: zoom-in; }
+    .document-dialog { width: 96vw; max-width: 1600px; height: 92dvh; max-height: 96dvh; margin: auto; padding: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
+    .document-dialog::backdrop { background: rgba(0,0,0,.75); }
+    .document-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+    .document-toolbar strong { flex: 1; min-width: 120px; overflow-wrap: anywhere; }
+    .document-toolbar select { width: auto; }
+    .document-scroll { height: calc(100% - 90px); overflow: auto; padding: 16px; background: #d7dce3; }
+    #document-image { display: block; width: 100%; max-width: none; height: auto; background: white; }
+    #document-image[hidden] { display: none; }
+    #document-preview-status { color: #172033; }
   </style>
   <!-- Vercel Web Analytics -->
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
@@ -1125,6 +1137,7 @@
     <p class="page-subtitle">Convert letter grades to an overall percentage.</p>
   </header>
   <div class="action-bar">
+    <button class="btn btn-outline reset-visible" type="button" onclick="resetForm()">Reset calculator</button>
     <button class="btn btn-success" id="view-combinations-btn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
       Admission Requirements
@@ -1360,6 +1373,17 @@
     <p id="success-autoclose-note" style="font-size:0.72rem;color:var(--text-3);margin-top:10px;text-align:center;">This message will close automatically in a few seconds.</p>
   </div>
 </div>
+<dialog id="document-dialog" class="document-dialog" aria-labelledby="document-title">
+  <div class="document-toolbar">
+    <strong id="document-title">Document preview</strong>
+    <label for="document-zoom">Zoom</label>
+    <select id="document-zoom" onchange="document.getElementById('document-image').style.width=this.value+'%'">
+      <option value="100">Fit width</option><option value="150">150%</option><option value="200">200%</option><option value="300">300%</option><option value="400">400%</option>
+    </select>
+    <button type="button" class="btn btn-outline" onclick="document.getElementById('document-dialog').close()">Close</button>
+  </div>
+  <div class="document-scroll"><p id="document-preview-status" role="status"></p><img id="document-image" alt="Full certificate page with the selected result outlined" hidden></div>
+</dialog>
 <div id="ocr-modal" class="modal-overlay" data-static="true">
   <div class="modal-box ocr-modal-box">
     <div class="modal-header"><h2 class="modal-title">Review detected subjects</h2><button class="modal-close" onclick="closeOcrModal()">×</button></div>
@@ -3926,7 +3950,7 @@ const ENGINE_NAMES = { paddle: 'PaddleOCR', tesseract: 'Tesseract', openvino: 'S
 
 function getOcrEngine() {
   const value = document.getElementById('ocr-engine')?.value;
-  return OCR_ENGINES[value] ? value : 'auto';
+  return OCR_ENGINES[value] ? value : 'openvino';
 }
 
 const _scriptPromises = {};
@@ -5319,12 +5343,37 @@ async function makeSnapshots(rows) {
   }
 }
 
+async function openDocumentPreview(row) {
+  const file = ocrFileFor(row);
+  if(!file) return;
+  window._documentPreviewRow = row;
+  const dialog = document.getElementById('document-dialog'), image = document.getElementById('document-image');
+  const status = document.getElementById('document-preview-status');
+  document.getElementById('document-title').textContent = `${row.file} · Page ${row.page}`;
+  document.getElementById('document-zoom').value = '100';
+  image.hidden = true; image.removeAttribute('src'); image.style.width = '100%';
+  status.textContent = 'Loading full document page…';
+  if(!dialog.open) dialog.showModal();
+  try {
+    const canvas = await renderPageForSnapshot(file, row.page);
+    if(row.box) {
+      const box = row.box, ctx = canvas.getContext('2d');
+      ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3;
+      ctx.strokeRect(box.x0 * canvas.width, box.y0 * canvas.height, (box.x1-box.x0)*canvas.width, (box.y1-box.y0)*canvas.height);
+    }
+    if(dialog.open && window._documentPreviewRow === row) { image.src = canvas.toDataURL('image/png'); image.hidden = false; status.textContent = 'Use Zoom to enlarge the page; scroll to inspect the subjects and grades.'; }
+    canvas.width = canvas.height = 0;
+  } catch { status.textContent = 'Could not open this document page. Please check the original certificate.'; }
+}
+document.getElementById('document-dialog').addEventListener('close', () => { window._documentPreviewRow = null; document.getElementById('document-image').removeAttribute('src'); });
+
 function snapshotCell(r, i) {
+  const view = ocrFileFor(r) ? `<button type="button" class="footer-link ocr-see" data-snap="${i}">See on document</button>` : '';
   if(r.snapshot && r.snapshot !== 'unavailable') {
-    return `<div class="ocr-snap-wrap${r.box ? '' : ' whole-page'}"><img class="ocr-snap" src="${r.snapshot}" alt="This line on the document"><div class="ocr-snap-caption">${r.box ? 'On the document (outlined)' : 'The document page'}${needsConfirmation(r) ? ': check the subject and grade, then click Confirm' : ''}</div></div>`;
+    return `<div class="ocr-snap-wrap${r.box ? '' : ' whole-page'}"><button type="button" class="document-thumbnail" data-snap="${i}" aria-label="Open full document page"><img class="ocr-snap" src="${r.snapshot}" alt="This line on the document"></button><div class="ocr-snap-caption">${r.box ? 'On the document (outlined)' : 'The document page'}${needsConfirmation(r) ? ': check the subject and grade, then click Confirm' : ''}</div></div>${view}`;
   }
-  if(r.snapshot === 'unavailable') return '';
-  if(needsConfirmation(r)) return '<div class="ocr-snap-caption">Loading the snapshot from the document…</div>';
+  if(r.snapshot === 'unavailable') return view;
+  if(needsConfirmation(r)) return '<div class="ocr-snap-caption">Loading the snapshot from the document…</div>' + view;
   return ocrFileFor(r) ? `<button type="button" class="footer-link ocr-see" data-snap="${i}">See on document</button>` : '';
 }
 
@@ -5374,7 +5423,7 @@ document.getElementById('ocr-review').addEventListener('click', e => {
   const see = e.target.closest('[data-snap]');
   if(see) {
     const row = window._ocrRows[Number(see.dataset.snap)];
-    if(row) { see.textContent = 'Loading…'; makeSnapshots([row]).then(renderOcrReview); }
+    if(row) openDocumentPreview(row);
     return;
   }
   const ok = e.target.closest('[data-confirm]');
@@ -5487,7 +5536,7 @@ function closeOcrModal(force = false) {
 (function initCertificateUpload() {
   const engineSelect = document.getElementById('ocr-engine');
   engineSelect.innerHTML = Object.entries(OCR_ENGINES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
-  try { const saved = localStorage.getItem('ocrEngine'); if(OCR_ENGINES[saved]) engineSelect.value = saved; } catch(e) {}
+  engineSelect.value = 'openvino';
   engineSelect.addEventListener('change', () => { try { localStorage.setItem('ocrEngine', engineSelect.value); } catch(e) {} });
   document.querySelectorAll('.ocr-drop[data-level]').forEach(drop => {
     const input = document.getElementById(drop.htmlFor);
